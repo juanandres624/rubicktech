@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="dashboard-wrapper">
+    {% include 'includes/alerts.html' %}
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h3 class="mb-2">Editar Proveedor </h3>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Proveedores</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Editar Proveedor</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form action="{% url 'editProvider' id %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="card">
+                        <h5 class="card-header">Información Del Proveedor</h5>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="col-form-label">Codigo del Proveedor</label>
+                                {{ form.provider_code }}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Razón Comercial</label>
+                                {{ form.business_reason }}
+                            </div>
+                            <div class="form-group">
+                                <label>Razon Social</label>
+                                {{ form.social_reason }}
+                            </div>                            
+                            <div class="form-group">
+                                <label>Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Telefono # 1</label>
+                                {{ form.phone_1 }}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Telefono # 2</label>
+                                {{ form.phone_2 }}
+                            </div>
+                            <div class="form-group">
+                                <label>Ciudad</label>
+                                {{ form.city }}
+                            </div>
+                            <div class="form-group">
+                                <label>Dirección # 1</label>
+                                {{ form.address_1 }}
+                            </div>                            
+                            <div class="form-group">
+                                <label>Dirección # 2</label>
+                                {{ form.address_2 }}
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                    <div class="card">
+                        <h5 class="card-header">Información Addicional</h5>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Tipo de Documento</label>
+                                {{ form.mngDocumentType_id }}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Numero de Documento</label>
+                                {{ form.document_number }}
+                            </div>
+                            <div class="form-group">
+                                <label>Web Site</label>
+                                {{ form.web_site }}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Nota</label>
+                                {{ form.note }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-center">
+<!--                                <input type="submit" class="btn btn-space btn-primary">Guardar</input>-->
+                                <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
+                                <button class="btn btn-space btn-secondary">Cancel</button>
+                            </p>
+                </div>
+            </div>
+            {{ form.email.errors }}
+            {{ form.non_field_errors }}
+        </form>
+    </div>
+
+    {% include 'includes/footer.html' %}
+</div>
+
+{% endblock %}

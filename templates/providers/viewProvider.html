@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-wrapper">
+    {% include 'includes/alerts.html' %}
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h3 class="mb-2">Ver Proveedores </h3>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Proveedores</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Ver Proveedor</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="example4" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Codigo Proveedor</th>
+                        <th>Razon Comercial</th>
+                        <th>Razon Social</th>
+                        <th>Email</th>
+                        <th>Numero de Documento</th>
+                        <th>Fecha Creación</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for provider in providers %}
+                        <tr>
+                            <td>{{ provider.provider_code | capfirst }}</td>
+                            <td>{{ provider.business_reason | capfirst }}</td>
+                            <td>{{ provider.social_reason | capfirst }}</td>
+                            <td>{{ provider.email | capfirst }}</td>
+                            <td>{{ provider.document_number | capfirst }}</td>
+                            <td>{{ provider.date_added }}</td>
+                            <td><a type="button" href="{% url 'editProvider' provider.id %}"><span class="fa fa-edit"></span></a></td>               
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+    {% include 'includes/footer.html' %}
+</div>
+
+{% endblock %}
+
