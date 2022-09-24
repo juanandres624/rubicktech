@@ -1,7 +1,11 @@
+from dataclasses import field
+from turtle import textinput
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .forms import ProductsForm
+from .forms import ProductsForm,VariationForm
 from django.contrib import messages
+from django.forms import inlineformset_factory
+from .models import Product, Variation
 
 @login_required(login_url = 'login')
 def newProduct(request):
@@ -21,3 +25,62 @@ def newProduct(request):
         }
 
         return render(request, 'products/newProduct.html', context)
+
+@login_required(login_url = 'login')
+def editProduct(request,product_id):
+
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Exception as e:
+        raise e
+               
+    variation = product.variation_set.all()
+
+    if request.method == 'POST':
+        form = ProductsForm(request.POST,instance= product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto Editado....')
+            return redirect('editProduct', product.id)
+        else:
+            messages.success(request, 'Producto No ha sido Editado....')
+            return redirect('editProduct', product.id)  
+    else:
+        form = ProductsForm(instance=product)
+        context = {
+            'id': product.id,
+            'form': form,
+            'variations':variation,
+        }
+        return render(request, 'products/editProduct.html', context)
+
+
+@login_required(login_url = 'login')
+def createVariation(request,product_id):
+
+    VariationFormSet = inlineformset_factory(Product,Variation,
+    form=VariationForm, extra=8)
+
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Exception as e:
+        raise e
+
+    formset = VariationFormSet(instance=product)
+
+    if request.method == 'POST':
+        formset = VariationFormSet(request.POST,instance=product)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Producto Editado....')
+            return redirect('editProduct', product.id)
+        else:
+            messages.success(request, 'Producto No ha sido Editado....')
+            return redirect('editProduct', product.id)  
+    else:
+        #form = VariationForm(instance=product)
+        context = {
+            'id': product.id,
+            'formset': formset,
+        }
+        return render(request, 'products/productVariation.html', context)

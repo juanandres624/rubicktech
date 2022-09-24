@@ -53,12 +53,12 @@ class VariationForm(forms.ModelForm):
 
     class Meta:
         model = Variation
-        fields = ["variation_category", "stock"]
+        fields = ["variation_category","variation_value", "stock","product_id"]
         # widgets = {'mngProductCategory_id': MngSelectDescription, 'provider_id': MngSelectDescription,
         #     'mngProductBrand_id': MngSelectDescription,"description": forms.Textarea()}
 
     def __init__(self, *args, **kwargs):
-        super(ProductsForm, self).__init__(*args, **kwargs)
+        super(VariationForm, self).__init__(*args, **kwargs)
         self.fields['stock'].widget.attrs['type'] = 'text'
 
         for field_name, field in self.fields.items():
