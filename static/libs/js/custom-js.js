@@ -7,7 +7,7 @@
 
         //calls modal image product / set img src
 
-        $("#modal_img").click(function(){
+        $(".modal_img").click(function(){
             $("#modalImg").modal('show');
             var img_field = document.getElementById("img_space");
             data_table = search_table_row_values("table_img",this);
