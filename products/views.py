@@ -2,10 +2,10 @@ from dataclasses import field
 from turtle import textinput
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .forms import ProductsForm,VariationForm
+from .forms import ProductsForm,VariationForm,ImageForm
 from django.contrib import messages
 from django.forms import inlineformset_factory
-from .models import Product, Variation
+from .models import Product, Variation,Image
 
 @login_required(login_url = 'login')
 def newProduct(request):
@@ -35,6 +35,7 @@ def editProduct(request,product_id):
         raise e
                
     variation = product.variation_set.all()
+    image = product.image_set.all()
 
     if request.method == 'POST':
         form = ProductsForm(request.POST,instance= product)
@@ -51,6 +52,7 @@ def editProduct(request,product_id):
             'id': product.id,
             'form': form,
             'variations':variation,
+            'images':image,
         }
         return render(request, 'products/editProduct.html', context)
 
@@ -84,3 +86,34 @@ def createVariation(request,product_id):
             'formset': formset,
         }
         return render(request, 'products/productVariation.html', context)
+
+
+@login_required(login_url = 'login')
+def createImage(request,product_id):
+
+    ImageFormSet = inlineformset_factory(Product,Image,
+    form=ImageForm, extra=8)
+
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Exception as e:
+        raise e
+
+    formset = ImageFormSet(instance=product)
+
+    if request.method == 'POST':
+        formset = ImageFormSet(request.POST,request.FILES,instance=product)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Producto Editado....')
+            return redirect('editProduct', product.id)
+        else:
+            messages.success(request, 'Producto No ha sido Editado....')
+            return redirect('editProduct', product.id)  
+    else:
+        #form = VariationForm(instance=product)
+        context = {
+            'id': product.id,
+            'formset': formset,
+        }
+        return render(request, 'products/productImages.html', context)

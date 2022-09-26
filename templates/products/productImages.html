@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="dashboard-wrapper">
+    {% include 'includes/alerts.html' %}
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h3 class="mb-2">Editar Producto </h3>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Productos</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Editar Producto</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form action="{% url 'createImage' id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <h5 class="card-header">Imagenes de Producto</h5>
+                        <div class="card-body">
+                            {{ formset.management_form }}
+                            {% for form in formset %}
+                                {{form}}
+                                <hr>
+                            {% endfor %}
+                            <!-- <div class="form-group">
+                                <label>Product Id</label>
+                                {{ formset.product_id }}
+                            </div>  
+                            <div class="form-group">
+                                <label>Tipo de Variacion</label>
+                                {{ formset.variation_category }}
+                            </div>                             
+                            <div class="form-group">
+                                <label>Valor de Variacion</label>
+                                {{ formset.variation_value }}
+                            </div>                            
+                            <div class="form-group">
+                                <label>Stock</label>
+                                {{ formset.stock }}
+                            </div>                           -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-center">
+<!--                                <input type="submit" class="btn btn-space btn-primary">Guardar</input>-->
+                                <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
+                                <button class="btn btn-space btn-secondary">Cancel</button>
+                            </p>
+                </div>
+            </div>
+            {{ form.email.errors }}
+            {{ form.non_field_errors }}
+        </form>
+    </div>
+
+    {% include 'includes/footer.html' %}
+</div>
+
+{% endblock %}

@@ -101,12 +101,12 @@
                                                 <th scope="col">Tipo de Variación</th>
                                                 <th scope="col">Valor</th>
                                                 <th scope="col">Stock</th>
-                                                <th scope="col"><a class="btn btn-rounded btn-danger btn-xs" href="{% url 'createVariation' id %}" type="button">Agregar</a></th>
+                                                <th scope="col" class="text-center"><a class="btn btn-rounded btn-info btn-xs" href="{% url 'createVariation' id %}" type="button">Agregar</a></th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for variation in variations%}
+                                            {% for variation in variations %}
                                             <tr>
                                                 <td>{{ variation.variation_category |capfirst }}</td>
                                                 <td>{{ variation.variation_value |capfirst }}</td>
@@ -118,22 +118,21 @@
                                     </table>
                                 </div>
                                 <div class="col-6">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered" id="table_img">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Imagenes URL</th>
-                                                <th scope="col">Fecha de Creación</th>
+                                                <th scope="col" class="text-center"><a class="btn btn-rounded btn-info btn-xs" href="{% url 'createImage' id %}" type="button">Agregar</a></th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for img in images %}
                                             <tr>
-                                                <td>/upload/img1.img</td>
-                                                <td>2022-02-15</td>
+                                                <td name="img_{{img.id}}">{{ img.image.url }}</td>                                                                                       
+                                                <!-- <td class="text-center"><a class="btn btn-rounded btn-success btn-xs" onclick='ver_fila(this)' href="#" data-toggle="modal" data-target="#modalImg">Ver</a></td> -->
+                                                <td class="text-center"><a class="btn btn-rounded btn-success btn-xs" id="modal_img" type="button">Ver</a></td>
                                             </tr>
-                                            <tr>
-                                                <td>/upload/img2.img</td>
-                                                <td>2022-02-15</td>
-                                            </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -157,7 +156,28 @@
         </form>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modalImg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Imagen</h5>
+                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </a>
+                </div>
+                <div class="modal-body">
+                    <img id="img_space" style="width:460px;height:500px;">                
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% include 'includes/footer.html' %}
 </div>
 
 {% endblock %}
+

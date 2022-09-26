@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Variation
+from .models import Product, Variation,Image
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -12,6 +12,11 @@ class VariationAdmin(admin.ModelAdmin):
     list_editable = ('is_active',)
     list_filter = ('product_id', 'variation_category', 'variation_value')
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('product_id', 'name','image')
+    list_filter = ('product_id', 'name', 'image')
+
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Variation, VariationAdmin)
+admin.site.register(Image, ImageAdmin)
