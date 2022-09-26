@@ -117,3 +117,18 @@ def createImage(request,product_id):
             'formset': formset,
         }
         return render(request, 'products/productImages.html', context)
+
+@login_required(login_url = 'login')
+def viewProducts(request):
+
+    all_products = get_all_products()
+
+    context = {
+        'products' : all_products
+    }
+
+    return render(request, 'products/viewProduct.html', context)
+
+def get_all_products():
+    
+    return Product.objects.filter()

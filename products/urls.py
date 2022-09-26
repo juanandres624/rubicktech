@@ -5,6 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('newProduct', views.newProduct, name='newProduct'),
+    path('viewProducts', views.viewProducts, name='viewProducts'),
     path('editProduct/<int:product_id>/',views.editProduct,name='editProduct'),
     path('createVariation/<int:product_id>/',views.createVariation,name='createVariation'),
     path('createImage/<int:product_id>/',views.createImage,name='createImage'),
