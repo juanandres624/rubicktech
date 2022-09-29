@@ -129,13 +129,8 @@ def viewProducts(request):
     img = []
 
     for products in all_products:
-
         product_img = Image.objects.get(product_id=products.id,default=True)
-        data = {product_img}
-        img.append(data)
-
-        for imgs in img:
-            print(imgs)
+        img.append(product_img)
 
     context = {
         'products' : all_products,
