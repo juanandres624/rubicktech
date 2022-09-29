@@ -1,3 +1,4 @@
+from ast import For
 from dataclasses import field
 from turtle import textinput
 from django.shortcuts import render,redirect
@@ -104,6 +105,9 @@ def createImage(request,product_id):
     if request.method == 'POST':
         formset = ImageFormSet(request.POST,request.FILES,instance=product)
         if formset.is_valid():
+            # for forms in formset
+            #     forms.
+                
             formset.save()
             messages.success(request, 'Producto Editado....')
             return redirect('editProduct', product.id)
@@ -122,9 +126,20 @@ def createImage(request,product_id):
 def viewProducts(request):
 
     all_products = get_all_products()
+    img = []
+
+    for products in all_products:
+
+        product_img = Image.objects.get(product_id=products.id,default=True)
+        data = {product_img}
+        img.append(data)
+
+        for imgs in img:
+            print(imgs)
 
     context = {
-        'products' : all_products
+        'products' : all_products,
+        'prod_img' : img
     }
 
     return render(request, 'products/viewProduct.html', context)

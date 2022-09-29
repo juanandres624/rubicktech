@@ -71,17 +71,19 @@ class ImageForm(forms.ModelForm):
 
     class Meta:
         model = Image
-        fields = ["product_id","image","id"]
+        fields = ["product_id","image","id","default"]
         # widgets = {'mngProductCategory_id': MngSelectDescription, 'provider_id': MngSelectDescription,
         #     'mngProductBrand_id': MngSelectDescription,"description": forms.Textarea()}
 
     def __init__(self, *args, **kwargs):
         super(ImageForm, self).__init__(*args, **kwargs)
+        self.fields['default'].widget.attrs['type'] = 'checkbox'
 
         for field_name, field in self.fields.items():
-            if field.widget.attrs.get('class'):
-                field.widget.attrs['class'] += ' form-control'
-            else:
-                field.widget.attrs['class'] = 'form-control'
+            if field.widget.attrs.get('type') != 'checkbox' :
+                if field.widget.attrs.get('class'):
+                    field.widget.attrs['class'] += ' form-control'
+                else:
+                    field.widget.attrs['class'] = 'form-control'
 
 
