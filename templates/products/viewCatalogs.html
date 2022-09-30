@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-wrapper">
+    {% include 'includes/alerts.html' %}
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h3 class="mb-2">Catalogos </h3>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Productos</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Catalogos</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form action="" method="GET">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <h5 class="card-header">Filtros</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Nombre</label>
+                                        {{ form.product_name }}
+                                    </div>                            
+                                </div>
+                                <div class="col-6">                          
+                                    <div class="form-group">
+                                        <label class="col-form-label">Categoria</label>
+                                        {{ form.mngProductCategory_id }}
+                                    </div>
+                                </div>                            
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Marca</label>
+                                        {{ form.mngProductBrand_id }}
+                                    </div>                            
+                                </div>
+                                <div class="col-6">                          
+                                    <div class="form-group">
+                                        <label class="col-form-label">Proveedor</label>
+                                        {{ form.provider_id }}
+                                    </div>
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        
+        
+    </div>
+
+    {% include 'includes/footer.html' %}
+</div>
+
+{% endblock %}
+

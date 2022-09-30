@@ -9,5 +9,6 @@ urlpatterns = [
     path('editProduct/<int:product_id>/',views.editProduct,name='editProduct'),
     path('createVariation/<int:product_id>/',views.createVariation,name='createVariation'),
     path('createImage/<int:product_id>/',views.createImage,name='createImage'),
+    path('viewCatalogs', views.viewCatalogs, name='viewCatalogs'),
 
 ]

@@ -3,7 +3,7 @@ from dataclasses import field
 from turtle import textinput
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .forms import ProductsForm,VariationForm,ImageForm
+from .forms import ProductsForm,VariationForm,ImageForm,CatalogForm
 from django.contrib import messages
 from django.forms import inlineformset_factory
 from .models import Product, Variation,Image
@@ -32,8 +32,8 @@ def editProduct(request,product_id):
 
     try:
         product = Product.objects.get(pk=product_id)
-    except Exception as e:
-        raise e
+    except Product.DoesNotExist:
+        product = None
                
     variation = product.variation_set.all()
     image = product.image_set.all()
@@ -66,8 +66,8 @@ def createVariation(request,product_id):
 
     try:
         product = Product.objects.get(pk=product_id)
-    except Exception as e:
-        raise e
+    except Product.DoesNotExist:
+        product = None
 
     formset = VariationFormSet(instance=product)
 
@@ -97,16 +97,17 @@ def createImage(request,product_id):
 
     try:
         product = Product.objects.get(pk=product_id)
-    except Exception as e:
-        raise e
+    except Product.DoesNotExist:
+        product = None
 
     formset = ImageFormSet(instance=product)
 
     if request.method == 'POST':
         formset = ImageFormSet(request.POST,request.FILES,instance=product)
         if formset.is_valid():
-            # for forms in formset
-            #     forms.
+
+            product.has_image = True
+            product.save()
                 
             formset.save()
             messages.success(request, 'Producto Editado....')
@@ -129,8 +130,13 @@ def viewProducts(request):
     img = []
 
     for products in all_products:
-        product_img = Image.objects.get(product_id=products.id,default=True)
-        img.append(product_img)
+
+        try:
+            product_img = Image.objects.get(product_id=products.id,default=True)
+            img.append(product_img)
+
+        except Image.DoesNotExist:
+            product_img = None
 
     context = {
         'products' : all_products,
@@ -138,6 +144,27 @@ def viewProducts(request):
     }
 
     return render(request, 'products/viewProduct.html', context)
+
+
+@login_required(login_url = 'login')
+def viewCatalogs(request):
+
+    if request.method == 'POST':
+        form = CatalogForm(request.POST)
+        if form.is_valid():
+
+
+            # messages.success(request, 'Producto Creado....')
+            return redirect('dashboard')
+
+    else:
+        form = CatalogForm(request.POST or None, request.FILES or None)
+        context = {
+            'form': form,
+        }
+    
+    return render(request, 'products/viewCatalogs.html',context)
+
 
 def get_all_products():
     

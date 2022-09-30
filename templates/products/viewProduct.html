@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -39,9 +40,16 @@
                 <tbody>
                     {% for product in products %}
                         <tr>
-                            {% for img in prod_img %}
-                                <td>{{ img.image }}</td>
-                            {% endfor %}
+                            {% if product.has_image %}
+                                {% for img in prod_img %}
+                                    {% if product.id == img.product_id.id %}
+                                        <td class="text-center"><img id="img_space" src="{{ img.image.url }}" style="width:65px;height:65px;"></td>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <td class="text-center"><img id="img_space" src="{% static 'images/no-image-available.png' %}" style="width:65px;height:65px;"></td>
+                            {% endif %}
+
                             <td>{{ product.product_code | capfirst }}</td>
                             <td>{{ product.product_name | capfirst }}</td>
                             <td>{{ product.mngProductCategory_id | capfirst }}</td>
