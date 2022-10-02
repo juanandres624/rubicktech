@@ -7,6 +7,7 @@ from .forms import ProductsForm,VariationForm,ImageForm,CatalogForm
 from django.contrib import messages
 from django.forms import inlineformset_factory
 from .models import Product, Variation,Image
+from django.db.models import Q
 
 @login_required(login_url = 'login')
 def newProduct(request):
@@ -149,13 +150,23 @@ def viewProducts(request):
 @login_required(login_url = 'login')
 def viewCatalogs(request):
 
-    if request.method == 'POST':
-        form = CatalogForm(request.POST)
-        if form.is_valid():
+    if request.method == 'GET':
+        prod_name = request.GET['product_name']
+        prod_price = request.GET['price']
+        prod_categ = request.GET['mngProductCategory_id']
+        prod_provider = request.GET['provider_id']
+        prod_brand = request.GET['mngProductBrand_id']
 
+        print('RESULT QUERY----' + prod_name)
 
-            # messages.success(request, 'Producto Creado....')
-            return redirect('dashboard')
+        if prod_name or prod_price or prod_categ or prod_provider or prod_brand:
+
+            products = Product.objects.order_by('-created_date').filter
+            (Q(product_name__icontains=prod_name) | Q(price__icontains=prod_price) |
+             Q(mngProductCategory_id__icontains=prod_categ) | Q(provider_id__icontains=prod_provider) |
+             Q(mngProductBrand_id__icontains=prod_brand))
+
+            print('RESULT QUERY----' + products)
 
     else:
         form = CatalogForm(request.POST or None, request.FILES or None)

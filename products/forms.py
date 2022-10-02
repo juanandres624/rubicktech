@@ -100,6 +100,9 @@ class CatalogForm(forms.ModelForm):
         self.fields['product_name'].widget.attrs['type'] = 'text'
         self.fields['price'].widget.attrs['class'] = 'percentage-inputmask'
         self.fields['price'].widget.attrs['im-insert'] = 'true'
+        self.fields['mngProductCategory_id'].required = False
+        self.fields['provider_id'].required = False
+        self.fields['mngProductBrand_id'].required = False
     
         for field_name, field in self.fields.items():
             if field.widget.attrs.get('class') != 'custom-control-input is-valid' :

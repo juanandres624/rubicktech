@@ -22,8 +22,7 @@
             </div>
         </div>
 
-        <form action="" method="GET">
-            {% csrf_token %}
+        <form action="{% url 'viewCatalogs' %}" method="GET">
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="card">
@@ -60,11 +59,16 @@
                         </div>
                     </div>
                 </div>
-
-        
-        
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-center">
+                                <input type="submit" class="btn btn-space btn-primary" value="Generar PDF"></input>
+                            </p>
+                </div>
+            </div>
+        </form>
     </div>
-
     {% include 'includes/footer.html' %}
 </div>
 
