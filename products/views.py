@@ -150,26 +150,50 @@ def viewProducts(request):
 @login_required(login_url = 'login')
 def viewCatalogs(request):
 
-    if request.method == 'GET':
+    if request.GET:
         prod_name = request.GET['product_name']
         prod_price = request.GET['price']
         prod_categ = request.GET['mngProductCategory_id']
         prod_provider = request.GET['provider_id']
         prod_brand = request.GET['mngProductBrand_id']
 
-        print('RESULT QUERY----' + prod_name)
+        if prod_name :
+            prod_name_condition = Q(product_name__icontains=prod_name)
+        else:
+            prod_name_condition = Q()
 
-        if prod_name or prod_price or prod_categ or prod_provider or prod_brand:
+        if prod_price :
+            prod_price_condition = Q(price__exact=prod_price)
+        else:
+            prod_price_condition = Q()
 
-            products = Product.objects.order_by('-created_date').filter
-            (Q(product_name__icontains=prod_name) | Q(price__icontains=prod_price) |
-             Q(mngProductCategory_id__icontains=prod_categ) | Q(provider_id__icontains=prod_provider) |
-             Q(mngProductBrand_id__icontains=prod_brand))
+        if prod_categ :
+            prod_categ_condition = Q(mngProductCategory_id__exact=prod_categ)
+        else:
+            prod_categ_condition = Q()        
+            
+        if prod_provider :
+            prod_provider_condition = Q(prod_provider__exact=prod_provider)
+        else:
+            prod_provider_condition = Q()        
+            
+        if prod_brand :
+            prod_brand_condition = Q(prod_brand__exact=prod_brand)
+        else:
+            prod_brand_condition = Q()
 
-            print('RESULT QUERY----' + products)
+        products = Product.objects.order_by('-created_date').filter(
+            prod_name_condition & prod_price_condition & prod_categ_condition & prod_provider_condition & 
+            prod_brand_condition)
+
+
+        form = CatalogForm(request.GET or None)
+        context = {
+            'form': form,
+        }
 
     else:
-        form = CatalogForm(request.POST or None, request.FILES or None)
+        form = CatalogForm(request.GET or None)
         context = {
             'form': form,
         }

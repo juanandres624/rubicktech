@@ -103,6 +103,8 @@ class CatalogForm(forms.ModelForm):
         self.fields['mngProductCategory_id'].required = False
         self.fields['provider_id'].required = False
         self.fields['mngProductBrand_id'].required = False
+        self.fields['price'].required = False
+        self.fields['product_name'].required = False
     
         for field_name, field in self.fields.items():
             if field.widget.attrs.get('class') != 'custom-control-input is-valid' :
