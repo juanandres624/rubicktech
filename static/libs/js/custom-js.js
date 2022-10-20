@@ -5,6 +5,32 @@
 
     $(document).ready(function(){
 
+        //Invoice
+        $('.select-2-billing-customer').select2();
+
+        $(".select-2-billing-customer").on('change', function(e) {
+            e.preventDefault();
+            var id_customer = $(this).val();
+            console.log(id_customer)
+            // GET AJAX request
+            $.ajax({
+                type: 'GET',
+                url: "get/ajax/validate/customer/",
+                data: {"id_customer": id_customer},
+                success: function (response) {
+                    if(response){
+                        console.log(response)
+                       
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+        })
+
+
+
         //calls modal image product / set img src
 
         $(".modal_img").click(function(){

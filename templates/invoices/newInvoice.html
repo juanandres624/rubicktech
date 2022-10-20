@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-wrapper">
+    {% include 'includes/alerts.html' %}
+    <div class="container-fluid  dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h3 class="mb-2">Nueva Venta </h3>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Ventas</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Nueva Venta</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form action="{% url 'newInvoice' %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <h5 class="card-header">Información Factura</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Vendedor</label>
+                                        {{ form.user }}
+                                    </div>                        
+                                </div>
+                                <div class="col-md-4 offset-md-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label"># De Factura</label>
+                                        {{ form.Invoice_no }}
+                                    </div>  
+                                </div>  
+                            </div>
+                            <div class="row">
+                            </div>
+        
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Cliente</label>
+                                        {{ form.billing_customer_id }}
+                                    </div>                        
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">E-mail</label>
+                                        <input type="text" name="" maxlength="200" class="form-control" id="">
+                                    </div>                        
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Cliente</label>
+                                        {{ form.payment_method }}
+                                    </div>                        
+                                </div>
+                            </div>   
+                                                                     
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-center">
+<!--                                <input type="submit" class="btn btn-space btn-primary">Guardar</input>-->
+                                <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
+                                <button class="btn btn-space btn-secondary">Cancel</button>
+                            </p>
+                </div>
+            </div>
+            {{ form.email.errors }}
+            {{ form.non_field_errors }}
+        </form>
+    </div>
+
+    {% include 'includes/footer.html' %}
+</div>
+
+
+{% endblock %}

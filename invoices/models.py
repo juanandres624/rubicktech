@@ -1,6 +1,7 @@
 from django.db import models
 from customers.models import Customer
 from products.models import Product
+from accounts.models import Account
 
 class Invoice(models.Model):
 
@@ -8,15 +9,22 @@ class Invoice(models.Model):
     ('Tarjeta de Crédito/Débito', 'Tarjeta de Crédito/Débito'), ('Otros', 'Otros'),)
 
     Invoice_no = models.CharField(max_length=200, blank=True)
-    billing_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    shipping_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    billing_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name= 'billing_customer')
+    shipping_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name = 'shipping_customer')
     is_final_customer = models.BooleanField(default=False)
     referral_guide = models.CharField(max_length=200, blank=True) #Guia de Remision
-    payment_method = models.CharField(max_length=20, choices=payment_method_s)
-    subtotal_12 = models.DecimalField(max_digits=10, decimal_places=2)
-    subtotal_0 = models.DecimalField(max_digits=10, decimal_places=2)
-    subtotal_no_taxes = models.DecimalField(max_digits=10, decimal_places=2)
-    subtotal_discount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=100, choices=payment_method_s)
+    subtotal_tax = models.DecimalField(max_digits=10, decimal_places=2, default=0) #Subtotal 12%
+    subtotal_0 = models.DecimalField(max_digits=10, decimal_places=2, default=0) # Subtotal 0%
+    subtotal_no_sub_taxes = models.DecimalField(max_digits=10, decimal_places=2 , default=0) # Subtotal No Sujeto De IVA
+    subtotal_no_taxes = models.DecimalField(max_digits=10, decimal_places=2, default=0) # Subtotal Sin Impuestos
+    subtotal_discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Descuento
+    subtotal_ice = models.DecimalField(max_digits=10, decimal_places=2, default=0) # ICE
+    subtotal_tax_percentage = models.DecimalField(max_digits=10, decimal_places=2, default=0) # IVA 12%
+    subtotal_tip = models.DecimalField(max_digits=10, decimal_places=2, default=0) # Propina
+    subtotal_gran_total = models.DecimalField(max_digits=10, decimal_places=2, default=0) # Valor TOTAL
+
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
