@@ -7,6 +7,7 @@
 
         //Invoice
         $('.select-2-billing-customer').select2();
+        $('.select-2-shipping-customer').select2();
 
         $(".select-2-billing-customer").on('change', function(e) {
             e.preventDefault();

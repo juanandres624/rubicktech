@@ -28,7 +28,7 @@ class Invoice(models.Model):
 
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
-    paid_date = models.DateTimeField(default=timezone.now)
+    paid_date = models.DateTimeField(blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)
 

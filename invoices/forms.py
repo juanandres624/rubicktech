@@ -29,7 +29,8 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = ["Invoice_no", "is_final_customer", "referral_guide", "payment_method", "subtotal_tax", "subtotal_0",
                   "subtotal_no_sub_taxes","subtotal_no_taxes","subtotal_discount","subtotal_ice","subtotal_tax_percentage",
-                  "subtotal_tip","subtotal_gran_total","billing_customer_id","shipping_customer_id","payment_method","user","created_date"]
+                  "subtotal_tip","subtotal_gran_total","billing_customer_id","shipping_customer_id","user",
+                  "created_date","is_paid","paid_date"]
         widgets = {'billing_customer_id': CustomerBillingSelect, 'shipping_customer_id': CustomerShippingSelect
                     ,'payment_method': PaymentMethodSelect}
 
@@ -39,6 +40,7 @@ class InvoiceForm(forms.ModelForm):
         self.fields['referral_guide'].widget.attrs['type'] = 'text'
 
         self.fields['billing_customer_id'].widget.attrs['class'] = 'select-2-billing-customer'
+        self.fields['shipping_customer_id'].widget.attrs['class'] = 'select-2-shipping-customer'
 
         self.fields['subtotal_tax'].widget.attrs['class'] = 'percentage-inputmask'
         self.fields['subtotal_tax'].widget.attrs['im-insert'] = 'true'
@@ -59,11 +61,16 @@ class InvoiceForm(forms.ModelForm):
 
         self.fields['is_final_customer'].widget.attrs['class'] = 'custom-control-input'
         self.fields['is_final_customer'].widget.attrs['class'] += ' is-valid'
-        self.fields['is_final_customer'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_final_customer'].widget.attrs['type'] = 'checkbox'        
+        
+        self.fields['is_paid'].widget.attrs['class'] = 'custom-control-input'
+        self.fields['is_paid'].widget.attrs['class'] += ' is-valid'
+        self.fields['is_paid'].widget.attrs['type'] = 'checkbox'
 
         self.fields['user'].widget.attrs['disabled'] = True
         self.fields['Invoice_no'].widget.attrs['readonly'] = True
         self.fields['created_date'].widget.attrs['readonly'] = True
+        self.fields['paid_date'].widget.attrs['readonly'] = True
 
         for field_name, field in self.fields.items():
             if field.widget.attrs.get('class') != 'custom-control-input is-valid' :

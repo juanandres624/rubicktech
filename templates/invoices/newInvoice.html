@@ -50,105 +50,160 @@
                                 </div>  
                             </div>
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label class="col-form-label">Cliente</label>
                                         {{ form.billing_customer_id }}
                                     </div>                        
                                 </div>
+                                <div class="col-2">
+                                    <div class="form-group"> 
+                                        <label class="col-form-label">&nbsp;</label>
+                                        <div class="custom-control custom-checkbox">
+                                            {{ form.is_final_customer }}
+                                            <label class="custom-control-label" for="id_is_final_customer">Consumidor Final</label>
+                                        </div>  
+                                    </div>                            
+                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
+
+                            <div class="accrodion-regular">
+                                <div id="accordion1">
                                     <div class="card">
-                                        <h5 class="card-header">Información Cliente</h5>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label>Nombre Cliente</label>
-                                                        <p id="cust_names"></p>
-                                                    </div>                                                 
-                                                </div>                                
-                                                <div class="col-4">
-                                                    <div class="form-group">                                                       
-                                                        <label># Documento</label>
-                                                        <p id="cust_doc_num"></p>
-                                                    </div>
-                                                </div>                                
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label>Email</label>
-                                                        <p id="cust_email"></p>
-                                                    </div>                                                     
-                                                </div>                                
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label># Telefono</label>
-                                                        <p id="cust_phone"></p>
-                                                    </div>
+                                        <div class="card-header" id="headingOne">
+                                            <h5 class="mb-0">
+                                               <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseSeven">
+                                                 <span class="fas fa-angle-down mr-3"></span>Información Cliente
+                                               </button>
+                                              </h5>
+                                        </div>
+                                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion1">
+                                            <div class="card-body">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label><b>Nombre Cliente</b></label>
+                                                                <p id="cust_names"></p>
+                                                            </div>                                                 
+                                                        </div>                                
+                                                        <div class="col-4">
+                                                            <div class="form-group">                                                       
+                                                                <label><b># Documento</b></label>
+                                                                <p id="cust_doc_num"></p>
+                                                            </div>
+                                                        </div>                                
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label><b>Email</b></label>
+                                                                <p id="cust_email"></p>
+                                                            </div>                                                     
+                                                        </div>                                
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label><b># Telefono</b></label>
+                                                                <p id="cust_phone"></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label><b>Direccion</b></label>
+                                                                <p id="cust_address"></p>
+                                                            </div>                                                      
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label><b>Ciudad</b></label>
+                                                                <p id="cust_city"></p>
+                                                            </div>                                              
+                                                        </div>
+                                                    </div> 
                                                 </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label>Direccion</label>
-                                                        <p id="cust_address"></p>
-                                                    </div>                                                      
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Ciudad</label>
-                                                        <p id="cust_city"></p>
-                                                    </div>                                              
-                                                </div>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                            </div>
+
+                            <div class="accrodion-regular">
+                                <div id="accordion2">
                                     <div class="card">
-                                        <h5 class="card-header">Otra Información</h5>
-                                        <div class="card-body">
-                                            <div class="row">           
-                                            </div> 
+                                        <div class="card-header" id="headingTwo">
+                                            <h5 class="mb-0">
+                                               <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                                 <span class="fas fa-angle-down mr-3"></span>Otra Información Factura
+                                               </button>
+                                              </h5>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion2">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <!-- <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label class="col-form-label">Entregado a</label>
+                                                            {{ form.shipping_customer_id }}
+                                                        </div>                        
+                                                    </div> -->
+                                                    <div class="col-2">
+                                                        <div class="form-group"> 
+                                                            <label class="col-form-label">&nbsp;</label>
+                                                            <div class="custom-control custom-checkbox">
+                                                                {{ form.is_paid }}
+                                                                <label class="custom-control-label" for="id_is_paid">Factura Pagado</label>
+                                                            </div>  
+                                                        </div>                            
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label class="col-form-label">Metodo de Pago</label>
+                                                            {{ form.payment_method }}
+                                                        </div>                        
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label class="col-form-label">Fecha de Pago</label>
+                                                            {{ form.paid_date }}
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="card">
                         <h5 class="card-header">Detalle Factura</h5>
                         <div class="card-body">           
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Metodo de Pago</label>
-                                        {{ form.payment_method }}
-                                    </div>                        
-                                </div>
-                            </div>                                                                
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-                    <div class="card">
-                        <h5 class="card-header">Otra Información Factura</h5>
-                        <div class="card-body">           
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Metodo de Pago</label>
-                                        {{ form.payment_method }}
-                                    </div>                        
-                                </div>
-                            </div>                                                                
+
+                                <table class="table table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width:10%" class="text-center">Codigo</th>
+                                            <th scope="col" style="width:10%" class="text-center">Cantidad</th>
+                                            <th scope="col" style="width:50%" class="text-center">Detalle</th>
+                                            <th scope="col" style="width:10%" class="text-center">Precio U.</th>
+                                            <th scope="col" style="width:10%" class="text-center">Dscto %</th>
+                                            <th scope="col" style="width:10%" class="text-center">Precio Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>@mddo</td>
+                                            <td>@mddo</td>
+                                        </tr>
+                               
+                                    </tbody>
+                                </table>
+
                         </div>
                     </div>
                 </div>
