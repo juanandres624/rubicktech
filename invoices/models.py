@@ -2,6 +2,7 @@ from django.db import models
 from customers.models import Customer
 from products.models import Product
 from accounts.models import Account
+from django.utils import timezone
 
 class Invoice(models.Model):
 
@@ -12,6 +13,7 @@ class Invoice(models.Model):
     billing_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name= 'billing_customer')
     shipping_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name = 'shipping_customer')
     is_final_customer = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
     referral_guide = models.CharField(max_length=200, blank=True) #Guia de Remision
     payment_method = models.CharField(max_length=100, choices=payment_method_s)
     subtotal_tax = models.DecimalField(max_digits=10, decimal_places=2, default=0) #Subtotal 12%
@@ -26,7 +28,8 @@ class Invoice(models.Model):
 
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
-    created_date = models.DateTimeField(auto_now_add=True)
+    paid_date = models.DateTimeField(default=timezone.now)
+    created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):

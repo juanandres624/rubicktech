@@ -11,7 +11,13 @@
         $(".select-2-billing-customer").on('change', function(e) {
             e.preventDefault();
             var id_customer = $(this).val();
-            console.log(id_customer)
+            $('#cust_names').text('');
+            $('#cust_doc_num').text('');
+            $('#cust_email').text('');
+            $('#cust_phone').text('');
+            $('#cust_address').text('');
+            $('#cust_city').text('');
+            
             // GET AJAX request
             $.ajax({
                 type: 'GET',
@@ -19,11 +25,15 @@
                 data: {"id_customer": id_customer},
                 success: function (response) {
                     if(response){
-                        console.log(response)
-                       
+                        $('#cust_names').text(response['customer_full_name']);
+                        $('#cust_doc_num').text(response['customer_doc_num']);
+                        $('#cust_email').text(response['customer_email']);
+                        $('#cust_phone').text(response['customer_phone1']);
+                        $('#cust_address').text(response['customer_address']);
+                        $('#cust_city').text(response['customer_city']);                    
                     }
                 },
-                error: function (response) {
+                error: function (response){
                     console.log(response)
                 }
             })

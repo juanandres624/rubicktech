@@ -32,9 +32,12 @@ def checkCustomerData(request):
         id_cust = request.GET.get("id_customer", None)
         if Customer.objects.filter(id = id_cust).exists():
             customer_data = Customer.objects.get(pk = id_cust)
-            return JsonResponse({"customer_email":customer_data.email,
+            return JsonResponse({"customer_full_name":customer_data.first_name + ' ' + customer_data.last_name,
+                "customer_doc_num":customer_data.document_number,
+                "customer_email":customer_data.email,
                 "customer_phone1":customer_data.phone_1,
-                "address":customer_data.address}, status = 200)
+                "customer_address":customer_data.address,
+                "customer_city":customer_data.mngCity_id.description}, status = 200)
         else:
             return JsonResponse({}, status = 400)
 
