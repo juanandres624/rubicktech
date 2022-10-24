@@ -1,10 +1,12 @@
-from django.shortcuts import render,redirect
+from asyncio.windows_events import NULL
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import InvoiceForm
 from django.contrib import messages
 from customers.models import Customer
+from invoices.models import Invoice
 from django.http import JsonResponse
-
+from datetime import date
 
 
 @login_required(login_url = 'login')
@@ -12,19 +14,58 @@ def newInvoice(request):
     if request.method == 'POST':
         form = InvoiceForm(request.POST)
         if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            if post.is_paid:
+                post.paid_date = str(date.today())
+            else:
+                post.paid_date = None
 
-            form.save()
+            if post.is_final_customer:
+                final_cust = Customer.objects.get(document_number=0)
+                post.billing_customer_id = final_cust
 
-            messages.success(request, 'Venta Creada....')
+            year = post.created_date.strftime("%Y")
+            month = post.created_date.strftime("%m")
+
+            invoice_number = str(year) + str(month) + str(post.Invoice_no).zfill(6)
+
+            post.Invoice_no_final = invoice_number
+
+            post.save()
+            #messages.success(request, 'Factura Creada....')
+            return redirect('newInvoiceDetail',  invoice_id=post.id)
+        else:
+            messages.error(request, 'Error:' + form.errors)
             return redirect('dashboard')
 
     else:
-        form = InvoiceForm(request.POST or None, request.FILES or None, initial={'user': request.user})
+        form = InvoiceForm(request.POST or None)
         context = {
             'form': form,
+            'user': request.user,
         }
 
         return render(request, 'invoices/newInvoice.html', context)
+
+
+@login_required(login_url = 'login')
+def newInvoiceDetail(request,invoice_id):
+
+    try:
+        invoice = Invoice.objects.get(pk=invoice_id)
+    except Invoice.DoesNotExist:
+        invoice = None
+               
+    if request.method == 'POST':
+
+        pass 
+    else:
+
+        context = {
+            'invoice': invoice,
+        }
+        return render(request, 'invoices/newInvoiceDetail.html', context)
 
 
 def checkCustomerData(request):

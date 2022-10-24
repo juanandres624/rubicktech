@@ -9,5 +9,6 @@ from invoices.views import (
 urlpatterns = [
     path('newInvoice', views.newInvoice, name='newInvoice'),
     path('get/ajax/validate/customer/', checkCustomerData, name = "ajax_customer_data"),
+    path('newInvoice/<int:invoice_id>/',views.newInvoiceDetail, name='newInvoiceDetail'),
 
 ]

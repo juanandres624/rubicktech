@@ -1,17 +1,28 @@
+from email.policy import default
 from django.db import models
 from customers.models import Customer
 from products.models import Product
 from accounts.models import Account
+from management.models import MngStatus
 from django.utils import timezone
+from django.db.models import Max
+
+
+def invoice_number():
+    invid = Invoice.objects.aggregate(max_inv=Max('Invoice_no'))['max_inv']
+    if invid is not None:
+        return invid + 1
+    return 0
 
 class Invoice(models.Model):
 
     payment_method_s = (('Efectivo', 'Efectivo'), ('Dinero Electrónico', 'Dinero Electrónico'),
     ('Tarjeta de Crédito/Débito', 'Tarjeta de Crédito/Débito'), ('Otros', 'Otros'),)
 
-    Invoice_no = models.CharField(max_length=200, blank=True)
-    billing_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name= 'billing_customer')
-    shipping_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name = 'shipping_customer')
+    Invoice_no = models.IntegerField(default=invoice_number, unique=True)
+    Invoice_no_final = models.CharField(max_length=200, blank=True)
+    billing_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name= 'billing_customer',blank=True,null=True)
+    #shipping_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name = 'shipping_customer')
     is_final_customer = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
     referral_guide = models.CharField(max_length=200, blank=True) #Guia de Remision
@@ -27,8 +38,10 @@ class Invoice(models.Model):
     subtotal_gran_total = models.DecimalField(max_digits=10, decimal_places=2, default=0) # Valor TOTAL
 
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    mngStatus_id = models.ForeignKey(MngStatus, on_delete=models.CASCADE, default=1)
 
-    paid_date = models.DateTimeField(blank=True)
+
+    paid_date = models.DateTimeField(blank=True,null=True,default=None)
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)
 
@@ -50,5 +63,4 @@ class InvoiceDetail(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=10, decimal_places=2)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-
 

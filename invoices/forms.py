@@ -9,12 +9,12 @@ class CustomerBillingSelect(forms.Select):
             option['attrs']['data-select'] = value.instance.__str__
         return option
 
-class CustomerShippingSelect(forms.Select):
-    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
-        option = super().create_option(name, value, label, selected, index, subindex, attrs)
-        if value:
-            option['attrs']['data-select'] = 'empty'
-        return option
+# class CustomerShippingSelect(forms.Select):
+#     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+#         option = super().create_option(name, value, label, selected, index, subindex, attrs)
+#         if value:
+#             option['attrs']['data-select'] = 'empty'
+#         return option
         
 class PaymentMethodSelect(forms.Select):
     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
@@ -27,12 +27,10 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = Invoice
-        fields = ["Invoice_no", "is_final_customer", "referral_guide", "payment_method", "subtotal_tax", "subtotal_0",
-                  "subtotal_no_sub_taxes","subtotal_no_taxes","subtotal_discount","subtotal_ice","subtotal_tax_percentage",
-                  "subtotal_tip","subtotal_gran_total","billing_customer_id","shipping_customer_id","user",
-                  "created_date","is_paid","paid_date"]
-        widgets = {'billing_customer_id': CustomerBillingSelect, 'shipping_customer_id': CustomerShippingSelect
-                    ,'payment_method': PaymentMethodSelect}
+        fields = ["Invoice_no", "is_final_customer", "referral_guide", "payment_method",
+                "billing_customer_id","created_date","is_paid","paid_date"]
+        widgets = {'billing_customer_id': CustomerBillingSelect,#'shipping_customer_id': CustomerShippingSelect
+                    'payment_method': PaymentMethodSelect,}
 
     def __init__(self, *args, **kwargs):
         super(InvoiceForm, self).__init__(*args, **kwargs)
@@ -40,24 +38,26 @@ class InvoiceForm(forms.ModelForm):
         self.fields['referral_guide'].widget.attrs['type'] = 'text'
 
         self.fields['billing_customer_id'].widget.attrs['class'] = 'select-2-billing-customer'
-        self.fields['shipping_customer_id'].widget.attrs['class'] = 'select-2-shipping-customer'
+        self.fields['billing_customer_id'].widget.attrs['required'] = False
 
-        self.fields['subtotal_tax'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_tax'].widget.attrs['im-insert'] = 'true'
-        self.fields['subtotal_0'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_0'].widget.attrs['im-insert'] = 'true'
-        self.fields['subtotal_no_sub_taxes'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_no_sub_taxes'].widget.attrs['im-insert'] = 'true'
-        self.fields['subtotal_no_taxes'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_no_taxes'].widget.attrs['im-insert'] = 'true'
-        self.fields['subtotal_discount'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_discount'].widget.attrs['im-insert'] = 'true'
-        self.fields['subtotal_tax_percentage'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_tax_percentage'].widget.attrs['im-insert'] = 'true'
-        self.fields['subtotal_tip'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_tip'].widget.attrs['im-insert'] = 'true'
-        self.fields['subtotal_gran_total'].widget.attrs['class'] = 'percentage-inputmask'
-        self.fields['subtotal_gran_total'].widget.attrs['im-insert'] = 'true'
+        # self.fields['shipping_customer_id'].widget.attrs['class'] = 'select-2-shipping-customer'
+
+        # self.fields['subtotal_tax'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_tax'].widget.attrs['im-insert'] = 'true'
+        # self.fields['subtotal_0'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_0'].widget.attrs['im-insert'] = 'true'
+        # self.fields['subtotal_no_sub_taxes'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_no_sub_taxes'].widget.attrs['im-insert'] = 'true'
+        # self.fields['subtotal_no_taxes'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_no_taxes'].widget.attrs['im-insert'] = 'true'
+        # self.fields['subtotal_discount'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_discount'].widget.attrs['im-insert'] = 'true'
+        # self.fields['subtotal_tax_percentage'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_tax_percentage'].widget.attrs['im-insert'] = 'true'
+        # self.fields['subtotal_tip'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_tip'].widget.attrs['im-insert'] = 'true'
+        # self.fields['subtotal_gran_total'].widget.attrs['class'] = 'percentage-inputmask'
+        # self.fields['subtotal_gran_total'].widget.attrs['im-insert'] = 'true'
 
         self.fields['is_final_customer'].widget.attrs['class'] = 'custom-control-input'
         self.fields['is_final_customer'].widget.attrs['class'] += ' is-valid'
@@ -67,7 +67,7 @@ class InvoiceForm(forms.ModelForm):
         self.fields['is_paid'].widget.attrs['class'] += ' is-valid'
         self.fields['is_paid'].widget.attrs['type'] = 'checkbox'
 
-        self.fields['user'].widget.attrs['disabled'] = True
+        #self.fields['user'].widget.attrs['disabled'] = True
         self.fields['Invoice_no'].widget.attrs['readonly'] = True
         self.fields['created_date'].widget.attrs['readonly'] = True
         self.fields['paid_date'].widget.attrs['readonly'] = True

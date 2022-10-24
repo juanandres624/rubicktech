@@ -4,6 +4,7 @@
     // });
 
     $(document).ready(function(){
+        //addInvoiceDetail();
 
         //Invoice
         $('.select-2-billing-customer').select2();
@@ -40,6 +41,18 @@
             })
         })
 
+        //Final Customer checkbox
+        $("#id_is_final_customer").on('change', function(e) {
+            e.preventDefault();
+            if ($('#id_is_final_customer').is(':checked')){
+                $('#id_billing_customer_id').prop('readonly', true);
+            }else{
+                $('#id_billing_customer_id').prop('readonly', false);
+            }
+            
+
+        })
+
 
 
         //calls modal image product / set img src
@@ -69,4 +82,8 @@
 
         //getRowValue = table.rows[i].cells.item(0).innerHTML;
 
+    }
+
+    function addInvoiceDetail(){
+        $(invoiceDetailTable).find('tbody').append("<tr><td>aaaa</td></tr>");
     }
