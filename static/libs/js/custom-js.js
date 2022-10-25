@@ -8,7 +8,7 @@
 
         //Invoice
         $('.select-2-billing-customer').select2();
-        $('.select-2-shipping-customer').select2();
+        //$('.select-2-shipping-customer').select2();
 
         $(".select-2-billing-customer").on('change', function(e) {
             e.preventDefault();
@@ -19,35 +19,19 @@
             $('#cust_phone').text('');
             $('#cust_address').text('');
             $('#cust_city').text('');
+
+            getFillCustomerData(id_customer);
             
-            // GET AJAX request
-            $.ajax({
-                type: 'GET',
-                url: "get/ajax/validate/customer/",
-                data: {"id_customer": id_customer},
-                success: function (response) {
-                    if(response){
-                        $('#cust_names').text(response['customer_full_name']);
-                        $('#cust_doc_num').text(response['customer_doc_num']);
-                        $('#cust_email').text(response['customer_email']);
-                        $('#cust_phone').text(response['customer_phone1']);
-                        $('#cust_address').text(response['customer_address']);
-                        $('#cust_city').text(response['customer_city']);                    
-                    }
-                },
-                error: function (response){
-                    console.log(response)
-                }
-            })
+
         })
 
         //Final Customer checkbox
         $("#id_is_final_customer").on('change', function(e) {
             e.preventDefault();
             if ($('#id_is_final_customer').is(':checked')){
-                $('#id_billing_customer_id').prop('readonly', true);
+                $('#id_billing_customer_id').attr('disabled',true);
             }else{
-                $('#id_billing_customer_id').prop('readonly', false);
+                $('#id_billing_customer_id').attr('disabled',false);
             }
             
 
@@ -84,6 +68,29 @@
 
     }
 
+    function getFillCustomerData(id_customer){
+        // GET AJAX request
+        $.ajax({
+            type: 'GET',
+            url: "get/ajax/validate/customer/",
+            data: {"id_customer": id_customer},
+            success: function (response) {
+                if(response){
+                    $('#cust_names').text(response['customer_full_name']);
+                    $('#cust_doc_num').text(response['customer_doc_num']);
+                    $('#cust_email').text(response['customer_email']);
+                    $('#cust_phone').text(response['customer_phone1']);
+                    $('#cust_address').text(response['customer_address']);
+                    $('#cust_city').text(response['customer_city']);                    
+                }
+            },
+            error: function (response){
+                console.log(response)
+            }
+        })
+    }
+    
+    
     function addInvoiceDetail(){
         $(invoiceDetailTable).find('tbody').append("<tr><td>aaaa</td></tr>");
     }

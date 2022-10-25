@@ -54,17 +54,7 @@
                                     <div class="form-group">
                                         <label class="col-form-label">Cliente</label>
                                         <p><b>{{ invoice.billing_customer_id }}</b></p>
-
                                     </div>                        
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-group"> 
-                                        <label class="col-form-label">&nbsp;</label>
-                                        <div class="custom-control custom-checkbox">
-                                            {{ form.is_final_customer }}
-                                            <label class="custom-control-label" for="id_is_final_customer">Consumidor Final</label>
-                                        </div>  
-                                    </div>                            
                                 </div>
                             </div>
 
@@ -73,7 +63,7 @@
                                     <div class="card">
                                         <div class="card-header" id="headingOne">
                                             <h5 class="mb-0">
-                                               <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseSeven">
+                                               <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseSeven">
                                                  <span class="fas fa-angle-down mr-3"></span>Información Cliente
                                                </button>
                                               </h5>
@@ -85,37 +75,37 @@
                                                         <div class="col-4">
                                                             <div class="form-group">
                                                                 <label><b>Nombre Cliente</b></label>
-                                                                <p id="cust_names"></p>
+                                                                <p>{{ invoice.billing_customer_id.first_name }} {{ invoice.billing_customer_id.last_name }}</p>
                                                             </div>                                                 
                                                         </div>                                
                                                         <div class="col-4">
                                                             <div class="form-group">                                                       
                                                                 <label><b># Documento</b></label>
-                                                                <p id="cust_doc_num"></p>
+                                                                <p>{{ invoice.billing_customer_id.document_number }}</p>
                                                             </div>
                                                         </div>                                
                                                         <div class="col-4">
                                                             <div class="form-group">
                                                                 <label><b>Email</b></label>
-                                                                <p id="cust_email"></p>
+                                                                <p>{{ invoice.billing_customer_id.email }}</p>
                                                             </div>                                                     
                                                         </div>                                
                                                         <div class="col-4">
                                                             <div class="form-group">
                                                                 <label><b># Telefono</b></label>
-                                                                <p id="cust_phone"></p>
+                                                                <p>{{ invoice.billing_customer_id.phone_1 }}</p>
                                                             </div>
                                                         </div>
                                                         <div class="col-4">
                                                             <div class="form-group">
                                                                 <label><b>Direccion</b></label>
-                                                                <p id="cust_address"></p>
+                                                                <p>{{ invoice.billing_customer_id.address }}</p>
                                                             </div>                                                      
                                                         </div>
                                                         <div class="col-4">
                                                             <div class="form-group">
                                                                 <label><b>Ciudad</b></label>
-                                                                <p id="cust_city"></p>
+                                                                <p>{{ invoice.billing_customer_id.mngCity_id }}</p>
                                                             </div>                                              
                                                         </div>
                                                     </div> 
@@ -131,7 +121,7 @@
                                     <div class="card">
                                         <div class="card-header" id="headingTwo">
                                             <h5 class="mb-0">
-                                               <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                               <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                                                  <span class="fas fa-angle-down mr-3"></span>Otra Información Factura
                                                </button>
                                               </h5>
@@ -145,7 +135,7 @@
                                                             {{ form.shipping_customer_id }}
                                                         </div>                        
                                                     </div> -->
-                                                    <div class="col-2">
+                                                    <!-- <div class="col-2">
                                                         <div class="form-group"> 
                                                             <label class="col-form-label">&nbsp;</label>
                                                             <div class="custom-control custom-checkbox">
@@ -153,17 +143,17 @@
                                                                 <label class="custom-control-label" for="id_is_paid">Factura Pagado</label>
                                                             </div>  
                                                         </div>                            
-                                                    </div>
-                                                    <div class="col-4">
+                                                    </div> -->
+                                                    <div class="col-6">
                                                         <div class="form-group">
                                                             <label class="col-form-label">Metodo de Pago</label>
-                                                            {{ form.payment_method }}
+                                                            <p><b>{{ invoice.payment_method }}</b></p>
                                                         </div>                        
                                                     </div>
                                                     <div class="col-4">
                                                         <div class="form-group">
                                                             <label class="col-form-label">Fecha de Pago</label>
-                                                            {{ form.paid_date }}
+                                                            <p><b>{{ invoice.paid_date }}</b></p>
                                                         </div>                        
                                                     </div>
                                                 </div>
