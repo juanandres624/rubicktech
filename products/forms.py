@@ -23,7 +23,7 @@ class ProductsForm(forms.ModelForm):
         model = Product
         fields = ["product_code", "code", "product_name", "description", "price", "boughtPrice",
                   "is_discount","discountPorcentage","mngProductCategory_id","provider_id",
-                  "mngProductBrand_id"]
+                  "mngProductBrand_id","stock"]
         widgets = {'mngProductCategory_id': MngSelectDescription, 'provider_id': MngSelectProvider,
             'mngProductBrand_id': MngSelectDescription,"description": forms.Textarea()}
 
@@ -106,6 +106,25 @@ class CatalogForm(forms.ModelForm):
         self.fields['price'].required = False
         self.fields['product_name'].required = False
     
+        for field_name, field in self.fields.items():
+            if field.widget.attrs.get('class') != 'custom-control-input is-valid' :
+                if field.widget.attrs.get('class'):
+                    field.widget.attrs['class'] += ' form-control'
+                else:
+                    field.widget.attrs['class'] = 'form-control'
+
+
+class InvoiceProdForm(forms.ModelForm):
+
+    class Meta:
+        model = Product
+        fields = ["product_code","stock"]
+
+    def __init__(self, *args, **kwargs):
+        super(InvoiceProdForm, self).__init__(*args, **kwargs)
+        self.fields['product_code'].widget.attrs['type'] = 'text'
+        self.fields['stock'].widget.attrs['type'] = 'text'
+        
         for field_name, field in self.fields.items():
             if field.widget.attrs.get('class') != 'custom-control-input is-valid' :
                 if field.widget.attrs.get('class'):

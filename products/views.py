@@ -15,11 +15,11 @@ def newProduct(request):
         form = ProductsForm(request.POST)
         if form.is_valid():
 
-            form.save()
+            newProd = form.save()
 
             messages.success(request, 'Producto Creado....')
-            return redirect('dashboard')
-
+            return redirect('editProduct',  product_id=newProd.id)
+            #return redirect('dashboard')
     else:
         form = ProductsForm(request.POST or None, request.FILES or None)
         context = {
@@ -36,7 +36,7 @@ def editProduct(request,product_id):
     except Product.DoesNotExist:
         product = None
                
-    variation = product.variation_set.all()
+    #variation = product.variation_set.all()
     image = product.image_set.all()
 
     if request.method == 'POST':
@@ -53,7 +53,7 @@ def editProduct(request,product_id):
         context = {
             'id': product.id,
             'form': form,
-            'variations':variation,
+            #'variations':variation,
             'images':image,
         }
         return render(request, 'products/editProduct.html', context)

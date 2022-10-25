@@ -22,8 +22,6 @@
             </div>
         </div>
 
-        <form action="{% url 'newInvoice' %}" method="POST">
-            {% csrf_token %}
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="card">
@@ -169,60 +167,96 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">Detalle Factura</h5>
-                        <div class="card-body">           
+                        <!-- <h5 class="card-header">Detalle Factura</h5> -->
+                        <div class="card-body">
+                            <div class="card">
+                                <h5 class="card-header">Filtros</h5>
+                                <div class="card-body">
+                                    <form action="{% url 'newInvoiceDetail' invoice.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Codigo Producto</label>
+                                                    <input type="text" name="product_code" class="form-control" id="id_product_code">
+                                                    <!-- {{ form.product_code }} -->
+                                                </div>  
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Cantidad</label>
+                                                    <input type="number" name="quantity" value="0" class="form-control" id="id_quantity">
+                                                </div>  
+                                            </div>
 
-                                <table class="table table-bordered" style="width:100%" id="invoiceDetailTable">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" style="width:10%" class="text-center">Codigo</th>
-                                            <th scope="col" style="width:10%" class="text-center">Cantidad</th>
-                                            <th scope="col" style="width:50%" class="text-center">Detalle</th>
-                                            <th scope="col" style="width:10%" class="text-center">Precio U.</th>
-                                            <th scope="col" style="width:10%" class="text-center">Dscto %</th>
-                                            <th scope="col" style="width:10%" class="text-center">Precio Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row"><input type="text" name="invoice_subtotal" class="form-control" id="id_subtotal"></th>
-                                            <td><input type="text" name="invoice_prod_quantity" class="form-control" id="invoice_prod_quantity"></td>
-                                            <td><p id="invoice_prod_detail_0"></p></td>
-                                            <td><p id="invoice_prod_unit_price_0"></p></td>
-                                            <td><p id="invoice_prod_disc_0"></p></td>
-                                            <td><p id="invoice_prod_total_0"></p></td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td >Subtotal</td>
-                                            <td ><input type="text" name="invoice_subtotal" readonly class="form-control" id="id_subtotal"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td >IVA</td>
-                                            <td ><input type="text" name="invoice_tax" readonly class="form-control" id="id_tax"></td>
-                                        </tr>                                        
-                                        <tr>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td style="border:0px;"></td>
-                                            <td >Total a Pagar</td>
-                                            <td ><input type="text" name="invoice_total" readonly class="form-control" id="id_total"></td>
-                                        </tr>
+                                            <div class="col-2">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">&nbsp;</label>
+                                                    <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{ form.email.errors }}
+                                    {{ form.non_field_errors }}
+                                    </form>
+                                </div>
+                            </div>
 
-                                    </tfoot>
-
-                                </table>
-
+                            <div class="card">
+                                <h5 class="card-header">Detalle Factura</h5>
+                                <div class="card-body">
+                                    <table class="table table-bordered" style="width:100%" id="invoiceDetailTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="width:10%" class="text-center">Codigo</th>
+                                                <th scope="col" style="width:10%" class="text-center">Cantidad</th>
+                                                <th scope="col" style="width:50%" class="text-center">Detalle</th>
+                                                <th scope="col" style="width:10%" class="text-center">Precio U.</th>
+                                                <th scope="col" style="width:10%" class="text-center">Dscto %</th>
+                                                <th scope="col" style="width:10%" class="text-center">P.Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for det in invdetail %}
+                                            <tr>
+                                                <td>{{ det.product_id.product_code }}</td>
+                                                <td class="text-center">{{ det.quantity }}</td>
+                                                <td>{{ det.product_id.description }}</td>
+                                                <td class="text-right">{{ det.unit_price }}</td>
+                                                <td class="text-right">{{ det.discount }}</td>
+                                                <td class="text-right">{{ det.total_price }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td >Subtotal</td>
+                                                <td ><input type="text" name="invoice_subtotal" readonly class="form-control" id="id_subtotal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td >IVA</td>
+                                                <td ><input type="text" name="invoice_tax" readonly class="form-control" id="id_tax"></td>
+                                            </tr>                                        
+                                            <tr>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td style="border:0px;"></td>
+                                                <td >Total a Pagar</td>
+                                                <td ><input type="text" name="invoice_total" readonly class="form-control" id="id_total"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -233,16 +267,13 @@
 
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p class="text-center">
+                    <p class="text-center">
 <!--                                <input type="submit" class="btn btn-space btn-primary">Guardar</input>-->
-                                <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
-                                <button class="btn btn-space btn-secondary">Cancel</button>
-                            </p>
+                        <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
+                        <button class="btn btn-space btn-secondary">Cancel</button>
+                    </p>
                 </div>
             </div>
-            {{ form.email.errors }}
-            {{ form.non_field_errors }}
-        </form>
     </div>
 
     {% include 'includes/footer.html' %}

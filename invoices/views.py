@@ -1,9 +1,13 @@
 from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
+
+from products.models import Product
 from .forms import InvoiceForm
+from products.forms import InvoiceProdForm
 from django.contrib import messages
 from customers.models import Customer
+from invoices.models import InvoiceDetail
 from invoices.models import Invoice
 from django.http import JsonResponse
 from datetime import date
@@ -51,19 +55,47 @@ def newInvoice(request):
 
 @login_required(login_url = 'login')
 def newInvoiceDetail(request,invoice_id):
+    discountVal = 0
 
     try:
         invoice = Invoice.objects.get(pk=invoice_id)
     except Invoice.DoesNotExist:
         invoice = None
+
+    Invdetail = invoice.invoicedetail_set.all()
                
     if request.method == 'POST':
+        form = request.POST
 
-        pass 
+        try:
+            prod = Product.objects.get(product_code=form['product_code'])
+        except Exception as e:
+            raise e
+        
+        if prod:
+
+            if prod.is_discount:
+                discountVal = calculateDiscount(prod.price,prod.discountPorcentage)
+            else:
+                discountVal = 0
+
+            inv_detail = InvoiceDetail.objects.create(
+                invoice_id=invoice,
+                product_id=prod,
+                quantity=form['quantity'],
+                unit_price = prod.price,
+                discount = discountVal,
+                total_price = prod.price - discountVal,
+            )
+
+            inv_detail.save()
+
+        return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+
     else:
-
         context = {
             'invoice': invoice,
+            'invdetail': Invdetail,
         }
         return render(request, 'invoices/newInvoiceDetail.html', context)
 
@@ -81,4 +113,12 @@ def checkCustomerData(request):
                 "customer_city":customer_data.mngCity_id.description}, status = 200)
         else:
             return JsonResponse({}, status = 400)
+
+def calculateDiscount(amount,discount):
+    if(amount>0):
+        valPorc = amount * discount
+        valTot = valPorc / 100
+
+        return valTot
+    
 
