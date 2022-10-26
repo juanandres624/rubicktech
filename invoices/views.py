@@ -69,8 +69,9 @@ def newInvoiceDetail(request,invoice_id):
 
         try:
             prod = Product.objects.get(product_code=form['product_code'])
-        except Exception as e:
-            raise e
+        except Product.DoesNotExist:
+            messages.error(request, 'Producto No Existe')
+            return redirect('newInvoiceDetail',  invoice_id=invoice_id)
         
         if prod:
 

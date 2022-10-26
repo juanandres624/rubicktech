@@ -205,65 +205,66 @@
                             <div class="card">
                                 <h5 class="card-header">Detalle Factura</h5>
                                 <div class="card-body">
-                                    <table class="table table-bordered" style="width:100%" id="invoiceDetailTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" style="width:10%" class="text-center">Codigo</th>
-                                                <th scope="col" style="width:10%" class="text-center">Cantidad</th>
-                                                <th scope="col" style="width:50%" class="text-center">Detalle</th>
-                                                <th scope="col" style="width:10%" class="text-center">Precio U.</th>
-                                                <th scope="col" style="width:10%" class="text-center">Dscto %</th>
-                                                <th scope="col" style="width:10%" class="text-center">P.Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for det in invdetail %}
-                                            <tr>
-                                                <td>{{ det.product_id.product_code }}</td>
-                                                <td class="text-center">{{ det.quantity }}</td>
-                                                <td>{{ det.product_id.description }}</td>
-                                                <td class="text-right">{{ det.unit_price }}</td>
-                                                <td class="text-right">{{ det.discount }}</td>
-                                                <td class="text-right">{{ det.total_price }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td >Subtotal</td>
-                                                <td ><input type="text" name="invoice_subtotal" readonly class="form-control" id="id_subtotal"></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td >IVA</td>
-                                                <td ><input type="text" name="invoice_tax" readonly class="form-control" id="id_tax"></td>
-                                            </tr>                                        
-                                            <tr>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td style="border:0px;"></td>
-                                                <td >Total a Pagar</td>
-                                                <td ><input type="text" name="invoice_total" readonly class="form-control" id="id_total"></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <table class="table table-bordered" style="width:100%" id="invoiceDetailTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col" style="width:10%" class="text-center">Codigo</th>
+                                                        <th scope="col" style="width:5%" class="text-center">Cantidad</th>
+                                                        <th scope="col" style="width:50%" class="text-center">Detalle</th>
+                                                        <th scope="col" style="width:9%" class="text-center">Precio U.</th>
+                                                        <th scope="col" style="width:9%" class="text-center">Dscto %</th>
+                                                        <th scope="col" style="width:9%" class="text-center">P.Total</th>
+                                                        <th scope="col" style="width:30%" class="text-center"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for det in invdetail %}
+                                                    <tr>
+                                                        <td>{{ det.product_id.product_code }}</td>
+                                                        <td class="text-center">{{ det.quantity }}</td>
+                                                        <td>{{ det.product_id.description }}</td>
+                                                        <td class="text-right">{{ det.unit_price }}</td>
+                                                        <td class="text-right">{{ det.discount }}</td>
+                                                        <td class="text-right">{{ det.total_price }}</td>
+                                                        <td class="text-center">
+                                                            <a type="button" href="#" onclick="updateDetailInvoice()" class="modal_det_inv"><span class="fa fa-edit"></span></a>
+                                                            <a type="button" href="#"><span class="fa fa-trash"></span></a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+
+                                        </div>
+                                        <div class="offset-6 col-6">
+                                            <table class="table table-bordered" style="width:100%" id="">
+                                                <tbody>
+                                                    <tr class="table-success">
+                                                        <td class="text-center"><b>SubTotal</b></td>
+                                                        <td class="text-right"><b>4.52</b></td>
+                                                        <td class="text-center"><b>IVA</b></td>
+                                                        <td class="text-right"><b>5.63</b></td>
+                                                        <td class="text-center"><b>TOTAL</b></td>
+                                                        <td class="text-right"><b>585.23</b></td>                      
+                                                    </tr>
+                                                </tbody>                         
+                                            </table>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
 
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -275,6 +276,41 @@
                 </div>
             </div>
     </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalDetInv" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Detalle Factura</h5>
+                        <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </a>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Codigo Producto</label>
+                                    <p>sdfsfsdf</p>
+                                </div>  
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Cantidad</label>
+                                    <input type="number" name="quantity" value="0" class="form-control" id="id_quantity">
+                                </div>  
+                            </div>
+                        </div>
+                                       
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     {% include 'includes/footer.html' %}
 </div>

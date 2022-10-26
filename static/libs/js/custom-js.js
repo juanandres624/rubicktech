@@ -49,7 +49,8 @@
             src_path = data_table[0];
 
             img_field.setAttribute("src", src_path);
-        });
+        });        
+        
 
     });
 
@@ -91,6 +92,7 @@
     }
     
     
-    function addInvoiceDetail(){
-        $(invoiceDetailTable).find('tbody').append("<tr><td>aaaa</td></tr>");
+    function updateDetailInvoice(){
+        $("#modalImg").modal('show');
+
     }
