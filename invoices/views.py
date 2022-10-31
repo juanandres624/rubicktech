@@ -63,37 +63,75 @@ def newInvoiceDetail(request,invoice_id):
         invoice = None
 
     Invdetail = invoice.invoicedetail_set.all()
+
+    print(request.method)
                
     if request.method == 'POST':
-        form = request.POST
+        if request.POST.get("post_btn") == 'btn1':
+            form = request.POST
 
-        try:
-            prod = Product.objects.get(product_code=form['product_code'])
-        except Product.DoesNotExist:
-            messages.error(request, 'Producto No Existe')
-            return redirect('newInvoiceDetail',  invoice_id=invoice_id)
-        
-        if prod:
-
-            if prod.is_discount:
-                discountVal = calculateDiscount(prod.price,prod.discountPorcentage)
-            else:
+            try:
+                prod = Product.objects.get(product_code=form['product_code'])
+            except Product.DoesNotExist:
+                messages.error(request, 'Producto No Existe')
+                return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+            
+            if prod:
                 discountVal = 0
+                quantityVal = form['quantity']
 
-            inv_detail = InvoiceDetail.objects.create(
-                invoice_id=invoice,
-                product_id=prod,
-                quantity=form['quantity'],
-                unit_price = prod.price,
-                discount = discountVal,
-                total_price = prod.price - discountVal,
-            )
+                if prod.is_discount:
+                    discountVal = calculateDiscount(prod.price,prod.discountPorcentage)
+                    discountVal = discountVal * quantityVal
+                else:
+                    discountVal = 0
+                    
 
-            inv_detail.save()
+                inv_detail = InvoiceDetail.objects.create(
+                    invoice_id=invoice,
+                    product_id=prod,
+                    quantity=quantityVal,
+                    unit_price = prod.price,
+                    discount = discountVal,
+                    total_price = prod.price - discountVal,
+                )
 
-        return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+                inv_detail.save()
 
+            return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+
+        else:
+            id_prod = request.POST.get("code_prod", None)
+            prod_quantity = request.POST.get("quantity", None)
+            discountVal = 0
+
+            if Invoice.objects.filter(id = invoice_id).exists():
+                invoice_data = Invoice.objects.get(pk = invoice_id)
+                invoice_data_prod = Product.objects.get(product_code = id_prod)
+
+                if InvoiceDetail.objects.filter(invoice_id = invoice_data, product_id = invoice_data_prod):
+                    invoice_det_data = InvoiceDetail.objects.get(invoice_id = invoice_data, product_id = invoice_data_prod)
+                    invoice_det_data.quantity = prod_quantity
+
+                    if invoice_data_prod.is_discount:
+                        discountVal = calculateDiscount(invoice_data_prod.price,invoice_data_prod.discountPorcentage)
+                        discountVal = discountVal * prod_quantity
+
+                    else:
+                        discountVal = 0
+
+                    invoice_det_data.discount = discountVal,
+                    invoice_det_data.total_price = invoice_data_prod.price - discountVal,
+                    invoice_det_data.save()
+                    return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+                else:
+                    messages.error(request, 'Detalle del Producto No Existe')
+                    return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+            else:
+                messages.error(request, 'Error Invoice')
+                return redirect('newInvoiceDetail',  invoice_id=invoice_id)
     else:
+
         context = {
             'invoice': invoice,
             'invdetail': Invdetail,
@@ -121,5 +159,26 @@ def calculateDiscount(amount,discount):
         valTot = valPorc / 100
 
         return valTot
-    
 
+
+# def updateInvoiceDetail(request):
+#     if request.method == "PUT":
+#         id_invoice = request.GET.get("id_invoice", None)
+#         id_prod = request.GET.get("id_prod", None)
+#         prod_quantity = request.GET.get("prod_quantity", None)
+
+
+#         if Invoice.objects.filter(id = id_invoice).exists():
+#             invoice_data = Invoice.objects.get(pk = id_invoice)
+#             invoice_data_prod = Product.objects.get(product_code = id_prod)
+#             print(invoice_data.id)
+#             print(invoice_data_prod.id)
+#             # if InvoiceDetail.objects.filter(invoice_id = invoice_data, product_id = invoice_data_prod):
+#             #     invoice_det_data = InvoiceDetail.objects.get(invoice_id = invoice_data, product_id = invoice_data_prod)
+#             #     invoice_det_data.quantity = prod_quantity
+#             #     invoice_det_data.save()
+#             #     return redirect('newInvoiceDetail',  invoice_id=id_invoice)
+#             # else:
+#             #     return JsonResponse({}, status = 400)
+#         else:
+#             return JsonResponse({}, status = 400)

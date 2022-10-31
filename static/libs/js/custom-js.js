@@ -40,7 +40,6 @@
 
 
         //calls modal image product / set img src
-
         $(".modal_img").click(function(){
             $("#modalImg").modal('show');
             var img_field = document.getElementById("img_space");
@@ -49,7 +48,18 @@
             src_path = data_table[0];
 
             img_field.setAttribute("src", src_path);
-        });        
+        });
+
+
+        //Modal Detalle Factura
+        $(".modal_det_inv").click(function(){
+            invoice_id = $('#id_invoice_glob').text()
+            $("#modalDetInv").modal('show');
+            data_table = search_table_row_values("invoiceDetailTable",this);
+            $('#cod_prod_det_modal').text(data_table[0]);
+            $('#id_quantity_det_modal').val(data_table[1]);
+            $('#input_cod_prod_det_modal').val(data_table[0]);
+        });
         
 
     });
@@ -90,9 +100,25 @@
             }
         })
     }
-    
-    
-    function updateDetailInvoice(){
-        $("#modalImg").modal('show');
 
-    }
+
+    // function updateInvoiceDetailModal(id_prod,id_invoice,prod_quantity){
+    //     // GET AJAX request
+    //     //var url = "newInvoice/" + id_invoice + "/update/ajax/invoice/details/";
+    //     var url = "update/ajax/invoice/details/";
+    //     $.ajax({
+    //         type: 'PUT',
+    //         url: url,
+    //         data: {"id_prod": id_prod,
+    //                 "id_invoice": id_invoice,
+    //                 "prod_quantity": prod_quantity},
+    //         success: function (response) {
+    //             if(response){
+    //                 console.log(response)                   
+    //             }
+    //         },
+    //         error: function (response){
+    //             console.log(response)
+    //         }
+    //     })
+    // }
