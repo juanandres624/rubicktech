@@ -1,7 +1,6 @@
 from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-
 from products.models import Product
 from .forms import InvoiceForm
 from products.forms import InvoiceProdForm
@@ -55,7 +54,6 @@ def newInvoice(request):
 
 @login_required(login_url = 'login')
 def newInvoiceDetail(request,invoice_id):
-    discountVal = 0
 
     try:
         invoice = Invoice.objects.get(pk=invoice_id)
@@ -78,14 +76,16 @@ def newInvoiceDetail(request,invoice_id):
             
             if prod:
                 discountVal = 0
-                quantityVal = form['quantity']
+                quantityVal = int(form['quantity'])
+                resultTotal = 0
 
                 if prod.is_discount:
                     discountVal = calculateDiscount(prod.price,prod.discountPorcentage)
                     discountVal = discountVal * quantityVal
+                    resultTotal = prod.price * quantityVal - discountVal
                 else:
                     discountVal = 0
-                    
+                    resultTotal = prod.price * quantityVal             
 
                 inv_detail = InvoiceDetail.objects.create(
                     invoice_id=invoice,
@@ -93,7 +93,7 @@ def newInvoiceDetail(request,invoice_id):
                     quantity=quantityVal,
                     unit_price = prod.price,
                     discount = discountVal,
-                    total_price = prod.price - discountVal,
+                    total_price = resultTotal,
                 )
 
                 inv_detail.save()
@@ -102,8 +102,9 @@ def newInvoiceDetail(request,invoice_id):
 
         else:
             id_prod = request.POST.get("code_prod", None)
-            prod_quantity = request.POST.get("quantity", None)
+            prod_quantity = int(request.POST.get("quantity", None))
             discountVal = 0
+            resultTotal = 0
 
             if Invoice.objects.filter(id = invoice_id).exists():
                 invoice_data = Invoice.objects.get(pk = invoice_id)
@@ -116,13 +117,15 @@ def newInvoiceDetail(request,invoice_id):
                     if invoice_data_prod.is_discount:
                         discountVal = calculateDiscount(invoice_data_prod.price,invoice_data_prod.discountPorcentage)
                         discountVal = discountVal * prod_quantity
-
+                        resultTotal = invoice_data_prod.price * prod_quantity - discountVal
                     else:
                         discountVal = 0
+                        resultTotal = invoice_data_prod.price * prod_quantity
 
-                    invoice_det_data.discount = discountVal,
-                    invoice_det_data.total_price = invoice_data_prod.price - discountVal,
+                    invoice_det_data.discount = discountVal
+                    invoice_det_data.total_price = resultTotal
                     invoice_det_data.save()
+
                     return redirect('newInvoiceDetail',  invoice_id=invoice_id)
                 else:
                     messages.error(request, 'Detalle del Producto No Existe')
