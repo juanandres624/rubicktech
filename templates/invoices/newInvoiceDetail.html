@@ -207,7 +207,7 @@
                                     <div class="col-12">
                                         <table class="table table-bordered" style="width:100%" id="invoiceDetailTable">
                                             <thead>
-                                                <tr>
+                                                <tr class="table-active">
                                                     <th scope="col" style="width:10%" class="text-center">Codigo</th>
                                                     <th scope="col" style="width:5%" class="text-center">Cantidad</th>
                                                     <th scope="col" style="width:50%" class="text-center">Detalle</th>
@@ -219,18 +219,22 @@
                                             </thead>
                                             <tbody>
                                                 {% for det in invdetail %}
-                                                <tr>
-                                                    <td>{{ det.product_id.product_code }}</td>
-                                                    <td class="text-center">{{ det.quantity }}</td>
-                                                    <td>{{ det.product_id.description }}</td>
-                                                    <td class="text-right">{{ det.unit_price }}</td>
-                                                    <td class="text-right">{{ det.discount }}</td>
-                                                    <td class="text-right">{{ det.total_price }}</td>
-                                                    <td class="text-center">
-                                                        <a type="button" href="javascript:;" class="modal_det_inv"><span class="fa fa-edit"></span></a>
-                                                        <a type="button" href="#"><span class="fa fa-trash"></span></a>
-                                                    </td>
-                                                </tr>
+                                                    {% if det.product_id.stock <= 0 %}
+                                                        <tr class='table-danger'>
+                                                    {% elif det.product_id.stock >= 1 and det.product_id.stock <= 5 %}
+                                                        <tr class='table-warning'>
+                                                    {% endif %}
+                                                        <td>{{ det.product_id.product_code }}</td>
+                                                        <td class="text-center">{{ det.quantity }}</td>
+                                                        <td>{{ det.product_id.description }}</td>
+                                                        <td class="text-right">{{ det.unit_price }}</td>
+                                                        <td class="text-right">{{ det.discount }}</td>
+                                                        <td class="text-right">{{ det.total_price }}</td>
+                                                        <td class="text-center">
+                                                            <a type="button" href="javascript:;" class="modal_det_inv"><span class="fa fa-edit"></span></a>
+                                                            <a type="button" href="#"><span class="fa fa-trash"></span></a>
+                                                        </td>
+                                                    </tr>                                           
                                                 {% endfor %}
                                             </tbody>
                                         </table>
@@ -239,17 +243,26 @@
                                 <div class="row">
                                     <div class="col-6">
                                     </div>
-                                    <div class="offset-6 col-6">
-                                        <table class="table table-bordered" style="width:100%" id="">
+                                    <div class="offset-8 col-4">
+                                        <table class="table table-bordered table-success" style="width:100%" id="">
                                             <tbody>
-                                                <tr class="table-success">
-                                                    <td class="text-center"><b>SubTotal</b></td>
-                                                    <td class="text-right"><b>4.52</b></td>
-                                                    <td class="text-center"><b>IVA</b></td>
-                                                    <td class="text-right"><b>5.63</b></td>
-                                                    <td class="text-center"><b>TOTAL</b></td>
-                                                    <td class="text-right"><b>585.23</b></td>                      
+                                                <tr class="">
+                                                    <td class="text-center"><b>SubTotal 0%</b></td>
+                                                    <td class="text-right"><b>{{ invoice.subtotal_0 }}</b></td>
                                                 </tr>
+                                                <tr>
+                                                    <td class="text-center"><b>SubTotal 12%</b></td>
+                                                    <td class="text-right"><b>{{ invoice.subtotal_tax }}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center"><b>IVA</b></td>
+                                                    <td class="text-right"><b>{{ invoice.subtotal_tax_percentage }}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center"><b>TOTAL</b></td>
+                                                    <td class="text-right"><b>{{ invoice.subtotal_gran_total }}</b></td>  
+                                                </tr>
+                                                
                                             </tbody>                         
                                         </table>
                                     </div>

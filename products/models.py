@@ -17,6 +17,7 @@ class Product(models.Model):
     is_discount = models.BooleanField(default=False)
     discountPorcentage = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
+    is_0_tax = models.BooleanField(default=False)
     has_image = models.BooleanField(default=False)
     mngProductCategory_id = models.ForeignKey(MngProductCategory, on_delete=models.CASCADE)
     mngProductBrand_id = models.ForeignKey(MngProductBrand, on_delete=models.CASCADE)

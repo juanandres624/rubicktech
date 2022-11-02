@@ -23,7 +23,7 @@ class ProductsForm(forms.ModelForm):
         model = Product
         fields = ["product_code", "code", "product_name", "description", "price", "boughtPrice",
                   "is_discount","discountPorcentage","mngProductCategory_id","provider_id",
-                  "mngProductBrand_id","stock"]
+                  "mngProductBrand_id","stock","is_0_tax"]
         widgets = {'mngProductCategory_id': MngSelectDescription, 'provider_id': MngSelectProvider,
             'mngProductBrand_id': MngSelectDescription,"description": forms.Textarea()}
 
@@ -38,6 +38,9 @@ class ProductsForm(forms.ModelForm):
         self.fields['is_discount'].widget.attrs['class'] = 'custom-control-input'
         self.fields['is_discount'].widget.attrs['class'] += ' is-valid'
         self.fields['is_discount'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_0_tax'].widget.attrs['class'] = 'custom-control-input'
+        self.fields['is_0_tax'].widget.attrs['class'] += ' is-valid'
+        self.fields['is_0_tax'].widget.attrs['type'] = 'checkbox'
 
  
 

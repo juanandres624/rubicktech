@@ -95,13 +95,28 @@
                                     </div>
                                 </div>                             
                             </div>
-                            <div class="form-group">
-                                <label>Categoria de Producto</label>
-                                {{ form.mngProductCategory_id }}
-                            </div>                            
-                            <div class="form-group">
-                                <label>Proveedor</label>
-                                {{ form.provider_id }}
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Categoria de Producto</label>
+                                        {{ form.mngProductCategory_id }}
+                                    </div> 
+                                </div>
+                                <div class="col-4">                                
+                                    <div class="form-group">
+                                        <label>Proveedor</label>
+                                        {{ form.provider_id }}
+                                    </div> 
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group"> 
+                                        <label class="col-form-label">&nbsp;</label>
+                                        <div class="custom-control custom-checkbox">
+                                            {{ form.is_0_tax }}
+                                            <label class="custom-control-label" for="id_is_0_tax">Excento de IVA?</label>
+                                        </div>  
+                                    </div>                            
+                                </div> 
                             </div> 
                             <div class="row">
                                 <!-- <div class="col-6">

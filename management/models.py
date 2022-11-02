@@ -48,6 +48,15 @@ class MngProductBrand(models.Model):
     def __str__(self):
         return self.description
 
+class MngValues(models.Model):
+    description = models.CharField(max_length=100)
+    value = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.description
+
 class MngStatus(models.Model):
     statusType = (
         ("Active", 'Active'), ('Inactive', 'Inactive'),
