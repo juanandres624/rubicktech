@@ -6,6 +6,13 @@
     $(document).ready(function(){
         //addInvoiceDetail();
 
+        if( $('#card_fcs').length )  //Check if element exist in page
+        {
+            $('html, body').animate({
+                scrollTop: $('#card_fcs').offset().top
+            }, 'slow');
+        }
+
         //Invoice
         $('.select-2-billing-customer').select2();
         //$('.select-2-shipping-customer').select2();
@@ -38,7 +45,6 @@
         })
 
 
-
         //calls modal image product / set img src
         $(".modal_img").click(function(){
             $("#modalImg").modal('show');
@@ -60,7 +66,36 @@
             $('#id_quantity_det_modal').val(data_table[1]);
             $('#input_cod_prod_det_modal').val(data_table[0]);
         });
+
+        $(".delete_det_inv").click(function(){
+            invoice_id = $('#id_invoice_glob').text()
+            data_table = search_table_row_values("invoiceDetailTable",this);
+            var url = "delete/ajax/invoice/details/";
+
+            $.ajax({
+            type: 'GET',
+            url: url,
+            data: {"id_prod": data_table[0],
+                    "id_invoice": invoice_id},
+            success: function (response) {
+                if(response){
+                    setInterval('location.reload()', 1000);                    
+                }
+            },
+            error: function (response){
+                console.log(response)
+            }
+        })
+            
+        });
+
         
+        $("#id_product_code").on('change', function(e) {
+            e.preventDefault();
+            this.blur();
+            document.getElementById("form1").submit();
+            
+        })
 
     });
 

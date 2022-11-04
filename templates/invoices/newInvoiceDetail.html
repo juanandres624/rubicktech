@@ -165,7 +165,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="card_fcs">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="card">
                     <!-- <h5 class="card-header">Detalle Factura</h5> -->
@@ -180,28 +180,35 @@
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label class="col-form-label">Codigo Producto</label>
-                                                <input type="text" name="product_code" class="form-control" id="id_product_code">
+                                                <input type="text" name="product_code" class="form-control" id="id_product_code" autofocus>
                                                 <!-- {{ form.product_code }} -->
                                             </div>  
                                         </div>
                                         <div class="col-3">
                                             <div class="form-group">
                                                 <label class="col-form-label">Cantidad</label>
-                                                <input type="number" name="quantity" value="0" class="form-control" id="id_quantity">
+                                                <input type="number" name="quantity" value="1" class="form-control" id="id_quantity">
                                             </div>  
                                         </div>
-                                        <div class="col-2">
+                                        <!-- <div class="col-2">
                                             <div class="form-group">
                                                 <label class="col-form-label">&nbsp;</label>
                                                 <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 {{ form.email.errors }}
                                 {{ form.non_field_errors }}
                                 </form>
+                                <div class="row pt-3">
+                                    <button  class="btn btn-space btn-primary">Generar Factura Electronica</button>
+                                    <button  class="btn btn-space btn-primary">Generar Factura Sin IVA</button>
+                                    <a  class="btn btn-space btn-primary" href="{% url 'pdf_view' %}" target="_blank">Orden de Compra</a>
+                                    <button class="btn btn-space btn-secondary">Cancelar Factura</button>
+                                </div>
                             </div>
                         </div>
+
                         <div class="card">
                             <h5 class="card-header">Detalle Factura</h5>
                             <div class="card-body">
@@ -235,7 +242,7 @@
                                                         <td class="text-right">{{ det.total_price }}</td>
                                                         <td class="text-center">
                                                             <a type="button" href="javascript:;" class="modal_det_inv"><span class="fa fa-edit"></span></a>
-                                                            <a type="button" href="#"><span class="fa fa-trash"></span></a>
+                                                            <a type="button" href="javascript:;" class="delete_det_inv"><span class="fa fa-trash"></span></a>
                                                         </td>
                                                     </tr>                                           
                                                 {% endfor %}
@@ -256,6 +263,10 @@
                                                 <tr>
                                                     <td class="text-center"><b>SubTotal 12%</b></td>
                                                     <td class="text-right"><b>{{ invoice.subtotal_tax }}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center"><b>SubTotal Dscto(-)</b></td>
+                                                    <td class="text-right"><b>{{ invoice.subtotal_discount }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-center"><b>IVA</b></td>

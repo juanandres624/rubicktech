@@ -11,7 +11,14 @@ from invoices.models import InvoiceDetail
 from invoices.models import Invoice
 from django.http import JsonResponse
 from datetime import date
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.views import View
 
 @login_required(login_url = 'login')
 def newInvoice(request):
@@ -61,7 +68,7 @@ def newInvoiceDetail(request,invoice_id):
     except Invoice.DoesNotExist:
         invoice = None
 
-    Invdetail = invoice.invoicedetail_set.all()
+    Invdetail = getAllActualInvoiceDetails(invoice)
                
     if request.method == 'POST':
         if request.POST.get("post_btn") == 'btn1':
@@ -101,90 +108,79 @@ def newInvoiceDetail(request,invoice_id):
                                 Inv.discount = discountVal
                                 Inv.total_price = resultTotal
                                 Inv.save()
-
-                                if len(Invdetail) > 0:
-                                    subtotal_12 = 0
-                                    subtotal_0 = 0
-                                    subtotalDisc = 0
-                                    taxsubtotal = 0
-                                    mng_tax = MngValues.objects.get(description ='iva')
-
-                                    for invM in Invdetail:
-                                        if invM.product_id.is_0_tax:
-                                            subtotal_0 += invM.total_price
-                                        else:
-                                            subtotal_12 += invM.total_price
-
-                                        subtotalDisc += invM.discount
-
-                                    taxsubtotal = subtotal_12 * mng_tax.value / 100
-
-                                    #Alter Invoice Values
-                                    invoice.subtotal_0 = subtotal_0
-                                    invoice.subtotal_tax = subtotal_12
-                                    invoice.subtotal_discount = subtotalDisc
-                                    invoice.subtotal_tax_percentage = taxsubtotal
-                                    invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
-                                    invoice.save()
-                                
-                                return redirect('newInvoiceDetail',  invoice_id=invoice_id)
                             else:
                                 messages.error(request, 'Producto en actual factura tiene ' + str(Inv.quantity) + ' se quiere agregar ' + str(quantityVal) + ' el total en stock es ' + str(prod.stock) )
                                 return redirect('newInvoiceDetail',  invoice_id=invoice_id)
-                        else:
-                            flagProdInDetail = False
 
-                resultStock = prod.stock - quantityVal
+                    if flagProdInDetail: #If product is already in the invoice detail attach a new one
+                        InvdetailAct = getAllActualInvoiceDetails(invoice)
+                        if len(InvdetailAct) > 0:
+                            subtotal_12 = 0
+                            subtotal_0 = 0
+                            subtotalDisc = 0
+                            taxsubtotal = 0
+                            mng_tax = MngValues.objects.get(description ='iva')
+                            for invM in InvdetailAct:
+                                if invM.product_id.is_0_tax:
+                                    subtotal_0 += invM.total_price
+                                else:
+                                    subtotal_12 += invM.total_price
+                                subtotalDisc += invM.discount
+                            taxsubtotal = subtotal_12 * mng_tax.value / 100
+                            #Alter Invoice Values
+                            invoice.subtotal_0 = subtotal_0
+                            invoice.subtotal_tax = subtotal_12
+                            invoice.subtotal_discount = subtotalDisc
+                            invoice.subtotal_tax_percentage = taxsubtotal
+                            invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
+                            invoice.save()                           
+                            return redirect('newInvoiceDetail',  invoice_id=invoice_id)
 
-                if resultStock > 0:
-                    if prod.is_discount:
-                        discountVal = calculateDiscount(prod.price,prod.discountPorcentage)
-                        discountVal = discountVal * quantityVal
-                        resultTotal = prod.price * quantityVal - discountVal
-                    else:
-                        discountVal = 0
-                        resultTotal = prod.price * quantityVal             
+                    else: # If product is not in the actual detail invoice
 
-                    inv_detail = InvoiceDetail.objects.create(
-                        invoice_id=invoice,
-                        product_id=prod,
-                        quantity=quantityVal,
-                        unit_price = prod.price,
-                        discount = discountVal,
-                        total_price = resultTotal,
-                    )
-
-                    inv_detail.save()
-
-                    if len(Invdetail) > 0:
-                        subtotal_12 = 0
-                        subtotal_0 = 0
-                        subtotalDisc = 0
-                        taxsubtotal = 0
-                        mng_tax = MngValues.objects.get(description ='iva')
-
-                        for inv in Invdetail:
-                            if inv.product_id.is_0_tax:
-                                subtotal_0 += subtotal_0 + inv.total_price
+                        resultStock = prod.stock - quantityVal
+                        if resultStock > 0:
+                            if prod.is_discount:
+                                discountVal = calculateDiscount(prod.price,prod.discountPorcentage)
+                                discountVal = discountVal * quantityVal
+                                resultTotal = prod.price * quantityVal - discountVal
                             else:
-                                subtotal_12 += subtotal_12 + inv.total_price
-
-                            subtotalDisc += subtotalDisc + inv.discount
-
-                        taxsubtotal = subtotal_12 * mng_tax.value / 100
-
-                        #Alter Invoice Values
-                        invoice.subtotal_0 = subtotal_0
-                        invoice.subtotal_tax = subtotal_12
-                        invoice.subtotal_discount = subtotalDisc
-                        invoice.subtotal_tax_percentage = taxsubtotal
-                        invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
-                        invoice.save()
-
-                        return redirect('newInvoiceDetail',  invoice_id=invoice_id)
-                else:
-                    messages.error(request, 'Producto tiene ' + str(prod.stock) + ' en Stock')
-                    return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+                                discountVal = 0
+                                resultTotal = prod.price * quantityVal             
+                            inv_detail = InvoiceDetail.objects.create(
+                                invoice_id=invoice,
+                                product_id=prod,
+                                quantity=quantityVal,
+                                unit_price = prod.price,
+                                discount = discountVal,
+                                total_price = resultTotal,
+                            )
+                            inv_detail.save()
+                            InvdetailAct = getAllActualInvoiceDetails(invoice)
+                            if len(InvdetailAct) > 0:
+                                subtotal_12 = 0
+                                subtotal_0 = 0
+                                subtotalDisc = 0
+                                taxsubtotal = 0
+                                mng_tax = MngValues.objects.get(description ='iva')
+                                for inv in InvdetailAct:
+                                    if inv.product_id.is_0_tax:
+                                        subtotal_0 += inv.total_price
+                                    else:
+                                        subtotal_12 += inv.total_price
+                                    subtotalDisc += inv.discount
+                                taxsubtotal = subtotal_12 * mng_tax.value / 100
+                                #Alter Invoice Values
+                                invoice.subtotal_0 = subtotal_0
+                                invoice.subtotal_tax = subtotal_12
+                                invoice.subtotal_discount = subtotalDisc
+                                invoice.subtotal_tax_percentage = taxsubtotal
+                                invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
+                                invoice.save()
+                                return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+                        else:
+                            messages.error(request, 'Producto tiene ' + str(prod.stock) + ' en Stock')
+                            return redirect('newInvoiceDetail',  invoice_id=invoice_id)
             else:
                 messages.error(request, 'Producto No en Stock')
                 return redirect('newInvoiceDetail',  invoice_id=invoice_id)
@@ -218,14 +214,15 @@ def newInvoiceDetail(request,invoice_id):
                         invoice_det_data.total_price = resultTotal
                         invoice_det_data.save()
 
-                        if len(Invdetail) > 0:
+                        invDetailAct = getAllActualInvoiceDetails(invoice)
+                        if len(invDetailAct) > 0:
                             subtotal_12 = 0
                             subtotal_0 = 0
                             subtotalDisc = 0
                             taxsubtotal = 0
                             mng_tax = MngValues.objects.get(description ='iva')
 
-                            for inv in Invdetail:
+                            for inv in invDetailAct:
                                 if inv.product_id.is_0_tax:
                                     subtotal_0 += inv.total_price
                                 else:
@@ -283,25 +280,88 @@ def calculateDiscount(amount,discount):
 
         return valTot
 
+@csrf_exempt
+def deleteInvoiceDetail(request,invoice_id):
 
-# def updateInvoiceDetail(request):
-#     if request.method == "PUT":
-#         id_invoice = request.GET.get("id_invoice", None)
-#         id_prod = request.GET.get("id_prod", None)
-#         prod_quantity = request.GET.get("prod_quantity", None)
+    try:
+        invoice = Invoice.objects.get(pk=invoice_id)
+    except Invoice.DoesNotExist:
+        invoice = None
+
+    if request.method == "GET":
+        id_invoice = request.GET.get("id_invoice", None)
+        id_prod = request.GET.get("id_prod", None)
+
+        try:
+            prod = Product.objects.get(product_code = id_prod)
+        except Product.DoesNotExist:
+            prod = None
+
+        if InvoiceDetail.objects.filter(invoice_id = invoice, product_id = prod):
+            invoice_det_data = InvoiceDetail.objects.get(invoice_id = invoice, product_id = prod)
+            invoice_det_data.delete()
+
+            Invdetail = getAllActualInvoiceDetails(invoice)
+
+            if len(Invdetail) > 0:
+                subtotal_12 = 0
+                subtotal_0 = 0
+                subtotalDisc = 0
+                taxsubtotal = 0
+                mng_tax = MngValues.objects.get(description ='iva')
+                for inv in Invdetail:
+                    if inv.product_id.is_0_tax:
+                        subtotal_0 += inv.total_price
+                    else:
+                        subtotal_12 += inv.total_price
+                    subtotalDisc += inv.discount
+                taxsubtotal = subtotal_12 * mng_tax.value / 100
+                #Alter Invoice Values
+                invoice.subtotal_0 = subtotal_0
+                invoice.subtotal_tax = subtotal_12
+                invoice.subtotal_discount = subtotalDisc
+                invoice.subtotal_tax_percentage = taxsubtotal
+                invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
+                invoice.save()
+
+            return JsonResponse({"message":"success"}, status = 200)
+            #return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+        else:
+            messages.error(request, 'Error No se encuentra detalle factura')
+            return redirect('newInvoiceDetail',  invoice_id=invoice_id)
 
 
-#         if Invoice.objects.filter(id = id_invoice).exists():
-#             invoice_data = Invoice.objects.get(pk = id_invoice)
-#             invoice_data_prod = Product.objects.get(product_code = id_prod)
-#             print(invoice_data.id)
-#             print(invoice_data_prod.id)
-#             # if InvoiceDetail.objects.filter(invoice_id = invoice_data, product_id = invoice_data_prod):
-#             #     invoice_det_data = InvoiceDetail.objects.get(invoice_id = invoice_data, product_id = invoice_data_prod)
-#             #     invoice_det_data.quantity = prod_quantity
-#             #     invoice_det_data.save()
-#             #     return redirect('newInvoiceDetail',  invoice_id=id_invoice)
-#             # else:
-#             #     return JsonResponse({}, status = 400)
-#         else:
-#             return JsonResponse({}, status = 400)
+def getAllActualInvoiceDetails(invoice):
+    return invoice.invoicedetail_set.all()
+
+
+def render_to_pdf(template_src, context_dict={}):
+	template = get_template(template_src)
+	html  = template.render(context_dict)
+	result = BytesIO()
+	pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+	if not pdf.err:
+		return HttpResponse(result.getvalue(), content_type='application/pdf')
+	return None
+
+
+    
+data = {
+    "company": "Dennnis Ivanov Company",
+    "address": "123 Street name",
+    "city": "Vancouver",
+    "state": "WA",
+    "zipcode": "98663",
+    "phone": "555-555-2345",
+    "email": "youremail@dennisivy.com",
+    "website": "dennisivy.com",
+}
+
+#Opens up page as PDF
+class ViewPDF(View):
+	def get(self, request, *args, **kwargs):
+
+		pdf = render_to_pdf('invoices/pdf/invoiceOrder.html', data)
+		return HttpResponse(pdf, content_type='application/pdf')
+
+                    
