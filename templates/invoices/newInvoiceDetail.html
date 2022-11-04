@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load invoiceDetailTags %}
+
 {% block content %}
 
 <div class="dashboard-wrapper">
@@ -219,9 +221,10 @@
                                             </thead>
                                             <tbody>
                                                 {% for det in invdetail %}
-                                                    {% if det.product_id.stock <= 0 %}
+                                                {% calculateStockProd det.quantity det.product_id.stock as resultStock %}
+                                                    {% if resultStock <= 0 %}
                                                         <tr class='table-danger'>
-                                                    {% elif det.product_id.stock >= 1 and det.product_id.stock <= 5 %}
+                                                    {% elif resultStock >= 1 and resultStock <= 5 %}
                                                         <tr class='table-warning'>
                                                     {% endif %}
                                                         <td>{{ det.product_id.product_code }}</td>
