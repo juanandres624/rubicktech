@@ -19,6 +19,7 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.views import View
+from management.models import MngProductCategory
 
 @login_required(login_url = 'login')
 def newInvoice(request):
@@ -345,23 +346,33 @@ def render_to_pdf(template_src, context_dict={}):
 	return None
 
 
-    
-data = {
-    "company": "Dennnis Ivanov Company",
-    "address": "123 Street name",
-    "city": "Vancouver",
-    "state": "WA",
-    "zipcode": "98663",
-    "phone": "555-555-2345",
-    "email": "youremail@dennisivy.com",
-    "website": "dennisivy.com",
-}
-
 #Opens up page as PDF
 class ViewPDF(View):
-	def get(self, request, *args, **kwargs):
+    
+    def get(self,request,invoice_id, *args, **kwargs):
+        
+        try:
+            invoice = Invoice.objects.get(pk=invoice_id)
+        except Invoice.DoesNotExist:
+            invoice = None
+        
+        prodListidsCat= []
 
-		pdf = render_to_pdf('invoices/pdf/invoiceOrder.html', data)
-		return HttpResponse(pdf, content_type='application/pdf')
+        InvdetailAct = InvoiceDetail.objects.filter(invoice_id=invoice_id)
+
+        for invda in InvdetailAct:
+            prodListidsCat.append(invda.product_id.mngProductCategory_id.id)
+
+        #categories = MngProductCategory.objects.all()
+        categories = MngProductCategory.objects.filter(id__in=prodListidsCat)
+
+        context = {  
+            'invoice': invoice,
+            'invdetail': InvdetailAct,
+            'categories': categories,
+        }
+
+        pdf = render_to_pdf('invoices/pdf/invoiceOrder.html', context)
+        return HttpResponse(pdf, content_type='application/pdf')
 
                     

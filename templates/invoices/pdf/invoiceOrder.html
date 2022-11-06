@@ -31,123 +31,47 @@
     <!-- HTML Content -->
     <table>
             <tr>
-                <td>fdsfsdf</td>
-                <td>fsdfsdf</td>
+                <td>Factura No: {{invoice.Invoice_no_final}}</td>
+                <td>Cliente: {{invoice.billing_customer_id}}</td>
             </tr>
             <tr>
-                <td>fsdfsdf,</td>
-                <td>fsdfsdf</td>
-            </tr>
-            <tr>
-                <td>fsdfsdf</td>
-                <td>fsdfsdf</td>
+                <td>Fecha Factura: {{invoice.created_date}}</td>
+                <td>Vendedor: {{invoice.user}}</td>
             </tr>
     </table>
 
     <hr>
-
-    <table>
-        <tr>
- 
-            <th>Product</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-        </tr>
-        <tr>
- 
-            <td>Hosting Plan</td>
-            <td>$7.99</td>
-            <td>2</td>
-            <td>$15.98</td>
-        </tr>
-        <tr>
- 
-            <td>consultation </td>
-            <td>$225</td>
-            <td>1</td>
-            <td>$225</td>
-        </tr>
-        <tr>
- 
-            <td>Service Hours</td>
-            <td>$189</td>
-            <td>45.7</td>
-            <td>$8637.30</td>
-        </tr>
-    </table>
-
-    <hr>
-
-    <p><strong>Total: $8878.28</strong></p>
-</body>
-
-
-
-
-
-
-
-
-    <!-- <div class="container-fluid">
-        <div class="row pt-4 justify-content-center">
-            <h3 class="">Orden de Compra</h3>
-        </div>
-        <div class="row pt-4">
-            <div class="col-6">
-                <div class="col-3">
-                    <h3>Categoria</h3>
-                    <table class="table" style="width:100%" id="">
-                        <thead>
-                            <tr>
-                                <th scope="col">Codigo</th>
-                                <th scope="col">Cantidad</th>                             
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="">
-                                <td class="text-center"><b>2</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                                <td class="text-center"><b>ÑLO42342342</b></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center"><b>7</b></td>
-                                <td class="text-center"><b>LOL12244</b></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center"><b>7</b></td>
-                                <td class="text-center"><b>LOL12244</b></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center"><b>7</b></td>
-                                <td class="text-center"><b>LOL12244</b></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center"><b>7</b></td>
-                                <td class="text-center"><b>LOL12244</b></td>
-                            </tr>
-                            
-                        </tbody>                         
+    
+    {% for cat in categories %}
+        <hr>
+        <h3>{{cat.description}}</h3>
+        <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>
+                    <table  border="0" cellspacing="0" cellpadding="3">
+                        <tr>
+                            <th>Cantidad</th>
+                            <th>Codigo Producto</th>
+                            <th>Stock</th>
+                        </tr>   
+                        {% for det in invdetail %}
+                            {% if det.product_id.mngProductCategory_id == cat %}
+                                <tr>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <p>{{det.quantity}}</p>
+                                    </td>                
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <p>{{det.product_id.product_code}}</p>
+                                    </td>                                    
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <p>{{det.product_id.stock}}</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        
-
-    </div> -->
-
+                </td>
+            </tr>
+        </table>
+    {% endfor %}
+ 

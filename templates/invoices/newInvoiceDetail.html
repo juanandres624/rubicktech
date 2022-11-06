@@ -203,7 +203,7 @@
                                 <div class="row pt-3">
                                     <button  class="btn btn-space btn-primary">Generar Factura Electronica</button>
                                     <button  class="btn btn-space btn-primary">Generar Factura Sin IVA</button>
-                                    <a  class="btn btn-space btn-primary" href="{% url 'pdf_view' %}" target="_blank">Orden de Compra</a>
+                                    <a  class="btn btn-space btn-primary" href="{% url 'pdf_view' invoice.id %}" target="_blank">Orden de Compra</a>
                                     <button class="btn btn-space btn-secondary">Cancelar Factura</button>
                                 </div>
                             </div>
@@ -236,7 +236,7 @@
                                                     {% endif %}
                                                         <td>{{ det.product_id.product_code }}</td>
                                                         <td class="text-center">{{ det.quantity }}</td>
-                                                        <td>{{ det.product_id.description }}</td>
+                                                        <td>{{ det.product_id.product_name }}</td>
                                                         <td class="text-right">{{ det.unit_price }}</td>
                                                         <td class="text-right">{{ det.discount }}</td>
                                                         <td class="text-right">{{ det.total_price }}</td>
