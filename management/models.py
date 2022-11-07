@@ -59,7 +59,7 @@ class MngValues(models.Model):
 
 class MngStatus(models.Model):
     statusType = (
-        ("Active", 'Active'), ('Inactive', 'Inactive'), ('InProgress', 'In Progress'),('Completed', 'Completed'),
+        ("Activo", 'Activo'), ('Inactivo', 'Inactivo'), ('En Progreso', 'En Progreso'),('Completado', 'Completado'),
     )
 
     description = models.CharField(max_length=20, choices=statusType)

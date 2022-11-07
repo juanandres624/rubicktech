@@ -30,6 +30,20 @@
                     <h5 class="card-header">Información Factura</h5>
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-md-2 offset-md-10">
+                                {% if invoice.mngStatus_id.description == "Activo" %}
+                                    <span class="badge badge-success">{{ invoice.mngStatus_id }}</span>
+                                {% elif invoice.mngStatus_id.description == "Inactivo" %}
+                                    <span class="badge badge-danger">{{ invoice.mngStatus_id }}</span>
+                                {% elif invoice.mngStatus_id.description == "En Progreso" %}
+                                    <span class="badge badge-warning">{{ invoice.mngStatus_id }}</span>
+                                {% else %}
+                                    <span class="badge badge-info">{{ invoice.mngStatus_id }}</span>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <div class="row">
                             <p id="id_invoice_glob" hidden><b>{{ invoice.id }}</b></p>
                             <div class="col-4">
                                 <div class="form-group">
@@ -288,14 +302,14 @@
             </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <p class="text-center">
                     <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
                     <button class="btn btn-space btn-secondary">Cancel</button>
                 </p>
             </div>
-        </div>
+        </div> -->
     </div>
    
 

@@ -46,7 +46,7 @@ class Invoice(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.Invoice_no
+        return str(self.Invoice_no)
 
     class Meta:
         ordering = ['-modified_date']

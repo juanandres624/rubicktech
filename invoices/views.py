@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from products.models import Product
-from management.models import MngValues
+from management.models import MngValues,MngStatus
 from .forms import InvoiceForm
 from products.forms import InvoiceProdForm
 from django.contrib import messages
@@ -24,6 +24,7 @@ from management.models import MngProductCategory
 @login_required(login_url = 'login')
 def newInvoice(request):
     if request.method == 'POST':
+        mng_status = MngStatus.objects.get(description ='InProgress')
         form = InvoiceForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -43,6 +44,7 @@ def newInvoice(request):
             invoice_number = str(year) + str(month) + str(post.Invoice_no).zfill(6)
 
             post.Invoice_no_final = invoice_number
+            post.mngStatus_id = mng_status
 
             post.save()
             #messages.success(request, 'Factura Creada....')
@@ -63,15 +65,16 @@ def newInvoice(request):
 
 @login_required(login_url = 'login')
 def newInvoiceDetail(request,invoice_id):
-
+    
     try:
         invoice = Invoice.objects.get(pk=invoice_id)
     except Invoice.DoesNotExist:
         invoice = None
 
     Invdetail = getAllActualInvoiceDetails(invoice)
-               
+           
     if request.method == 'POST':
+        print('es el method post---->>>>')
         if request.POST.get("post_btn") == 'btn1':
             form = request.POST
 
@@ -80,7 +83,8 @@ def newInvoiceDetail(request,invoice_id):
             except Product.DoesNotExist:
                 messages.error(request, 'Producto No Existe')
                 return redirect('newInvoiceDetail',  invoice_id=invoice_id)
-            
+            print('si hay prod-->>>>')
+            print(prod.product_code)
             if prod.stock > 0:
                 discountVal = 0
                 quantityVal = int(form['quantity'])
@@ -138,7 +142,7 @@ def newInvoiceDetail(request,invoice_id):
                             return redirect('newInvoiceDetail',  invoice_id=invoice_id)
 
                     else: # If product is not in the actual detail invoice
-
+                        print('entro aqui')
                         resultStock = prod.stock - quantityVal
                         if resultStock > 0:
                             if prod.is_discount:
@@ -182,6 +186,7 @@ def newInvoiceDetail(request,invoice_id):
                         else:
                             messages.error(request, 'Producto tiene ' + str(prod.stock) + ' en Stock')
                             return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+                #else:
             else:
                 messages.error(request, 'Producto No en Stock')
                 return redirect('newInvoiceDetail',  invoice_id=invoice_id)
@@ -257,7 +262,7 @@ def newInvoiceDetail(request,invoice_id):
             'invoice': invoice,
             'invdetail': Invdetail,
         }
-        return render(request, 'invoices/newInvoiceDetail.html', context)
+        return render(request, 'invoices/newInvoiceDetail.html',context)
 
 
 def checkCustomerData(request):
