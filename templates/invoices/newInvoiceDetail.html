@@ -215,6 +215,7 @@
                                 {{ form.non_field_errors }}
                                 </form>
                                 <div class="row pt-3">
+                                    <button  class="btn btn-space btn-primary" href="{% url 'generate_invoice' invoice.id %}">Generar Factura</button>
                                     <button  class="btn btn-space btn-primary">Generar Factura Electronica</button>
                                     <button  class="btn btn-space btn-primary">Generar Factura Sin IVA</button>
                                     <a  class="btn btn-space btn-primary" href="{% url 'pdf_view' invoice.id %}" target="_blank">Orden de Compra</a>
