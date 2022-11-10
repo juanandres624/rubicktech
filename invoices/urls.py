@@ -13,5 +13,5 @@ urlpatterns = [
     path('newInvoice/<int:invoice_id>/delete/ajax/invoice/details/', deleteInvoiceDetail, name = "deleteInvoiceDetail"),
     path('pdf_view/<int:invoice_id>', views.ViewPDF.as_view(), name="pdf_view"),
     path('generate_invoice/<int:invoice_id>/', views.generateInvoice, name="generate_invoice"),
-    #path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
+    path('xml_download/<int:invoice_id>', views.DownloadXML.as_view() , name="xml_download"),
 ]

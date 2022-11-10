@@ -20,11 +20,15 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.views import View
 from management.models import MngProductCategory
+from xml.dom import minidom
+import os
+from datetime import datetime
+import itertools
 
 @login_required(login_url = 'login')
 def newInvoice(request):
     if request.method == 'POST':
-        mng_status = MngStatus.objects.get(description ='InProgress')
+        mng_status = MngStatus.objects.get(description ='En Progreso')
         form = InvoiceForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -41,7 +45,7 @@ def newInvoice(request):
             year = post.created_date.strftime("%Y")
             month = post.created_date.strftime("%m")
 
-            invoice_number = str(year) + str(month) + str(post.Invoice_no).zfill(6)
+            invoice_number = str(post.Invoice_no).zfill(9)
 
             post.Invoice_no_final = invoice_number
             post.mngStatus_id = mng_status
@@ -351,7 +355,92 @@ def render_to_pdf(template_src, context_dict={}):
 	return None
 
 
-#Opens up page as PDF
+def createFactElectXml(invoice_id):
+
+    try:
+        invoice = Invoice.objects.get(pk=invoice_id)
+    except Invoice.DoesNotExist:
+        invoice = None
+
+    tipAmb = '1'
+    # current dateTime
+    now = datetime.now()
+    tipComp = '02'
+    numRuc = '0906855911001'
+    serie = '001001'
+    numSec = invoice.Invoice_no_final
+    codNum = numSec[1:]
+    tipEmi = '1'
+    clavAcc = f'{now.strftime("%d%m%Y"):8.8}' + f'{tipComp:2.2}' + f'{numRuc:13.13}' + f'{tipAmb:1.1}' + f'{serie:6.6}' + f'{numSec:9.9}' + f'{codNum:8.8}' + f'{tipEmi:1.1}'
+    digVerif = str(GenClavAccMod11(clavAcc))
+    clavAccFinal = clavAcc + digVerif
+
+    rootNode = minidom.Document()
+    rootNode.toprettyxml(encoding="utf-8")
+  
+    factNode = rootNode.createElement('factura') 
+    factNode.setAttribute('id', 'comprobante')
+    factNode.setAttribute('version', '1.0.0')
+    rootNode.appendChild(factNode)
+    
+
+    infoTribNode = rootNode.createElement('infoTributaria')
+    factNode.appendChild(infoTribNode)
+
+    ambienteNode = rootNode.createElement('ambiente')
+    ambienteNodeTxt = rootNode.createTextNode(tipAmb)
+    ambienteNode.appendChild(ambienteNodeTxt)
+    infoTribNode.appendChild(ambienteNode)
+
+    tipEmisNode = rootNode.createElement('tipoEmision')
+    tipEmisNodeTxt = rootNode.createTextNode(tipEmi)
+    tipEmisNode.appendChild(tipEmisNodeTxt)
+    infoTribNode.appendChild(tipEmisNode)
+
+    razSocNode = rootNode.createElement('razonSocial')
+    razSocNodeTxt = rootNode.createTextNode("Rubick Tech")
+    razSocNode.appendChild(razSocNodeTxt)
+    infoTribNode.appendChild(razSocNode)
+
+    nomComNode = rootNode.createElement('nombreComercial')
+    nomComNodeTxt = rootNode.createTextNode("JAA Prueba")
+    nomComNode.appendChild(nomComNodeTxt)
+    infoTribNode.appendChild(nomComNode)    
+    
+    rucNode = rootNode.createElement('ruc')
+    rucNodeTxt = rootNode.createTextNode("0906855911001")
+    rucNode.appendChild(rucNodeTxt)
+    infoTribNode.appendChild(rucNode)    
+    
+    clavAccNode = rootNode.createElement('claveAcceso')
+    clavAccNodeTxt = rootNode.createTextNode(clavAccFinal)
+    clavAccNode.appendChild(clavAccNodeTxt)
+    infoTribNode.appendChild(clavAccNode)
+    
+    
+    xml_str = rootNode.toprettyxml(indent ="\t") 
+    
+    save_path_file = "invElect/" + str(invoice.user.id) + invoice.Invoice_no_final + ".xml"
+
+    with open(save_path_file, "w") as f:
+        f.write(xml_str)
+    
+    return save_path_file
+
+
+def GenClavAccMod11(clavAcc):
+    factores = itertools.cycle((2,3,4,5,6,7))
+    suma = 0
+    for digito, factor in zip(reversed(clavAcc), factores):
+        suma += int(digito)*factor
+    control = 11 - suma%11
+    if control == 10:
+        return 1
+    else:
+        return control
+
+
+#Opens up page as PDF Oder Page
 class ViewPDF(View):
     
     def get(self,request,invoice_id, *args, **kwargs):
@@ -380,4 +469,17 @@ class ViewPDF(View):
         pdf = render_to_pdf('invoices/pdf/invoiceOrder.html', context)
         return HttpResponse(pdf, content_type='application/pdf')
 
-                    
+#Fact Elect
+class DownloadXML(View):
+    def get(self, request,invoice_id, *args, **kwargs):
+        print('esta aqui')
+        xml = createFactElectXml(invoice_id)
+        print(xml)
+        # response = HttpResponse(xml, content_type='application/xml')
+        # #filename = "Invoice_%s.xml" %("12341231")
+        # content = "attachment; filename='%s'" %(xml)
+        # response['Content-Disposition'] = content
+        # return response
+        return redirect('newInvoiceDetail',  invoice_id=invoice_id)
+
+        

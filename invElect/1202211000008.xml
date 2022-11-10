@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<factura id="comprobante" version="1.0.0">
+	<infoTributaria>
+		<ambiente>1</ambiente>
+		<tipoEmision>1</tipoEmision>
+		<razonSocial>Rubick Tech</razonSocial>
+		<nombreComercial>JAA Prueba</nombreComercial>
+		<ruc>0906855911001</ruc>
+		<claveAcceso>10112022</claveAcceso>
+	</infoTributaria>
+</factura>
