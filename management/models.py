@@ -2,7 +2,7 @@ from django.db import models
 
 class MngDocumentType(models.Model):
     docType = (
-        ('Cedula Identidad', 'Cedula Identidad'), ('RUC', 'RUC'), ('Pasaporte', 'Pasaporte'),
+        ('05', 'CÉDULA'), ('04', 'RUC'), ('03', 'PASAPORTE'),('07', 'VENTA A CONSUMIDOR FINAL'),('08', 'IDENTIFICACIÓN DEL EXTERIOR'),
     )
 
     description = models.CharField(max_length=20, choices=docType)
@@ -10,7 +10,7 @@ class MngDocumentType(models.Model):
     date_added = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.description
+        return self.get_description_display()
 
 class MngPersonType(models.Model):
     PersonType = (
@@ -68,3 +68,29 @@ class MngStatus(models.Model):
 
     def __str__(self):
         return self.description
+
+class MngFactElect(models.Model):
+    tipEmision = (
+        ("1", 'Emisión normal'), 
+    )
+    tipComprob = (
+        ("01", 'Factura'), 
+        ("03", 'LIQUIDACIÓN DE COMPRA DE BIENES Y PRESTACIÓN DE SERVICIOS'), 
+        ("04", 'NOTA DE CRÉDITO '), 
+        ("05", 'NOTA DE DÉBITO'), 
+        ("06", 'GUÍA DE REMISIÓN'), 
+        ("07", 'COMPROBANTE DE RETENCIÓN'), 
+    )
+    tipAmbient = (
+        ("1", 'Pruebas '),
+        ("2", 'Producción'), 
+    )
+
+    tipoEmision = models.CharField(max_length=1, choices=tipEmision)
+    tipoComprobante = models.CharField(max_length=2, choices=tipComprob, default="1")
+    tipoAmbiente = models.CharField(max_length=1, choices=tipAmbient,default = "1")
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateField(auto_now_add=True)
+
+    # def __str__(self):
+    #     return self.description

@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from products.models import Product
-from management.models import MngValues,MngStatus
+from management.models import MngValues,MngStatus,MngFactElect
 from .forms import InvoiceForm
 from products.forms import InvoiceProdForm
 from django.contrib import messages
@@ -362,6 +362,8 @@ def createFactElectXml(invoice_id):
     except Invoice.DoesNotExist:
         invoice = None
 
+    mng_fact_properties = MngFactElect.objects.get(is_active = True)
+
     tipAmb = '1'
     # current dateTime
     now = datetime.now()
@@ -370,7 +372,7 @@ def createFactElectXml(invoice_id):
     serie = '001001'
     numSec = invoice.Invoice_no_final
     codNum = numSec[1:]
-    tipEmi = '1'
+    tipEmi = mng_fact_properties.tipEmision[0][0]
     clavAcc = f'{now.strftime("%d%m%Y"):8.8}' + f'{tipComp:2.2}' + f'{numRuc:13.13}' + f'{tipAmb:1.1}' + f'{serie:6.6}' + f'{numSec:9.9}' + f'{codNum:8.8}' + f'{tipEmi:1.1}'
     digVerif = str(GenClavAccMod11(clavAcc))
     clavAccFinal = clavAcc + digVerif
@@ -438,6 +440,13 @@ def GenClavAccMod11(clavAcc):
         return 1
     else:
         return control
+
+def get_key(val):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
+ 
+    return "key doesn't exist"
 
 
 #Opens up page as PDF Oder Page

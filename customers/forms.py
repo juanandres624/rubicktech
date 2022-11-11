@@ -1,5 +1,6 @@
 from django import forms
 from .models import Customer
+from django.forms.widgets import Select
 
 
 class MngSelectDescription(forms.Select):
@@ -16,7 +17,7 @@ class CustomerForm(forms.ModelForm):
         model = Customer
         fields = ["first_name", "last_name", "email", "phone_1", "phone_2", "address",
                   "mngCity_id", "mngDocumentType_id", "mngPersonType_id", "document_number", "note"]
-        widgets = {'mngCity_id': MngSelectDescription, 'mngDocumentType_id': MngSelectDescription,
+        widgets = {'mngCity_id': MngSelectDescription , 'mngDocumentType_id': MngSelectDescription,
                    "mngPersonType_id": MngSelectDescription, "address": forms.Textarea(),
                    "note": forms.Textarea()}
 
