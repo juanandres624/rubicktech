@@ -3,9 +3,18 @@
 	<infoTributaria>
 		<ambiente>1</ambiente>
 		<tipoEmision>1</tipoEmision>
-		<razonSocial>Rubick Tech</razonSocial>
-		<nombreComercial>JAA Prueba</nombreComercial>
+		<razonSocial>Rubick Tech S.A</razonSocial>
+		<nombreComercial>Venta de Prog. Informaticos</nombreComercial>
 		<ruc>0906855911001</ruc>
-		<claveAcceso>1011202202090685591100110010012022110000221100017</claveAcceso>
+		<claveAcceso>1411202201090685591100110010010000000090000000918</claveAcceso>
+		<codDoc>01</codDoc>
+		<estab>001</estab>
+		<ptoEmi>001</ptoEmi>
+		<secuencial>000000009</secuencial>
+		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
+		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
 	</infoTributaria>
+	<infoFactura>
+		<fechaEmision>14112022</fechaEmision>
+	</infoFactura>
 </factura>

@@ -42,6 +42,13 @@ class Account(AbstractBaseUser):
     username        = models.CharField(max_length = 50, null = False, blank = True, unique = True)
     email           = models.EmailField(max_length = 100, null = False, blank = False, unique = True)
     phone_number    = models.CharField(max_length = 50, null = False, blank = True)
+    numRuc          = models.CharField(max_length = 13, null = True, blank = True)
+    razSocial       = models.CharField(max_length = 150, null = True, blank = True)
+    nombCom         = models.CharField(max_length = 150, null = True, blank = True)
+    dirMatr         = models.CharField(max_length = 255, null = True, blank = True)
+    dirEstablec     = models.CharField(max_length = 255, null = True, blank = True)
+    obligContab     = models.BooleanField(default = False)
+    contribEspec    = models.CharField(max_length = 13, null = True, blank = True)
 
     #required
     date_joined     = models.DateTimeField(auto_now_add = True, null = False, blank = True)

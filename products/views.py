@@ -36,7 +36,7 @@ def editProduct(request,product_id):
     except Product.DoesNotExist:
         product = None
                
-    #variation = product.variation_set.all()
+    variation = product.variation_set.all()
     image = product.image_set.all()
 
     if request.method == 'POST':
@@ -53,7 +53,7 @@ def editProduct(request,product_id):
         context = {
             'id': product.id,
             'form': form,
-            #'variations':variation,
+            'variations':variation,
             'images':image,
         }
         return render(request, 'products/editProduct.html', context)

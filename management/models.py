@@ -2,7 +2,7 @@ from django.db import models
 
 class MngDocumentType(models.Model):
     docType = (
-        ('05', 'CÉDULA'), ('04', 'RUC'), ('03', 'PASAPORTE'),('07', 'VENTA A CONSUMIDOR FINAL'),('08', 'IDENTIFICACIÓN DEL EXTERIOR'),
+        ('05', 'CÉDULA'), ('04', 'RUC'), ('06', 'PASAPORTE'),('07', 'VENTA A CONSUMIDOR FINAL'),('08', 'IDENTIFICACIÓN DEL EXTERIOR'),
     )
 
     description = models.CharField(max_length=20, choices=docType)
@@ -87,8 +87,8 @@ class MngFactElect(models.Model):
     )
 
     tipoEmision = models.CharField(max_length=1, choices=tipEmision)
-    tipoComprobante = models.CharField(max_length=2, choices=tipComprob, default="1")
-    tipoAmbiente = models.CharField(max_length=1, choices=tipAmbient,default = "1")
+    tipoComprobante = models.CharField(max_length=2, choices=tipComprob)
+    tipoAmbiente = models.CharField(max_length=1, choices=tipAmbient)
     is_active = models.BooleanField(default=True)
     date_added = models.DateField(auto_now_add=True)
 

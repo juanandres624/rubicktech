@@ -3,8 +3,9 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from products.models import Product
 from management.models import MngValues,MngStatus,MngFactElect
+from accounts.models import Account
 from .forms import InvoiceForm
-from products.forms import InvoiceProdForm
+#from products.forms import InvoiceProdForm
 from django.contrib import messages
 from customers.models import Customer
 from invoices.models import InvoiceDetail
@@ -363,16 +364,30 @@ def createFactElectXml(invoice_id):
         invoice = None
 
     mng_fact_properties = MngFactElect.objects.get(is_active = True)
+    mainAccnt = Account.objects.get(is_superadmin = True)
 
-    tipAmb = '1'
+    tipAmb = mng_fact_properties.tipoAmbiente
+
     # current dateTime
     now = datetime.now()
-    tipComp = '02'
-    numRuc = '0906855911001'
+    tipComp = mng_fact_properties.tipoComprobante
+    numRuc = str(mainAccnt.numRuc)
+    razSoc = mainAccnt.razSocial
+    nombCome = mainAccnt.nombCom
+    dirMatr = mainAccnt.dirMatr
+    dirEstab = mainAccnt.dirEstablec
+    contribEspec = mainAccnt.contribEspec
+    obligContab = ''
+    if mainAccnt.obligContab:
+        obligContab = 'SI'
+    else:
+       obligContab = 'NO' 
     serie = '001001'
-    numSec = invoice.Invoice_no_final
+    estab = '001' # Creo que establecimiento
+    ptoEmi = '001' # Creo que punto de emision
+    numSec = str(invoice.Invoice_no).zfill(9)
     codNum = numSec[1:]
-    tipEmi = mng_fact_properties.tipEmision[0][0]
+    tipEmi = mng_fact_properties.tipoEmision
     clavAcc = f'{now.strftime("%d%m%Y"):8.8}' + f'{tipComp:2.2}' + f'{numRuc:13.13}' + f'{tipAmb:1.1}' + f'{serie:6.6}' + f'{numSec:9.9}' + f'{codNum:8.8}' + f'{tipEmi:1.1}'
     digVerif = str(GenClavAccMod11(clavAcc))
     clavAccFinal = clavAcc + digVerif
@@ -400,17 +415,17 @@ def createFactElectXml(invoice_id):
     infoTribNode.appendChild(tipEmisNode)
 
     razSocNode = rootNode.createElement('razonSocial')
-    razSocNodeTxt = rootNode.createTextNode("Rubick Tech")
+    razSocNodeTxt = rootNode.createTextNode(razSoc)
     razSocNode.appendChild(razSocNodeTxt)
     infoTribNode.appendChild(razSocNode)
 
     nomComNode = rootNode.createElement('nombreComercial')
-    nomComNodeTxt = rootNode.createTextNode("JAA Prueba")
+    nomComNodeTxt = rootNode.createTextNode(nombCome)
     nomComNode.appendChild(nomComNodeTxt)
     infoTribNode.appendChild(nomComNode)    
     
     rucNode = rootNode.createElement('ruc')
-    rucNodeTxt = rootNode.createTextNode("0906855911001")
+    rucNodeTxt = rootNode.createTextNode(numRuc)
     rucNode.appendChild(rucNodeTxt)
     infoTribNode.appendChild(rucNode)    
     
@@ -418,6 +433,67 @@ def createFactElectXml(invoice_id):
     clavAccNodeTxt = rootNode.createTextNode(clavAccFinal)
     clavAccNode.appendChild(clavAccNodeTxt)
     infoTribNode.appendChild(clavAccNode)
+
+    codDocItNode = rootNode.createElement('codDoc')
+    codDocItNodeTxt = rootNode.createTextNode(tipComp)
+    codDocItNode.appendChild(codDocItNodeTxt)
+    infoTribNode.appendChild(codDocItNode)   
+    
+    estabNode = rootNode.createElement('estab')
+    estabNodeTxt = rootNode.createTextNode(estab)
+    estabNode.appendChild(estabNodeTxt)
+    infoTribNode.appendChild(estabNode)    
+    
+    ptoEmiNode = rootNode.createElement('ptoEmi')
+    ptoEmiNodeTxt = rootNode.createTextNode(ptoEmi)
+    ptoEmiNode.appendChild(ptoEmiNodeTxt)
+    infoTribNode.appendChild(ptoEmiNode)    
+    
+    secuencialNode = rootNode.createElement('secuencial')
+    secuencialNodeTxt = rootNode.createTextNode(numSec)
+    secuencialNode.appendChild(secuencialNodeTxt)
+    infoTribNode.appendChild(secuencialNode)    
+    
+    dirMatrizNode = rootNode.createElement('dirMatriz')
+    dirMatrizNodeTxt = rootNode.createTextNode(dirMatr)
+    dirMatrizNode.appendChild(dirMatrizNodeTxt)
+    infoTribNode.appendChild(dirMatrizNode)    
+    
+    dirMatrizNode = rootNode.createElement('dirMatriz')
+    dirMatrizNodeTxt = rootNode.createTextNode(dirMatr)
+    dirMatrizNode.appendChild(dirMatrizNodeTxt)
+    infoTribNode.appendChild(dirMatrizNode)
+
+    infoFactNode = rootNode.createElement('infoFactura')
+    factNode.appendChild(infoFactNode)
+
+    fechaEmisionNode = rootNode.createElement('fechaEmision')
+    fechaEmisionNodeTxt = rootNode.createTextNode(f'{now.strftime("%d/%m/%Y"):8.8}')
+    fechaEmisionNode.appendChild(fechaEmisionNodeTxt)
+    infoFactNode.appendChild(fechaEmisionNode)
+
+    dirEstablecimientoNode = rootNode.createElement('dirEstablecimiento')
+    dirEstablecimientoNodeTxt = rootNode.createTextNode(dirEstab)
+    dirEstablecimientoNode.appendChild(dirEstablecimientoNodeTxt)
+    infoFactNode.appendChild(dirEstablecimientoNode)
+
+    if mainAccnt.obligContab:
+        contribuyenteEspecialNode = rootNode.createElement('contribuyenteEspecial')
+        contribuyenteEspecialNodeTxt = rootNode.createTextNode(contribEspec)
+        contribuyenteEspecialNode.appendChild(contribuyenteEspecialNodeTxt)
+        infoFactNode.appendChild(contribuyenteEspecialNode)
+
+        obligadoContabilidadNode = rootNode.createElement('obligadoContabilidad')
+        obligadoContabilidadNodeTxt = rootNode.createTextNode(obligContab)
+        obligadoContabilidadNode.appendChild(obligadoContabilidadNodeTxt)
+        infoFactNode.appendChild(obligadoContabilidadNode)
+    else:
+
+        obligadoContabilidadNode = rootNode.createElement('obligadoContabilidad')
+        obligadoContabilidadNodeTxt = rootNode.createTextNode(obligContab)
+        obligadoContabilidadNode.appendChild(obligadoContabilidadNodeTxt)
+        infoFactNode.appendChild(obligadoContabilidadNode)
+
     
     
     xml_str = rootNode.toprettyxml(indent ="\t") 
