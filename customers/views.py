@@ -10,23 +10,13 @@ def newCustomer(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
-            # first_name = form.cleaned_data['first_name']
-            # last_name = form.cleaned_data['last_name']
-            # phone_1 = form.cleaned_data['phone_1']
-            # phone_2 = form.cleaned_data['phone_2']
-            # email = form.cleaned_data['email']
-            # address = form.cleaned_data['address']
-            # mngCity_id = form.cleaned_data['mngCity_id']
-            # mngDocumentType_id = form.cleaned_data['mngDocumentType_id']
-            # mngPersonType_id = form.cleaned_data['mngPersonType_id']
-            # document_number = form.cleaned_data['document_number']
-            # note = form.cleaned_data['note']
-
-            form.save()
-
+            post = form.save(commit=False)
+            post.save()
             messages.success(request, 'Cliente Creado....')
-            return redirect('dashboard')
-
+            return redirect('editCustomer', customer_id = post.id)
+        else:
+            messages.error(request, form.errors)
+            return redirect('newCustomer')
     else:
         form = CustomerForm(request.POST or None, request.FILES or None)
         context = {
@@ -63,8 +53,8 @@ def editCustomer(request,customer_id):
             messages.success(request, 'Cliente Editado....')
             return redirect('editCustomer', customer.id)
         else:
-            messages.success(request, 'Cliente No ha sido Editado....')
-            return redirect('viewCustomer')  
+            messages.error(request, form.errors)
+            return redirect('editCustomer', customer.id)
     else:
         form = CustomerForm(instance=customer)
         context = {

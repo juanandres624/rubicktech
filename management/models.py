@@ -85,10 +85,25 @@ class MngFactElect(models.Model):
         ("1", 'Pruebas '),
         ("2", 'Producción'), 
     )
+    tipCodImp = (
+        ("2", 'IVA '),
+        ("3", 'ICE'),
+        ("5", 'IRBPNR'),
+    )
+    tipTarifIva = (
+        ("0", '0% '),
+        ("2", '12%'),
+        ("3", '14%'),
+        ("6", 'No Objeto de Impuesto'),
+        ("7", 'Exento de IVA'),
+        ("8", 'IVA diferenciado'),
+    )
 
     tipoEmision = models.CharField(max_length=1, choices=tipEmision)
     tipoComprobante = models.CharField(max_length=2, choices=tipComprob)
     tipoAmbiente = models.CharField(max_length=1, choices=tipAmbient)
+    codImp = models.CharField(max_length=1, choices=tipCodImp)
+    tarifIva = models.CharField(max_length=1, choices=tipTarifIva)
     is_active = models.BooleanField(default=True)
     date_added = models.DateField(auto_now_add=True)
 

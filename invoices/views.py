@@ -138,6 +138,7 @@ def newInvoiceDetail(request,invoice_id):
                         #Alter Invoice Values
                         invoice.subtotal_0 = subtotal_0
                         invoice.subtotal_tax = subtotal_12
+                        invoice.subtotal_no_taxes = subtotal_0 + subtotal_12
                         invoice.subtotal_discount = subtotalDisc
                         invoice.subtotal_tax_percentage = taxsubtotal
                         invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
@@ -179,6 +180,7 @@ def newInvoiceDetail(request,invoice_id):
                             #Alter Invoice Values
                             invoice.subtotal_0 = subtotal_0
                             invoice.subtotal_tax = subtotal_12
+                            invoice.subtotal_no_taxes = subtotal_0 + subtotal_12
                             invoice.subtotal_discount = subtotalDisc
                             invoice.subtotal_tax_percentage = taxsubtotal
                             invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
@@ -242,6 +244,7 @@ def newInvoiceDetail(request,invoice_id):
                             #Alter Invoice Values
                             invoice.subtotal_0 = subtotal_0
                             invoice.subtotal_tax = subtotal_12
+                            invoice.subtotal_no_taxes = subtotal_0 + subtotal_12
                             invoice.subtotal_discount = subtotalDisc
                             invoice.subtotal_tax_percentage = taxsubtotal
                             invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
@@ -326,6 +329,7 @@ def deleteInvoiceDetail(request,invoice_id):
                 #Alter Invoice Values
                 invoice.subtotal_0 = subtotal_0
                 invoice.subtotal_tax = subtotal_12
+                invoice.subtotal_no_taxes = subtotal_0 + subtotal_12
                 invoice.subtotal_discount = subtotalDisc
                 invoice.subtotal_tax_percentage = taxsubtotal
                 invoice.subtotal_gran_total = subtotal_0 + subtotal_12 + taxsubtotal - subtotalDisc
@@ -388,6 +392,19 @@ def createFactElectXml(invoice_id):
     numSec = str(invoice.Invoice_no).zfill(9)
     codNum = numSec[1:]
     tipEmi = mng_fact_properties.tipoEmision
+    tipIdentCompr = invoice.billing_customer_id.mngDocumentType_id.description
+    flagGuiaRemis = False
+    guiaRem = ''
+    if flagGuiaRemis:
+        guiaRem = '001-001-000000001' # Ejemplo de Guia de Remision
+    razSocialComp = invoice.billing_customer_id.first_name + ' ' + invoice.billing_customer_id.last_name
+    identifCompr = invoice.billing_customer_id.document_number
+    direccCompr = invoice.billing_customer_id.address
+    totalSinImp = str(invoice.subtotal_no_taxes)
+    totalDesc = str(invoice.subtotal_discount)
+    totalImpCod = mng_fact_properties.codImp
+    totalImpTarifIva = mng_fact_properties.tarifIva
+
     clavAcc = f'{now.strftime("%d%m%Y"):8.8}' + f'{tipComp:2.2}' + f'{numRuc:13.13}' + f'{tipAmb:1.1}' + f'{serie:6.6}' + f'{numSec:9.9}' + f'{codNum:8.8}' + f'{tipEmi:1.1}'
     digVerif = str(GenClavAccMod11(clavAcc))
     clavAccFinal = clavAcc + digVerif
@@ -468,7 +485,7 @@ def createFactElectXml(invoice_id):
     factNode.appendChild(infoFactNode)
 
     fechaEmisionNode = rootNode.createElement('fechaEmision')
-    fechaEmisionNodeTxt = rootNode.createTextNode(f'{now.strftime("%d/%m/%Y"):8.8}')
+    fechaEmisionNodeTxt = rootNode.createTextNode(f'{now.strftime("%d/%m/%Y")}')
     fechaEmisionNode.appendChild(fechaEmisionNodeTxt)
     infoFactNode.appendChild(fechaEmisionNode)
 
@@ -488,13 +505,67 @@ def createFactElectXml(invoice_id):
         obligadoContabilidadNode.appendChild(obligadoContabilidadNodeTxt)
         infoFactNode.appendChild(obligadoContabilidadNode)
     else:
-
         obligadoContabilidadNode = rootNode.createElement('obligadoContabilidad')
         obligadoContabilidadNodeTxt = rootNode.createTextNode(obligContab)
         obligadoContabilidadNode.appendChild(obligadoContabilidadNodeTxt)
         infoFactNode.appendChild(obligadoContabilidadNode)
 
+    tipIdentifComprNode = rootNode.createElement('tipoIdentificacionComprador')
+    tipIdentifComprNodeTxt = rootNode.createTextNode(tipIdentCompr)
+    tipIdentifComprNode.appendChild(tipIdentifComprNodeTxt)
+    infoFactNode.appendChild(tipIdentifComprNode)
+
+    if flagGuiaRemis:
+        guiaRemisionNode = rootNode.createElement('guiaRemision')
+        guiaRemisionNodeTxt = rootNode.createTextNode(guiaRem)
+        guiaRemisionNode.appendChild(guiaRemisionNodeTxt)
+        infoFactNode.appendChild(guiaRemisionNode)
+
+    razSocialComprNode = rootNode.createElement('razonSocialComprador')
+    razSocialComprNodeTxt = rootNode.createTextNode(razSocialComp)
+    razSocialComprNode.appendChild(razSocialComprNodeTxt)
+    infoFactNode.appendChild(razSocialComprNode)    
     
+    identifComprNode = rootNode.createElement('identificacionComprador')
+    identifComprNodeTxt = rootNode.createTextNode(identifCompr)
+    identifComprNode.appendChild(identifComprNodeTxt)
+    infoFactNode.appendChild(identifComprNode)    
+    
+    direccComprNode = rootNode.createElement('direccionComprador')
+    direccComprNodeTxt = rootNode.createTextNode(direccCompr)
+    direccComprNode.appendChild(direccComprNodeTxt)
+    infoFactNode.appendChild(direccComprNode)
+    
+    totalSinImpNode = rootNode.createElement('totalSinImpuestos')
+    totalSinImpNodeTxt = rootNode.createTextNode(totalSinImp)
+    totalSinImpNode.appendChild(totalSinImpNodeTxt)
+    infoFactNode.appendChild(totalSinImpNode)
+    
+    totalDescNode = rootNode.createElement('totalDescuento')
+    totalDescNodeTxt = rootNode.createTextNode(totalDesc)
+    totalDescNode.appendChild(totalDescNodeTxt)
+    infoFactNode.appendChild(totalDescNode)
+
+    totalConImpNode = rootNode.createElement('totalConImpuestos')
+    factNode.appendChild(totalConImpNode)
+    
+    totalImpNode = rootNode.createElement('totalImpuesto')
+    totalConImpNode.appendChild(totalImpNode)
+
+    totalImpCodNode = rootNode.createElement('codigo')
+    totalImpCodNodeTxt = rootNode.createTextNode(totalImpCod)
+    totalImpCodNode.appendChild(totalImpCodNodeTxt)
+    totalImpNode.appendChild(totalImpCodNode)
+
+    totalImpTarifIvaNode = rootNode.createElement('codigoPorcentaje')
+    totalImpTarifIvaNodeTxt = rootNode.createTextNode(totalImpTarifIva)
+    totalImpTarifIvaNode.appendChild(totalImpTarifIvaNodeTxt)
+    totalImpNode.appendChild(totalImpTarifIvaNode)
+
+    # totalImpBaseImpoNode = rootNode.createElement('baseImponible')
+    # totalImpBaseImpoNodeTxt = rootNode.createTextNode(totalImpTarifIva)
+    # totalImpBaseImpoNode.appendChild(totalImpBaseImpoNodeTxt)
+    # totalImpNode.appendChild(totalImpBaseImpoNode)
     
     xml_str = rootNode.toprettyxml(indent ="\t") 
     
@@ -516,13 +587,6 @@ def GenClavAccMod11(clavAcc):
         return 1
     else:
         return control
-
-def get_key(val):
-    for key, value in my_dict.items():
-        if val == value:
-            return key
- 
-    return "key doesn't exist"
 
 
 #Opens up page as PDF Oder Page

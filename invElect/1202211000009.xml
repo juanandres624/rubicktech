@@ -6,7 +6,7 @@
 		<razonSocial>Rubick Tech S.A</razonSocial>
 		<nombreComercial>Venta de Prog. Informaticos</nombreComercial>
 		<ruc>0906855911001</ruc>
-		<claveAcceso>1411202201090685591100110010010000000090000000918</claveAcceso>
+		<claveAcceso>1511202201090685591100110010010000000090000000912</claveAcceso>
 		<codDoc>01</codDoc>
 		<estab>001</estab>
 		<ptoEmi>001</ptoEmi>
@@ -15,6 +15,20 @@
 		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
 	</infoTributaria>
 	<infoFactura>
-		<fechaEmision>14112022</fechaEmision>
+		<fechaEmision>15/11/2022</fechaEmision>
+		<dirEstablecimiento>Entrerios Calle Principal Local 43</dirEstablecimiento>
+		<obligadoContabilidad>NO</obligadoContabilidad>
+		<tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+		<razonSocialComprador>Juan Andres Aulestia Velasco</razonSocialComprador>
+		<identificacionComprador>1803483716001</identificacionComprador>
+		<direccionComprador>address update</direccionComprador>
+		<totalSinImpuestos>208.25</totalSinImpuestos>
+		<totalDescuento>0.00</totalDescuento>
 	</infoFactura>
+	<totalConImpuestos>
+		<totalImpuesto>
+			<codigo>2</codigo>
+			<codigoPorcentaje>2</codigoPorcentaje>
+		</totalImpuesto>
+	</totalConImpuestos>
 </factura>
