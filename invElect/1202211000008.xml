@@ -3,9 +3,111 @@
 	<infoTributaria>
 		<ambiente>1</ambiente>
 		<tipoEmision>1</tipoEmision>
-		<razonSocial>Rubick Tech</razonSocial>
-		<nombreComercial>JAA Prueba</nombreComercial>
+		<razonSocial>Rubick Tech S.A</razonSocial>
+		<nombreComercial>Venta de Prog. Informaticos</nombreComercial>
 		<ruc>0906855911001</ruc>
-		<claveAcceso>10112022</claveAcceso>
+		<claveAcceso>1711202201090685591100110010010000000080000000819</claveAcceso>
+		<codDoc>01</codDoc>
+		<estab>001</estab>
+		<ptoEmi>001</ptoEmi>
+		<secuencial>000000008</secuencial>
+		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
+		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
 	</infoTributaria>
+	<infoFactura>
+		<fechaEmision>17/11/2022</fechaEmision>
+		<dirEstablecimiento>Entrerios Calle Principal Local 43</dirEstablecimiento>
+		<obligadoContabilidad>NO</obligadoContabilidad>
+		<tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+		<razonSocialComprador>Juan Andres Aulestia Velasco</razonSocialComprador>
+		<identificacionComprador>1803483716001</identificacionComprador>
+		<direccionComprador>address update</direccionComprador>
+		<totalSinImpuestos>375.75</totalSinImpuestos>
+		<totalDescuento>7.50</totalDescuento>
+		<propina>0.00</propina>
+		<importeTotal>412.44</importeTotal>
+		<moneda>DÓLAR</moneda>
+	</infoFactura>
+	<totalConImpuestos>
+		<totalImpuesto>
+			<codigo>2</codigo>
+			<codigoPorcentaje>2</codigoPorcentaje>
+			<baseImponible>368.25</baseImponible>
+			<valor>44.19</valor>
+		</totalImpuesto>
+	</totalConImpuestos>
+	<detalles>
+		<detalle>
+			<codigoPrincipal>KI45215</codigoPrincipal>
+			<codigoAuxiliar>23423423443</codigoAuxiliar>
+			<descripcion>Mavi Jeans</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>88.25</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>88.25</precioTotalSinImpuesto>
+		</detalle>
+		<impuestos>
+			<impuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<tarifa>12.00</tarifa>
+				<baseImponible>88.25</baseImponible>
+				<valor>10.59</valor>
+			</impuesto>
+		</impuestos>
+		<detalle>
+			<codigoPrincipal>ÑLO42342342</codigoPrincipal>
+			<codigoAuxiliar>423423fsa2423423</codigoAuxiliar>
+			<descripcion>Jordan Basketball Shoe</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>120.00</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>120.00</precioTotalSinImpuesto>
+		</detalle>
+		<impuestos>
+			<impuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<tarifa>12.00</tarifa>
+				<baseImponible>120.00</baseImponible>
+				<valor>14.40</valor>
+			</impuesto>
+		</impuestos>
+		<detalle>
+			<codigoPrincipal>JLSK342445</codigoPrincipal>
+			<codigoAuxiliar></codigoAuxiliar>
+			<descripcion>BIS Rojo Arete</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>25.00</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>25.00</precioTotalSinImpuesto>
+		</detalle>
+		<impuestos>
+			<impuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<tarifa>12.00</tarifa>
+				<baseImponible>25.00</baseImponible>
+				<valor>3.00</valor>
+			</impuesto>
+		</impuestos>
+		<detalle>
+			<codigoPrincipal>KIUE0005255</codigoPrincipal>
+			<codigoAuxiliar></codigoAuxiliar>
+			<descripcion>Barcelona Sc Camiseta</descripcion>
+			<cantidad>3</cantidad>
+			<precioUnitario>50.00</precioUnitario>
+			<descuento>7.50</descuento>
+			<precioTotalSinImpuesto>142.50</precioTotalSinImpuesto>
+		</detalle>
+		<impuestos>
+			<impuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<tarifa>12.00</tarifa>
+				<baseImponible>142.50</baseImponible>
+				<valor>17.10</valor>
+			</impuesto>
+		</impuestos>
+	</detalles>
 </factura>

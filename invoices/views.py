@@ -23,6 +23,9 @@ from django.views import View
 from management.models import MngProductCategory
 from xml.dom import minidom
 import os
+import base64
+import subprocess
+import logging
 from datetime import datetime
 import itertools
 
@@ -367,6 +370,8 @@ def createFactElectXml(invoice_id):
     except Invoice.DoesNotExist:
         invoice = None
 
+    Invdetail = getAllActualInvoiceDetails(invoice)
+
     mng_fact_properties = MngFactElect.objects.get(is_active = True)
     mainAccnt = Account.objects.get(is_superadmin = True)
 
@@ -400,10 +405,13 @@ def createFactElectXml(invoice_id):
     razSocialComp = invoice.billing_customer_id.first_name + ' ' + invoice.billing_customer_id.last_name
     identifCompr = invoice.billing_customer_id.document_number
     direccCompr = invoice.billing_customer_id.address
-    totalSinImp = str(invoice.subtotal_no_taxes)
-    totalDesc = str(invoice.subtotal_discount)
+    totalSinImp = invoice.subtotal_no_taxes
+    totalDesc = invoice.subtotal_discount
     totalImpCod = mng_fact_properties.codImp
     totalImpTarifIva = mng_fact_properties.tarifIva
+    totalImpBaseImp = totalSinImp - totalDesc
+    totalImpValor = totalImpBaseImp * 12 / 100
+    importeTotal = totalImpBaseImp + totalImpValor
 
     clavAcc = f'{now.strftime("%d%m%Y"):8.8}' + f'{tipComp:2.2}' + f'{numRuc:13.13}' + f'{tipAmb:1.1}' + f'{serie:6.6}' + f'{numSec:9.9}' + f'{codNum:8.8}' + f'{tipEmi:1.1}'
     digVerif = str(GenClavAccMod11(clavAcc))
@@ -537,18 +545,20 @@ def createFactElectXml(invoice_id):
     infoFactNode.appendChild(direccComprNode)
     
     totalSinImpNode = rootNode.createElement('totalSinImpuestos')
-    totalSinImpNodeTxt = rootNode.createTextNode(totalSinImp)
+    totalSinImpNodeTxt = rootNode.createTextNode(str(totalSinImp))
     totalSinImpNode.appendChild(totalSinImpNodeTxt)
     infoFactNode.appendChild(totalSinImpNode)
     
     totalDescNode = rootNode.createElement('totalDescuento')
-    totalDescNodeTxt = rootNode.createTextNode(totalDesc)
+    totalDescNodeTxt = rootNode.createTextNode(str(totalDesc))
     totalDescNode.appendChild(totalDescNodeTxt)
     infoFactNode.appendChild(totalDescNode)
 
+    #totalConImpuestos Node
     totalConImpNode = rootNode.createElement('totalConImpuestos')
     factNode.appendChild(totalConImpNode)
-    
+
+    #totalImpuesto Node
     totalImpNode = rootNode.createElement('totalImpuesto')
     totalConImpNode.appendChild(totalImpNode)
 
@@ -562,11 +572,117 @@ def createFactElectXml(invoice_id):
     totalImpTarifIvaNode.appendChild(totalImpTarifIvaNodeTxt)
     totalImpNode.appendChild(totalImpTarifIvaNode)
 
-    # totalImpBaseImpoNode = rootNode.createElement('baseImponible')
-    # totalImpBaseImpoNodeTxt = rootNode.createTextNode(totalImpTarifIva)
-    # totalImpBaseImpoNode.appendChild(totalImpBaseImpoNodeTxt)
-    # totalImpNode.appendChild(totalImpBaseImpoNode)
+    totalImpBaseImpoNode = rootNode.createElement('baseImponible')
+    totalImpBaseImpoNodeTxt = rootNode.createTextNode(str(totalImpBaseImp))
+    totalImpBaseImpoNode.appendChild(totalImpBaseImpoNodeTxt)
+    totalImpNode.appendChild(totalImpBaseImpoNode)    
     
+    totalImpValorNode = rootNode.createElement('valor')
+    totalImpValorNodeTxt = rootNode.createTextNode(str(totalImpValor))
+    totalImpValorNode.appendChild(totalImpValorNodeTxt)
+    totalImpNode.appendChild(totalImpValorNode)
+
+    propinaNode = rootNode.createElement('propina')
+    propinaNodeTxt = rootNode.createTextNode('0.00')
+    propinaNode.appendChild(propinaNodeTxt)
+    infoFactNode.appendChild(propinaNode)
+
+    importeTotalNode = rootNode.createElement('importeTotal')
+    importeTotalNodeTxt = rootNode.createTextNode(str(importeTotal))
+    importeTotalNode.appendChild(importeTotalNodeTxt)
+    infoFactNode.appendChild(importeTotalNode)
+
+    monedaNode = rootNode.createElement('moneda')
+    monedaNodeTxt = rootNode.createTextNode('DÓLAR')
+    monedaNode.appendChild(monedaNodeTxt)
+    infoFactNode.appendChild(monedaNode)
+
+    #detalles Node
+    detallesNode = rootNode.createElement('detalles')
+    factNode.appendChild(detallesNode)
+
+    for deta in Invdetail:
+
+        #detalle Node 
+        detalleNode = rootNode.createElement('detalle')
+        detallesNode.appendChild(detalleNode)
+
+        codigoPrincipalNode = rootNode.createElement('codigoPrincipal')
+        codigoPrincipalNodeTxt = rootNode.createTextNode(deta.product_id.product_code)
+        codigoPrincipalNode.appendChild(codigoPrincipalNodeTxt)
+        detalleNode.appendChild(codigoPrincipalNode)
+
+        codigoSecNode = rootNode.createElement('codigoAuxiliar')
+        codigoSecNodeTxt = rootNode.createTextNode(deta.product_id.code)
+        codigoSecNode.appendChild(codigoSecNodeTxt)
+        detalleNode.appendChild(codigoSecNode)        
+        
+        descripcionNode = rootNode.createElement('descripcion')
+        descripcionNodeTxt = rootNode.createTextNode(deta.product_id.product_name)
+        descripcionNode.appendChild(descripcionNodeTxt)
+        detalleNode.appendChild(descripcionNode)        
+        
+        cantidadNode = rootNode.createElement('cantidad')
+        cantidadNodeTxt = rootNode.createTextNode(str(deta.quantity))
+        cantidadNode.appendChild(cantidadNodeTxt)
+        detalleNode.appendChild(cantidadNode)        
+        
+        precioUnitarioNode = rootNode.createElement('precioUnitario')
+        precioUnitarioNodeTxt = rootNode.createTextNode(str(deta.unit_price))
+        precioUnitarioNode.appendChild(precioUnitarioNodeTxt)
+        detalleNode.appendChild(precioUnitarioNode)        
+        
+        descuentoNode = rootNode.createElement('descuento')
+        descuentoNodeTxt = rootNode.createTextNode(str(deta.discount))
+        descuentoNode.appendChild(descuentoNodeTxt)
+        detalleNode.appendChild(descuentoNode)        
+        
+        precTotSinImpNode = rootNode.createElement('precioTotalSinImpuesto')
+        precTotSinImpNodeTxt = rootNode.createTextNode(str(deta.total_price))
+        precTotSinImpNode.appendChild(precTotSinImpNodeTxt)
+        detalleNode.appendChild(precTotSinImpNode)
+
+        #impuestos Node 
+        impuestosNode = rootNode.createElement('impuestos')
+        detallesNode.appendChild(impuestosNode)
+
+        #impuesto Node 
+        impuestoNode = rootNode.createElement('impuesto')
+        impuestosNode.appendChild(impuestoNode)
+
+        impuestoCodNode = rootNode.createElement('codigo')
+        impuestoCodNodeTxt = rootNode.createTextNode(totalImpCod)
+        impuestoCodNode.appendChild(impuestoCodNodeTxt)
+        impuestoNode.appendChild(impuestoCodNode)
+
+        impuestocodigoPorcentjeNode = rootNode.createElement('codigoPorcentaje')
+        impuestocodigoPorcentjeNodeTxt = rootNode.createTextNode(totalImpTarifIva)
+        impuestocodigoPorcentjeNode.appendChild(impuestocodigoPorcentjeNodeTxt)
+        impuestoNode.appendChild(impuestocodigoPorcentjeNode)
+
+        tipTarifDict = dict(mng_fact_properties.tipTarifIva)
+        tipTarifRes = ''
+        if tipTarifDict[totalImpTarifIva].find('%') > 0:
+            tipTarifRes = tipTarifDict[totalImpTarifIva].replace('%','.00')
+        else:
+            tipTarifRes = tipTarifDict[totalImpTarifIva]
+
+        impuestoTarifaNode = rootNode.createElement('tarifa')
+        impuestoTarifaNodeTxt = rootNode.createTextNode(tipTarifRes)
+        impuestoTarifaNode.appendChild(impuestoTarifaNodeTxt)
+        impuestoNode.appendChild(impuestoTarifaNode)
+        
+        impuestoBaseImpNode = rootNode.createElement('baseImponible')
+        impuestoBaseImpNodeTxt = rootNode.createTextNode(str(deta.total_price))
+        impuestoBaseImpNode.appendChild(impuestoBaseImpNodeTxt)
+        impuestoNode.appendChild(impuestoBaseImpNode)        
+        
+        impuestoValorNode = rootNode.createElement('valor')
+        impuestoValorNodeTxt = rootNode.createTextNode(str(deta.total_price * int(float(tipTarifRes)) / 100))
+        impuestoValorNode.appendChild(impuestoValorNodeTxt)
+        impuestoNode.appendChild(impuestoValorNode)
+
+
     xml_str = rootNode.toprettyxml(indent ="\t") 
     
     save_path_file = "invElect/" + str(invoice.user.id) + invoice.Invoice_no_final + ".xml"
@@ -631,4 +747,38 @@ class DownloadXML(View):
         # return response
         return redirect('newInvoiceDetail',  invoice_id=invoice_id)
 
-        
+class Xades(object):
+
+    def sign(self, xml_document, file_pk12, password):
+        """
+        Metodo que aplica la firma digital al XML
+        TODO: Revisar return
+        """
+        xml_str = xml_document.encode('utf-8')
+        JAR_PATH = 'firma/firmaXadesBes.jar'
+        JAVA_CMD = 'java'
+        firma_path = os.path.join(os.path.dirname(__file__), JAR_PATH)
+        command = [
+            JAVA_CMD,
+            '-jar',
+            firma_path,
+            xml_str,
+            base64.b64encode(file_pk12),
+            base64.b64encode(password)
+        ]
+        try:
+            logging.info('Probando comando de firma digital')
+            subprocess.check_output(command)
+        except subprocess.CalledProcessError as e:
+            returncode = e.returncode
+            output = e.output
+            logging.error('Llamada a proceso JAVA codigo: %s' % returncode)
+            logging.error('Error: %s' % output)
+
+        p = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
+        res = p.communicate()
+        return res[0]
