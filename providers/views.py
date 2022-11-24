@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
 from providers.models import Provider
 from .forms import ProviderForm
+from products.models import Product
 
 
 @login_required(login_url = 'login')
@@ -54,9 +54,13 @@ def editProvider(request,provider_id):
             return redirect('viewProvider')  
     else:
         form = ProviderForm(instance=provider)
+        products = Product.objects.filter(provider_id=provider)
+
         context = {
             'id': provider.id,
             'form': form,
+            'provider':provider,
+            'prodProv':products,
         }
         return render(request, 'providers/editProvider.html', context)
 

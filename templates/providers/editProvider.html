@@ -1,114 +1,198 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="page-header">
+            <h3 class="mb-2">Detalle Proveedor </h3>
+            <p class="pageheader-text"></p>
+            <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'viewProviders' %}" class="breadcrumb-link">Proveedores</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detalle Proveedor</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
 
-<div class="dashboard-wrapper">
-    {% include 'includes/alerts.html' %}
-    <div class="container-fluid  dashboard-content">
-        <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="page-header">
-                    <h3 class="mb-2">Editar Proveedor </h3>
-                    <p class="pageheader-text"></p>
-                    <div class="page-breadcrumb">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Proveedores</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Editar Proveedor</li>
-                            </ol>
-                        </nav>
+<div class="row">
+    <div class="col-4">
+        <div class="col-xl-12 col-lg-12 col-md-12col-sm-12 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <img src="{% static 'images/user-avatar.png' %}" alt="" class="rounded mx-auto d-block">
+                        </div>
+                        <div class="row justify-content-center">
+                            <h4>{{ provider.social_reason | capfirst }}</h4>
+                        </div>                        
+                            <b><h5>Detalles</h5></b>
+                        <hr>
+                        <div class="form-group">
+                            <b><label>Numero de Documento</label></b>
+                            <p>{{ provider.document_number }}</p>
+                        </div>
+                        <div class="form-group">
+                            <b><label>Email</label></b>
+                            <p>{{ provider.email }}</p>
+                        </div>                    
+                        <div class="form-group">
+                            <b><label>Dirección</label></b>
+                            <p>{{ provider.address_1 | capfirst }} 
+                                <br> 
+                                {{ provider.city | capfirst }} 
+                            </p>
+                        </div>                    
+                        <div class="form-group">
+                            <b><label>Telefono # 1</label></b>
+                            <p>{{ provider.phone_1 }}</p>
+                        </div>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <input type="button" class="btn btn-primary" value="Editar" data-toggle="modal" data-target="#modalEditProv"></input>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <form action="{% url 'editProvider' id %}" method="POST">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                    <div class="card">
-                        <h5 class="card-header">Información Del Proveedor</h5>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="col-form-label">Codigo del Proveedor</label>
-                                {{ form.provider_code }}
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Razón Comercial</label>
-                                {{ form.business_reason }}
-                            </div>
-                            <div class="form-group">
-                                <label>Razon Social</label>
-                                {{ form.social_reason }}
-                            </div>                            
-                            <div class="form-group">
-                                <label>Email</label>
-                                {{ form.email }}
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Telefono # 1</label>
-                                {{ form.phone_1 }}
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Telefono # 2</label>
-                                {{ form.phone_2 }}
-                            </div>
-                            <div class="form-group">
-                                <label>Ciudad</label>
-                                {{ form.city }}
-                            </div>
-                            <div class="form-group">
-                                <label>Dirección # 1</label>
-                                {{ form.address_1 }}
-                            </div>                            
-                            <div class="form-group">
-                                <label>Dirección # 2</label>
-                                {{ form.address_2 }}
-                            </div>                            
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                    <div class="card">
-                        <h5 class="card-header">Información Addicional</h5>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>Tipo de Documento</label>
-                                {{ form.mngDocumentType_id }}
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Numero de Documento</label>
-                                {{ form.document_number }}
-                            </div>
-                            <div class="form-group">
-                                <label>Web Site</label>
-                                {{ form.web_site }}
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Nota</label>
-                                {{ form.note }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p class="text-center">
-<!--                                <input type="submit" class="btn btn-space btn-primary">Guardar</input>-->
-                                <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
-                                <button class="btn btn-space btn-secondary">Cancel</button>
-                            </p>
-                </div>
-            </div>
-            {{ form.email.errors }}
-            {{ form.non_field_errors }}
-        </form>
     </div>
 
-    {% include 'includes/footer.html' %}
+    <div class="col-8">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <h5 class="card-header">Productos De Proveedor</h5>
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table id="example4" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Código Producto #</th>
+                                            <th>Nombre Producto</th>
+                                            <th>Precio</th>
+                                            <th>Stock</th>
+                                            <th>Fecha Creación</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for prod in prodProv %}
+                                            <tr>
+                                                <td>{{ prod.product_code }}</td>
+                                                <td>{{ prod.product_name }}</td>
+                                                <td>{{ prod.price }}</td>
+                                                <td>{{ prod.stock }}</td>
+                                                <td>{{ prod.created_date }}</td>
+                                                <td class="text-center"><a type="button" href=""><span class="fa fa-edit"></span></a></td>               
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="modalEditProv" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="{% url 'editProvider' id %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar Proveedor</h5>
+                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card">
+                                <h5 class="card-header">Información Del Proveedor</h5>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Codigo del Proveedor</label>
+                                        {{ form.provider_code }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Razón Comercial</label>
+                                        {{ form.business_reason }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Razon Social</label>
+                                        {{ form.social_reason }}
+                                    </div>                            
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        {{ form.email }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Telefono # 1</label>
+                                        {{ form.phone_1 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Telefono # 2</label>
+                                        {{ form.phone_2 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ciudad</label>
+                                        {{ form.city }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Dirección # 1</label>
+                                        {{ form.address_1 }}
+                                    </div>                            
+                                    <div class="form-group">
+                                        <label>Dirección # 2</label>
+                                        {{ form.address_2 }}
+                                    </div>                            
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card">
+                                <h5 class="card-header">Información Addicional</h5>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Tipo de Documento</label>
+                                        {{ form.mngDocumentType_id }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Numero de Documento</label>
+                                        {{ form.document_number }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Web Site</label>
+                                        {{ form.web_site }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Nota</label>
+                                        {{ form.note }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
+                    <button href="#" class="btn btn-space btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

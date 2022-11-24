@@ -6,7 +6,7 @@
 		<razonSocial>Rubick Tech S.A</razonSocial>
 		<nombreComercial>Venta de Prog. Informaticos</nombreComercial>
 		<ruc>0906855911001</ruc>
-		<claveAcceso>1511202201090685591100110010010000000090000000912</claveAcceso>
+		<claveAcceso>2311202201090685591100110010010000000090000000917</claveAcceso>
 		<codDoc>01</codDoc>
 		<estab>001</estab>
 		<ptoEmi>001</ptoEmi>
@@ -15,20 +15,63 @@
 		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
 	</infoTributaria>
 	<infoFactura>
-		<fechaEmision>15/11/2022</fechaEmision>
+		<fechaEmision>23/11/2022</fechaEmision>
 		<dirEstablecimiento>Entrerios Calle Principal Local 43</dirEstablecimiento>
 		<obligadoContabilidad>NO</obligadoContabilidad>
 		<tipoIdentificacionComprador>04</tipoIdentificacionComprador>
 		<razonSocialComprador>Juan Andres Aulestia Velasco</razonSocialComprador>
 		<identificacionComprador>1803483716001</identificacionComprador>
 		<direccionComprador>address update</direccionComprador>
-		<totalSinImpuestos>208.25</totalSinImpuestos>
+		<totalSinImpuestos>296.50</totalSinImpuestos>
 		<totalDescuento>0.00</totalDescuento>
+		<propina>0.00</propina>
+		<importeTotal>332.08</importeTotal>
+		<moneda>DÓLAR</moneda>
 	</infoFactura>
 	<totalConImpuestos>
 		<totalImpuesto>
 			<codigo>2</codigo>
 			<codigoPorcentaje>2</codigoPorcentaje>
+			<baseImponible>296.50</baseImponible>
+			<valor>35.58</valor>
 		</totalImpuesto>
 	</totalConImpuestos>
+	<detalles>
+		<detalle>
+			<codigoPrincipal>ÑLO42342342</codigoPrincipal>
+			<codigoAuxiliar>423423fsa2423423</codigoAuxiliar>
+			<descripcion>Jordan Basketball Shoe</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>120.00</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>120.00</precioTotalSinImpuesto>
+		</detalle>
+		<impuestos>
+			<impuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<tarifa>12.00</tarifa>
+				<baseImponible>120.00</baseImponible>
+				<valor>14.40</valor>
+			</impuesto>
+		</impuestos>
+		<detalle>
+			<codigoPrincipal>KI45215</codigoPrincipal>
+			<codigoAuxiliar>23423423443</codigoAuxiliar>
+			<descripcion>Mavi Jeans</descripcion>
+			<cantidad>2</cantidad>
+			<precioUnitario>88.25</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>176.50</precioTotalSinImpuesto>
+		</detalle>
+		<impuestos>
+			<impuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<tarifa>12.00</tarifa>
+				<baseImponible>176.50</baseImponible>
+				<valor>21.18</valor>
+			</impuesto>
+		</impuestos>
+	</detalles>
 </factura>

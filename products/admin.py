@@ -3,7 +3,7 @@ from .models import Product, Variation,Image
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_name', 'description', 'price', 'stock',   'is_available', 'modified_date')
+    list_display = ('product_name', 'description', 'price', 'stock',   'is_available', 'modified_date','created_date')
     prepopulated_fields = {'slug': ('product_name',)}
 
 

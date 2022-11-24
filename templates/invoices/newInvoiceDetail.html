@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-2 offset-md-10">
-                                {% if invoice.mngStatus_id.description == "Activo" %}
+                                {% if invoice.mngStatus_id.description == "Activo" or invoice.mngStatus_id.description == "Completado" %}
                                     <span class="badge badge-success">{{ invoice.mngStatus_id }}</span>
                                 {% elif invoice.mngStatus_id.description == "Inactivo" %}
                                     <span class="badge badge-danger">{{ invoice.mngStatus_id }}</span>

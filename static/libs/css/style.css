@@ -160,7 +160,7 @@ body {
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
-    color: #71748d;
+    color: #575656;
     background-color: #efeff6;
     -webkit-font-smoothing: antialiased;
 }
@@ -171,7 +171,7 @@ h3,
 h4,
 h5,
 h6 {
-    color: #3d405c;
+    color: #575656;
     margin: 0px 0px 15px 0px;
     font-family: 'Circular Std Medium';
 }
@@ -212,7 +212,7 @@ p:last-child {
 }
 
 a {
-    color: #71748d;
+    color: #575656;
 }
 
 a:hover {
@@ -235,7 +235,7 @@ ul li {}
 .lead {
     font-size: 1.25rem;
     font-weight: 300;
-    color: #3d3f5d;
+    color: #575656;
 }
 
 
@@ -248,7 +248,7 @@ label {
     max-width: 100%;
     margin-bottom: 5px;
     font-size: 15px;
-    color: #71748d;
+    color: #575656;
 }
 
 .form-control {
@@ -256,7 +256,7 @@ label {
     width: 100%;
     font-size: 14px;
     line-height: 1.42857143;
-    color: #71748d;
+    color: #575656;
     background-color: #fff;
     background-image: none;
     border: 1px solid #d2d2e4;
@@ -264,7 +264,7 @@ label {
 }
 
 .form-control:focus {
-    color: #71748d;
+    color: #575656;
     background-color: #fff;
     border-color: #a7a7f0;
     outline: 0;
@@ -272,7 +272,7 @@ label {
 }
 
 input[type=file] {
-    color: #71748d;
+    color: #575656;
     background-color: #fff;
     border-color: #a7a7f0;
     outline: 0;
@@ -292,13 +292,13 @@ button:focus {
 }
 
 select.form-control {
-    color: #71748d;
+    color: #575656;
     -webkit-appearance: none;
     -moz-appearance: none;
     background-position: 99% 52%;
     background-size: auto;
     background-repeat: no-repeat;
-    background-image: url(/images/down-arrow.png);
+    background-image: url(/static/images/down-arrow.png);
     padding-right: 15px;
     border: 1px solid #d2d2e4;
     border-radius: 2px;
@@ -306,7 +306,7 @@ select.form-control {
 
 textarea.form-control {
     height: auto;
-    color: #71748d;
+    color: #575656;
     background-color: #fff;
     background-image: none;
     border: 1px solid #d2d2e4;
@@ -372,13 +372,13 @@ address {}
 }
 
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #575656;
+    border-color: #575656;
 }
 
 .custom-control-input:checked~.custom-control-label::before {
     color: #fff;
-    background-color: #5969ff;
+    background-color: #575656;
 }
 
 .custom-checkbox .custom-control-input:checked~.custom-control-label::after {}
@@ -414,8 +414,8 @@ address {}
 }
 
 .custom-radio .custom-control-input:checked~.custom-control-label::before {
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #575656;
+    border-color: #575656;
 }
 
 .custom-control-input:disabled~.custom-control-label::before {
@@ -856,7 +856,7 @@ Background Color / Color
 -------------------------*/
 
 .bg-primary {
-    background-color: #5969ff !important;
+    background-color: #575656 !important;
     color: #fff !important;
 }
 
@@ -958,7 +958,7 @@ Borders
 -------------------------*/
 
 .text-primary {
-    color: #5969ff !important;
+    color: #575656 !important;
 }
 
 .text-brand {
@@ -1011,7 +1011,7 @@ Borders
 -------------------------*/
 
 .border-top-primary {
-    border-top-color: #5969ff !important;
+    border-top-color: #575656 !important;
 }
 
 .border-3 {
@@ -1137,11 +1137,11 @@ Progress bar
 
 .progress-bar {
 
-    background-color: #5969ff;
+    background-color: #575656;
 }
 
 .primary-progress-bar {
-    background-color: #5969ff;
+    background-color: #575656;
 }
 
 .progress-sm {
@@ -1330,7 +1330,7 @@ Top Header
     font-size: 11px;
     margin-top: 4px;
     text-transform: uppercase;
-    color: #71748d;
+    color: #575656;
 }
 
 .notification .dropdown-toggle::after,
@@ -1717,7 +1717,7 @@ Left Navigation Sidebar
     padding-left: 12px;
     padding-right: 12px;
     /* margin-top: 5px; */
-    background: #24274a;
+    /* background: #24274a; */
 }
 
 .nav-left-sidebar .submenu .nav .nav-item .nav-link {
@@ -1726,25 +1726,24 @@ Left Navigation Sidebar
     transition: 0.3s;
 }
 
-.nav-left-sidebar .navbar-nav .nav-link:focus,
+/* .nav-left-sidebar .navbar-nav .nav-link:focus,
 .nav-left-sidebar .navbar-nav .nav-link.active {
     background-color: #e2e2eb;
     color: #3d405c;
     border-radius: 2px;
-}
+} */
 
 .nav-left-sidebar .navbar-nav .nav-link:focus,
 .nav-left-sidebar .navbar-nav .nav-link:hover {
-    background-color: #e2e2eb;
-    color: #3d405c;
+    color: #ffffff;
     border-radius: 2px;
 }
 
-.nav-left-sidebar .submenu .nav .nav-item .nav-link:hover {
+/* .nav-left-sidebar .submenu .nav .nav-item .nav-link:hover {
     color: #3d405c;
     border-radius: 2px;
     background-color: transparent;
-}
+} */
 
 .nav-left-sidebar .navbar-toggler {
     background-color: #fff;
@@ -1779,7 +1778,7 @@ Leftsidebar - Primary
     color: #8991d4;
 }
 
-.sidebar-primary.nav-left-sidebar .navbar-nav .nav-link:focus,
+/* .sidebar-primary.nav-left-sidebar .navbar-nav .nav-link:focus,
 .sidebar-primary.nav-left-sidebar .navbar-nav .nav-link:hover {
     color: #fff;
     background-color: #5761c2;
@@ -1797,7 +1796,7 @@ Leftsidebar - Primary
     color: #fff;
     border-radius: 2px;
     background-color: transparent;
-}
+} */
 
 
 /* -----------------------
@@ -1805,38 +1804,37 @@ Leftsidebar - dark
 ------------------------- */
 
 .sidebar-dark {
-    background-color: #0e0c28;
+    background-color: #575656;
     -webkit-box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.13);
     box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.13);
     -webkit-transition: all 0.3s ease;
 }
 
 .sidebar-dark .nav-divider {
-    color: #a4aadb;
+    color: #fff;
     font-size: 12px;
     letter-spacing: 1px;
 }
 
 .sidebar-dark.nav-left-sidebar .nav-link i {
-    color: #7a80b4;
+    color: #757575;
 }
 
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-item {}
 
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-link {
-    color: #7a80b4;
-}
-
-.sidebar-dark.nav-left-sidebar .navbar-nav .nav-link:focus,
-.sidebar-dark.nav-left-sidebar .navbar-nav .nav-link:hover {
     color: #fff;
-    background-color: #242849;
-    border-radius: 2px;
 }
 
+ .sidebar-dark.nav-left-sidebar .navbar-nav .nav-link:focus,
+.sidebar-dark.nav-left-sidebar .navbar-nav .nav-link:hover { 
+    color: #ffffff;
+    border-radius: 5px;
+}
+/*
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-link:focus,
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-link.active {
-    background-color: #242849;
+    background-color: #525252;
     color: #fff;
     border-radius: 2px;
 }
@@ -1844,8 +1842,8 @@ Leftsidebar - dark
 .sidebar-dark.nav-left-sidebar .submenu .nav .nav-item .nav-link:hover {
     color: #fff;
     border-radius: 2px;
-    background-color: #242849;
-}
+    background-color: #525252;
+} */
 
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-item .badge{
     position: absolute;
@@ -2060,17 +2058,19 @@ Pageheader
 
 .footer {
     border-top: 1px solid rgba(152, 166, 173, .2);
-    padding: 14px 30px 14px;
-    color: #71748d;
-    background-color: #fff;
-    width: 100%;
+    padding: 14px 30px 14px; 
+    color: #fff;
+    background-color: #575656;
     /*position: absolute; bottom: 0;*/
+    position:fixed;
+    bottom:0px;
+    width:100%;
 }
 
 .footer-links {}
 
 .footer .footer-links a {
-    color: #71748d;
+    color: #fff;
     margin-left: 1.5rem;
     -webkit-transition: all .4s;
     transition: all .4s;
@@ -2362,7 +2362,7 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
     color: #ffa811;}
 .product-price{ position: absolute; top: 0; right: 0; font-size: 16px; color: #3d405c;font-family: 'Circular Std Medium'; line-height: 1;}
 .product-btn{}
-.product-del{font-size: 14px; color: #71748d;}
+.product-del{font-size: 14px; color: #575656;}
 .product-sidebar{ background-color: #fff; border:1px solid #e6e6f2;  }
 .product-sidebar-widget{border-bottom: 1px solid #e6e6f2; padding: 10px 20px; margin-bottom: 10px;}
 .product-sidebar-widget:last-child{border:0px;}
@@ -2656,21 +2656,21 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 
 .btn-primary {
     color: #fff;
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #575656;
+    border-color: #575656;
 }
 
 .btn-primary:hover {
     color: #fff;
-    background-color: #4656e9;
-    border-color: #4656e9;
+    background-color: #575656;
+    border-color: #575656;
 }
 
 .btn-primary.focus,
 .btn-primary:focus {
     color: #fff;
-    background-color: #4656e9;
-    border-color: #4656e9;
+    background-color: #575656;
+    border-color: #575656;
     box-shadow: 0 0 0 1px rgb(37, 52, 158);
 }
 
@@ -2684,8 +2684,8 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 .btn-primary:not(:disabled):not(.disabled):active,
 .show>.btn-primary.dropdown-toggle {
     color: #fff;
-    background-color: #4656e9;
-    border-color: #4656e9;
+    background-color: #575656;
+    border-color: #575656;
 }
 
 
@@ -3068,14 +3068,14 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 }
 
 .btn-outline-light:hover {
-    color: #71748d;
+    color: #575656;
     background-color: #f0f0f8;
     border-color: #cacae0;
 }
 
 .btn-outline-light.focus,
 .btn-outline-light:focus {
-    color: #71748d;
+    color: #575656;
     background-color: #f0f0f8;
     border-color: #cacae0;
     box-shadow: 0 0 0 1px rgb(235, 235, 237);
@@ -3561,7 +3561,7 @@ btn-link
 .tab-regular .nav.nav-tabs .nav-link {
     display: block;
     padding: 17px 49px;
-    color: #71748d;
+    color: #575656;
     background-color: #dddde8;
     margin-right: 5px;
     border-color: #dddde8;
@@ -3606,7 +3606,7 @@ btn-link
     border-top-right-radius: .25rem;
     background: #fff;
     padding: 17px 49px;
-    color: #71748d;
+    color: #575656;
     background-color: #dddde8;
     -webkit-border-radius: 4px 0px 0px 4px;
     -moz-border-radius: 4px 0px 0px 4px;
@@ -3646,7 +3646,7 @@ btn-link
 .tab-outline .nav.nav-tabs .nav-item .nav-link {
     display: block;
     padding: 17px 49px;
-    color: #71748d;
+    color: #575656;
     background-color: #e9e9f2;
     border-color: #c4c4cf #c4c4cf #c4c4cf;
     margin-right: 3px;
@@ -3695,7 +3695,7 @@ btn-link
     border-top-right-radius: .25rem;
     background: #fff;
     padding: 17px 49px;
-    color: #71748d;
+    color: #575656;
     background-color: #e9e9f2;
     -webkit-border-radius: 4px 0px 0px 4px;
     -moz-border-radius: 4px 0px 0px 4px;
@@ -3746,7 +3746,7 @@ btn-link
 
 .simple-card .nav.nav-tabs .nav-item .nav-link {
     padding: 17px 49px;
-    color: #71748d;
+    color: #575656;
     background: #f8f8fb;
     border-color: #e9e9f2 #e9e9f2 #e9e9f2;
     margin-right: -1px;
@@ -3780,7 +3780,7 @@ btn-link
 
 .simple-outline-card .nav.nav-tabs .nav-item .nav-link {
     padding: 17px 49px;
-    color: #71748d;
+    color: #575656;
     background: #e9e9f2;
     border-color: #c4c4cf #c4c4cf #c4c4cf;
     margin-right: -1px;
@@ -3813,7 +3813,7 @@ Pills Regular
     background-color: #dddde8;
     padding: 14px 26px;
     margin-right: 3px;
-    color: #71748d;
+    color: #575656;
     font-size: 16px;
     margin-bottom: 4px;
 }
@@ -3844,7 +3844,7 @@ Pills Outline
     background-color: transparent;
     padding: 16px 52px;
     margin-right: 3px;
-    color: #71748d;
+    color: #575656;
     border: 1px solid #c4c4cf;
 }
 
@@ -3873,7 +3873,7 @@ Pills vertical
     background-color: #dddde8;
     padding: 16px 52px;
     margin-bottom: 4px;
-    color: #71748d;
+    color: #575656;
 }
 
 .pills-vertical .nav.nav-pills .nav-link.active {
@@ -4145,7 +4145,7 @@ Pills vertical
     margin-left: 0px;
     margin-right: 5px;
     line-height: 1.25;
-    color: #71748d;
+    color: #575656;
     background-color: #fff;
     border: 1px solid #e6e6f2;
     border-radius: 3px;
@@ -5825,7 +5825,7 @@ Vertical Timeline - by CodyHouse.co
     text-align: center;
     min-width: 19px;
     margin-right: 6px;
-    color: #71748d;
+    color: #575656;
 }
 
 .aside-nav .nav li.active a {
@@ -5847,7 +5847,7 @@ Vertical Timeline - by CodyHouse.co
 }
 
 .aside-header .description {
-    color: #71748d;
+    color: #575656;
     margin: 0;
 }
 
@@ -5870,7 +5870,7 @@ Vertical Timeline - by CodyHouse.co
 }
 
 .aside-nav .nav li a {
-    color: #71748d;
+    color: #575656;
     padding: 10px 20px;
 }
 

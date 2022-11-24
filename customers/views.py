@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from .forms import CustomerForm
 from .models import Customer
+from invoices.models import Invoice
 
 
 @login_required(login_url = 'login')
@@ -57,9 +58,13 @@ def editCustomer(request,customer_id):
             return redirect('editCustomer', customer.id)
     else:
         form = CustomerForm(instance=customer)
+        invoices = Invoice.objects.filter(billing_customer_id=customer)
+        #InvdetailAct = Invoice.objects.filter(invoice_id=invoice_id)
         context = {
             'id': customer.id,
             'form': form,
+            'customer': customer,
+            'invoices': invoices,
         }
         return render(request, 'customers/editCustomer.html', context)
 
