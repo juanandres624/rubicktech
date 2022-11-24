@@ -13,6 +13,13 @@
             }, 'slow');
         }
 
+        //Product
+
+        if( $('#id_is_discount').length )  //Check if element exist in page
+        {
+            console.log('holiii');
+        }
+
         //Invoice
         $('.select-2-billing-customer').select2();
         //$('.select-2-shipping-customer').select2();
@@ -47,6 +54,7 @@
 
         //calls modal image product / set img src
         $(".modal_img").click(function(){
+            console.log('siii estaaa');
             $("#modalImg").modal('show');
             var img_field = document.getElementById("img_space");
             data_table = search_table_row_values("table_img",this);
@@ -116,6 +124,8 @@
 
     function getFillCustomerData(id_customer){
         // GET AJAX request
+        console.log('holiii');
+
         $.ajax({
             type: 'GET',
             url: "get/ajax/validate/customer/",
