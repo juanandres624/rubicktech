@@ -3,9 +3,6 @@
 
 {% block content %}
 
-<div class="dashboard-wrapper">
-    {% include 'includes/alerts.html' %}
-    <div class="container-fluid  dashboard-content">
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="page-header">
@@ -14,7 +11,7 @@
                     <div class="page-breadcrumb">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Productos</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'viewProducts' %}" class="breadcrumb-link">Productos</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Ver Producto</li>
                             </ol>
                         </nav>
@@ -23,50 +20,55 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table id="example4" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Imagen Producto</th>
-                        <th>Codigo Producto</th>
-                        <th>Nombre Producto</th>
-                        <th>Categoria</th>
-                        <th>Precio</th>
-                        <th>Marca</th>
-                        <th>Fecha Creación</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
-                        <tr>
-                            {% if product.has_image %}
-                                {% for img in prod_img %}
-                                    {% if product.id == img.product_id.id %}
-                                        <td class="text-center"><img id="img_space" src="{{ img.image.url }}" style="width:65px;height:65px;"></td>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                <td class="text-center"><img id="img_space" src="{% static 'images/no-image-available.png' %}" style="width:65px;height:65px;"></td>
-                            {% endif %}
-
-                            <td>{{ product.product_code | capfirst }}</td>
-                            <td>{{ product.product_name | capfirst }}</td>
-                            <td>{{ product.mngProductCategory_id | capfirst }}</td>
-                            <td>{{ product.price }}</td>
-                            <td>{{ product.mngProductBrand_id | capfirst }}</td>
-                            <td>{{ product.created_date }}</td>
-                            <td><a type="button" href="{% url 'editProduct' product.id %}"><span class="fa fa-edit"></span></a></td>               
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example4" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Imagen Producto</th>
+                                        <th>Codigo Producto</th>
+                                        <th>Nombre Producto</th>
+                                        <th>Categoria</th>
+                                        <th>Precio</th>
+                                        <th>Marca</th>
+                                        <th>Fecha Creación</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in products %}
+                                        <tr>
+                                            {% if product.has_image %}
+                                                {% for img in prod_img %}
+                                                    {% if product.id == img.product_id.id %}
+                                                        <td class="text-center"><img id="img_space" src="{{ img.image.url }}" style="width:65px;height:65px;"></td>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                <td class="text-center"><img id="img_space" src="{% static 'images/no-image-available.png' %}" style="width:65px;height:65px;"></td>
+                                            {% endif %}
+                
+                                            <td>{{ product.product_code | capfirst }}</td>
+                                            <td>{{ product.product_name | capfirst }}</td>
+                                            <td>{{ product.mngProductCategory_id | capfirst }}</td>
+                                            <td>{{ product.price }}</td>
+                                            <td>{{ product.mngProductBrand_id | capfirst }}</td>
+                                            <td>{{ product.created_date }}</td>
+                                            <td class="text-center"><a type="button" href="{% url 'editProduct' product.id %}"><span class="fa fa-edit"></span></a></td>               
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-    </div>
 
-    {% include 'includes/footer.html' %}
-</div>
 
+    
 {% endblock %}
 

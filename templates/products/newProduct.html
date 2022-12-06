@@ -5,12 +5,12 @@
 <div class="row">
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="page-header">
-            <h3 class="mb-2">Nuevo Producto </h3>
+            <h3 class="mb-2">Agregar Producto </h3>
             <p class="pageheader-text"></p>
             <div class="page-breadcrumb">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Productos</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'viewProducts' %}" class="breadcrumb-link">Productos</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Agregar Producto</li>
                     </ol>
                 </nav>
@@ -19,111 +19,108 @@
     </div>
 </div>
 
+
 <form action="{% url 'newProduct' %}" method="POST">
     {% csrf_token %}
     <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="card">
-                <h5 class="card-header">Información Producto</h5>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>Nombre de Producto</label>
-                        {{ form.product_name }}
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="col-form-label">Código del Producto</label>
-                                {{ form.product_code }}
-                            </div>
+        <div class="col-4">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                <div class="card">
+                    <h5 class="card-header">Detalle Producto</h5>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="col-form-label">Código del Producto <b style="color: red;">*</b></label>
+                            {{ form.product_code }}
                         </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="col-form-label">Código Unico </label>
-                                {{ form.code }}
-                            </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Código Unico </label>
+                            {{ form.code }}
                         </div>
+                        <div class="form-group">
+                            <label>Categoria de Producto <b style="color: red;">*</b></label>
+                            {{ form.mngProductCategory_id }}
+                            <p>Agregar una Categoría al Producto</p>
+                        </div> 
                     </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="form-group">
-                                <label>Marca</label>
-                                {{ form.mngProductBrand_id }}
-                            </div>
-                        </div>                                
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Stock</label>
-                                {{ form.stock }}
-                            </div>
+                </div>
+
+                <div class="card">
+                    <h5 class="card-header">Detalle Precios</h5>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="col-form-label">Precio <b style="color: red;">*</b></label>
+                            {{ form.price }}
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Descripción</label>
-                        {{ form.description }}
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label class="col-form-label">Precio</label>
-                                {{ form.price }}
+                        <div class="form-group">
+                            <label class="col-form-label">Precio de Compra</label>
+                            {{ form.boughtPrice }}
+                        </div>
+                        <div class="form-group"> 
+                            <label class="col-form-label">&nbsp;</label>
+                            <div class="custom-control custom-checkbox">
+                                {{ form.is_discount }}
+                                <label class="custom-control-label" for="id_is_discount">Tiene Descuento?</label>
                             </div>
-                        </div>                                
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label class="col-form-label">Precio de Compra</label>
-                                {{ form.boughtPrice }}
-                            </div>
-                        </div>                               
-                        <div class="col-3">
-                            <div class="form-group"> 
-                                <label class="col-form-label">&nbsp;</label>
-                                <div class="custom-control custom-checkbox">
-                                    {{ form.is_discount }}
-                                    <label class="custom-control-label" for="id_is_discount">Tiene Descuento?</label>
-                                </div>  
-                            </div>                            
-                        </div>                                
-                        <div class="col-3">
+                        </div> 
+                        <div class="col-12" id="discount_div" hidden>
                             <div class="form-group">
                                 <label class="col-form-label">% Descuento</label>
                                 {{ form.discountPorcentage }}
                             </div>
-                        </div>                             
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Categoria de Producto</label>
-                                {{ form.mngProductCategory_id }}
-                            </div> 
                         </div>
-                        <div class="col-4">                                
-                            <div class="form-group">
-                                <label>Proveedor</label>
-                                {{ form.provider_id }}
-                            </div> 
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group"> 
-                                <label class="col-form-label">&nbsp;</label>
-                                <div class="custom-control custom-checkbox">
-                                    {{ form.is_0_tax }}
-                                    <label class="custom-control-label" for="id_is_0_tax">Excento de IVA?</label>
-                                </div>  
-                            </div>                            
+                        <div class="form-group"> 
+                            <label class="col-form-label">&nbsp;</label>
+                            <div class="custom-control custom-checkbox">
+                                {{ form.is_0_tax }}
+                                <label class="custom-control-label" for="id_is_0_tax">Excento de IVA?</label>
+                            </div>  
                         </div> 
-                    </div>                           
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-12">
+                <div class="tab-regular">
+                    <ul class="nav nav-tabs " id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="avanzado-tab" data-toggle="tab" href="#avanzado" role="tab" aria-controls="avanzado" aria-selected="false">Avanzado</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                            <div class="form-group">
+                                <label>Nombre de Producto <b style="color: red;">*</b></label>
+                                {{ form.product_name }}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Descripción</label>
+                                {{ form.description }}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="avanzado" role="tabpanel" aria-labelledby="avanzado-tab">
+                            <div class="form-group">
+                                <label>Marca</label>
+                                {{ form.mngProductBrand_id }}
+                            </div>    
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <hr>
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <p class="text-center">
-                <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
-                <button class="btn btn-space btn-secondary">Cancel</button>
-            </p>
+                    <p class="text-center">
+<!--                                <input type="submit" class="btn btn-space btn-primary">Guardar</input>-->
+                        <input type="submit" class="btn btn-primary btn-lg" value="Guardar"></input>
+                        <button class="btn btn-secondary btn-lg" onClick="window.location.reload();">Cancelar</button>
+                    </p>
         </div>
     </div>
     {{ form.email.errors }}

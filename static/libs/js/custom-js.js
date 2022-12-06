@@ -15,10 +15,17 @@
 
         //Product
 
-        if( $('#id_is_discount').length )  //Check if element exist in page
-        {
-            console.log('holiii');
-        }
+        $("#id_is_discount").on('change', function(e) {
+            e.preventDefault();
+            if ($('#id_is_discount').is(':checked')){
+                $('#discount_div').attr('hidden',false);
+            }else{
+                $('#id_discountPorcentage').val(0);
+                $('#discount_div').attr('hidden',true);
+            }
+            
+
+        })
 
         //Invoice
         $('.select-2-billing-customer').select2();
@@ -54,7 +61,6 @@
 
         //calls modal image product / set img src
         $(".modal_img").click(function(){
-            console.log('siii estaaa');
             $("#modalImg").modal('show');
             var img_field = document.getElementById("img_space");
             data_table = search_table_row_values("table_img",this);
@@ -104,6 +110,17 @@
             document.getElementById("form1").submit();
             
         })
+
+        Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            accept: function(file, done) {
+              if (file.name == "justinbieber.jpg") {
+                done("Naha, you don't.");
+              }
+              else { done(); }
+            }
+          };
 
     });
 
