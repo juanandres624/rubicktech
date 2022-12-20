@@ -2,180 +2,161 @@
 
 {% block content %}
 
-        <div class="row">
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="page-header">
+            <h3 class="mb-2">Detalle Producto </h3>
+            <p class="pageheader-text"></p>
+            <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'viewProducts' %}" class="breadcrumb-link">Productos</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detalle Producto</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form action="{% url 'editProduct' id %}" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-4">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="page-header">
-                    <h3 class="mb-2">Detalle Producto </h3>
-                    <p class="pageheader-text"></p>
-                    <div class="page-breadcrumb">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{% url 'viewProducts' %}" class="breadcrumb-link">Productos</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Detalle Producto</li>
-                            </ol>
-                        </nav>
+                <div class="card">
+                    <h5 class="card-header">Detalle Producto</h5>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="col-form-label">Código del Producto <b style="color: red;">*</b></label>
+                            {{ form.product_code }}
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Código Unico </label>
+                            {{ form.code }}
+                        </div>
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="form-group">
+                                    <label>Categoria de Producto <b style="color: red;">*</b></label>
+                                    {{ form.mngProductCategory_id }}
+                                    <!-- <p>Agregar una Categoría al Producto</p> -->
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <input type="button" class="btn-small btn-success" value="+" data-toggle="modal" data-target="#modalAddCategory"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Stock</label>
+                            {{ form.stock }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Detalle Precios</h5>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="col-form-label">Precio <b style="color: red;">*</b></label>
+                            {{ form.price }}
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Precio de Compra</label>
+                            {{ form.boughtPrice }}
+                        </div>
+                        <div class="form-group"> 
+                            <label class="col-form-label">&nbsp;</label>
+                            <div class="custom-control custom-checkbox">
+                                {{ form.is_discount }}
+                                <label class="custom-control-label" for="id_is_discount">Tiene Descuento?</label>
+                            </div>
+                        </div> 
+                        <div class="col-12" id="discount_div" hidden>
+                            <div class="form-group">
+                                <label class="col-form-label">% Descuento</label>
+                                {{ form.discountPorcentage }}
+                            </div>
+                        </div>
+                        <div class="form-group"> 
+                            <label class="col-form-label">&nbsp;</label>
+                            <div class="custom-control custom-checkbox">
+                                {{ form.is_0_tax }}
+                                <label class="custom-control-label" for="id_is_0_tax">Excento de IVA?</label>
+                            </div>  
+                        </div> 
                     </div>
                 </div>
             </div>
         </div>
-
-        <form action="{% url 'editProduct' id %}" method="POST">
-            {% csrf_token %}
+        <div class="col-8">
             <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-12">
                     <div class="card">
-                        <h5 class="card-header">Información Producto</h5>
+                        <h5 class="card-header">Datos Producto</h5>
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Nombre de Producto</label>
+                                <label>Nombre de Producto <b style="color: red;">*</b></label>
                                 {{ form.product_name }}
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Código del Producto</label>
-                                        {{ form.product_code }}
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Código Unico </label>
-                                        {{ form.code }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-8">
-                                    <div class="form-group">
-                                        <label>Marca</label>
-                                        {{ form.mngProductBrand_id }}
-                                    </div>
-                                </div>                                
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label>Stock</label>
-                                        {{ form.stock }}
-                                    </div>
-                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Descripción</label>
                                 {{ form.description }}
                             </div>
-                            <div class="row">
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Precio</label>
-                                        {{ form.price }}
-                                    </div>
-                                </div>                                
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Precio de Compra</label>
-                                        {{ form.boughtPrice }}
-                                    </div>
-                                </div>                               
-                                <div class="col-3">
-                                    <div class="form-group"> 
-                                        <label class="col-form-label">&nbsp;</label>
-                                        <div class="custom-control custom-checkbox">
-                                            {{ form.is_discount }}
-                                            <label class="custom-control-label" for="id_is_discount">Tiene Descuento?</label>
-                                        </div>  
-                                    </div>                            
-                                </div>                                
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label class="col-form-label">% Descuento</label>
-                                        {{ form.discountPorcentage }}
-                                    </div>
-                                </div>                             
+                            <div class="form-group">
+                                <label>Marca</label>
+                                {{ form.mngProductBrand_id }}
                             </div>
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label>Categoria de Producto</label>
-                                        {{ form.mngProductCategory_id }}
-                                    </div> 
-                                </div>
-                                <div class="col-4">                                
-                                    <div class="form-group">
-                                        <label>Proveedor</label>
-                                        {{ form.provider_id }}
-                                    </div> 
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group"> 
-                                        <label class="col-form-label">&nbsp;</label>
-                                        <div class="custom-control custom-checkbox">
-                                            {{ form.is_0_tax }}
-                                            <label class="custom-control-label" for="id_is_0_tax">Excento de IVA?</label>
-                                        </div>  
-                                    </div>                            
-                                </div> 
-                            </div> 
-                            <div class="row">
-                                <div class="col-6">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Tipo de Variación</th>
-                                                <th scope="col">Valor</th>
-                                                <th scope="col">Stock</th>
-                                                <th scope="col" class="text-center"><a class="btn btn-rounded btn-info btn-xs" href="{% url 'createVariation' id %}" type="button">Agregar</a></th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for variation in variations %}
-                                            <tr>
-                                                <td>{{ variation.variation_category |capfirst }}</td>
-                                                <td>{{ variation.variation_value |capfirst }}</td>
-                                                <td>{{ variation.stock }}</td>
-                                                <td></td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-6">
-                                    <table class="table table-bordered" id="table_img">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Imagenes URL</th>
-                                                <th scope="col" class="text-center"><a class="btn btn-rounded btn-info btn-xs" href="{% url 'createImage' id %}" type="button">Agregar</a></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for img in images %}
-                                            <tr>
-                                                <td name="img_{{img.id}}">{{ img.image.url }}</td>                                                                                       
-                                                <!-- <td class="text-center"><a class="btn btn-rounded btn-success btn-xs" onclick='ver_fila(this)' href="#" data-toggle="modal" data-target="#modalImg">Ver</a></td> -->
-                                                <td class="text-center"><a class="btn btn-rounded btn-success btn-xs modal_img" type="button">Ver</a></td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>                          
+                            <div class="form-group">
+                                <label>Proveedor</label>
+                                {{ form.provider_id }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p class="text-center">
-<!--                                <input type="submit" class="btn btn-space btn-primary">Guardar</input>-->
-                                <input type="submit" class="btn btn-space btn-primary" value="Guardar"></input>
-                                <button class="btn btn-space btn-secondary">Cancel</button>
-                            </p>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-12">
+                    <div class="card">
+                        <h5 class="card-header">Imagenes</h5>
+                        <div class="card-body">
+                            <table class="table table-bordered" id="table_img">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Imagenes URL</th>
+                                        <th scope="col" class="text-center"><a class="btn btn-rounded btn-info btn-xs" href="{% url 'createImage' id %}" type="button">Agregar</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for img in images %}
+                                    <tr>
+                                        <td name="img_{{img.id}}">{{ img.image.url }}</td>                                                                                       
+                                        <!-- <td class="text-center"><a class="btn btn-rounded btn-success btn-xs" onclick='ver_fila(this)' href="#" data-toggle="modal" data-target="#modalImg">Ver</a></td> -->
+                                        <td class="text-center"><a class="btn btn-rounded btn-success btn-xs modal_img" type="button">Ver</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            {{ form.email.errors }}
-            {{ form.non_field_errors }}
-        </form>
+        </div>
     </div>
+    <hr>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <p class="text-center">
+                <input type="submit" class="btn btn-primary btn-lg" value="Guardar"></input>
+                <button class="btn btn-secondary btn-lg" onClick="window.location.reload();">Cancelar</button>
+            </p>
+        </div>
+    </div>
+    {{ form.email.errors }}
+    {{ form.non_field_errors }}
+</form>
 
     <!-- Modal -->
     <div class="modal fade" id="modalImg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -195,6 +176,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
 
 {% endblock %}

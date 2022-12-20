@@ -90,7 +90,7 @@
                                 }
                             });
                         });
-                                       
+                        $('#modalAddCategory').modal('hide')               
                     }
                 },
                 error: function (response){ 

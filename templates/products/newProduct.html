@@ -50,8 +50,10 @@
                                     <input type="button" class="btn-small btn-success" value="+" data-toggle="modal" data-target="#modalAddCategory"></input>
                                 </div>
                             </div>
- 
-
+                        </div>
+                        <div class="form-group">
+                            <label>Stock</label>
+                            {{ form.stock }}
                         </div>
  
                     </div>
@@ -93,18 +95,11 @@
             </div>
         </div>
         <div class="col-8">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-12">
-                <div class="tab-regular">
-                    <ul class="nav nav-tabs " id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="avanzado-tab" data-toggle="tab" href="#avanzado" role="tab" aria-controls="avanzado" aria-selected="false">Avanzado</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-12">
+                    <div class="card">
+                        <h5 class="card-header">Datos Producto</h5>
+                        <div class="card-body">
                             <div class="form-group">
                                 <label>Nombre de Producto <b style="color: red;">*</b></label>
                                 {{ form.product_name }}
@@ -114,19 +109,13 @@
                                 {{ form.description }}
                             </div>
                             <div class="form-group">
-                                <label>Stock</label>
-                                {{ form.stock }}
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="avanzado" role="tabpanel" aria-labelledby="avanzado-tab">
-                            <div class="form-group">
                                 <label>Marca</label>
                                 {{ form.mngProductBrand_id }}
                             </div>
                             <div class="form-group">
                                 <label>Proveedor</label>
                                 {{ form.provider_id }}
-                            </div>   
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,7 +138,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="modalAddCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <form action="{% url 'addCategory' %}" method="POST">
             {% csrf_token %}
@@ -161,16 +150,10 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="card">
-                            <h5 class="card-header">Información</h5>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label class="col-form-label">Nombres <b style="color: red;">*</b></label>
-                                    <input class="form-control" name='cat_desc' id="cat_desc_id"></input>
-                                </div>
-                                
-                            </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label>Descripcion <b style="color: red;">*</b></label>
+                            <input class="form-control" name='cat_desc' id="cat_desc_id"></input>
                         </div>
                     </div>
                 </div>           
