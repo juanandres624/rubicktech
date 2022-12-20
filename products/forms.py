@@ -42,7 +42,8 @@ class ProductsForm(forms.ModelForm):
         self.fields['is_0_tax'].widget.attrs['class'] += ' is-valid'
         self.fields['is_0_tax'].widget.attrs['type'] = 'checkbox'
 
- 
+        self.fields['mngProductCategory_id'].widget.attrs['class'] = 'select-2-product-category'
+        self.fields['mngProductCategory_id'].widget.attrs['required'] = False
 
         for field_name, field in self.fields.items():
             if field.widget.attrs.get('class') != 'custom-control-input is-valid' :

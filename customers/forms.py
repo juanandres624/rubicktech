@@ -35,6 +35,8 @@ class CustomerForm(forms.ModelForm):
         self.fields['phone_2'].widget.attrs['im-insert'] = 'true'
         self.fields['address'].widget.attrs['rows'] = 3
         self.fields['note'].widget.attrs['rows'] = 5
+        self.fields['mngDocumentType_id'].widget.attrs['id'] = 'docTypeClie'
+        self.fields['document_number'].widget.attrs['id'] = 'docNumbClie'
 
         for field_name, field in self.fields.items():
             if field.widget.attrs.get('class'):

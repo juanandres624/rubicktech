@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MngDocumentType, MngCity, MngPersonType, MngProductCategory,MngProductBrand,MngStatus,MngValues,MngFactElect
+from .models import MngDocumentType, MngCity, MngPersonType, MngProductCategory,MngProductBrand,MngStatus,MngValues,MngFactElect,MngPaymentType
 
 
 class MngDocumentTypeAdmin(admin.ModelAdmin):
@@ -25,6 +25,9 @@ class MngValuesAdmin(admin.ModelAdmin):
     
 class MngFactElectAdmin(admin.ModelAdmin):
     list_display = ('is_active', 'date_added')
+    
+class MngPaymentTypeAdmin(admin.ModelAdmin):
+    list_display = ('is_active', 'date_added')
 
 
 admin.site.register(MngDocumentType, MngDocumentTypeAdmin)
@@ -35,3 +38,4 @@ admin.site.register(MngProductBrand, MngProductBrandAdmin)
 admin.site.register(MngStatus, MngStatusAdmin)
 admin.site.register(MngValues, MngValuesAdmin)
 admin.site.register(MngFactElect, MngFactElectAdmin)
+admin.site.register(MngPaymentType, MngPaymentTypeAdmin)

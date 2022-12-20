@@ -1,10 +1,13 @@
 from invoices.models import Invoice
+#!/usr/bin/env python
+# -*- coding: latin-1 -*-
 from management.models import MngFactElect
 from accounts.models import Account
 from datetime import datetime
 from xml.dom import minidom
 from datetime import datetime
 import itertools
+import sys
 
 class XmlBuildFactElect():
 
@@ -56,6 +59,7 @@ class XmlBuildFactElect():
         totalImpBaseImp = totalSinImp - totalDesc
         totalImpValor = totalImpBaseImp * 12 / 100
         importeTotal = totalImpBaseImp + totalImpValor
+        tipoPago = invoice.payment_method
 
         clavAcc = f'{now.strftime("%d%m%Y"):8.8}' + f'{tipComp:2.2}' + f'{numRuc:13.13}' + f'{tipAmb:1.1}' + f'{serie:6.6}' + f'{numSec:9.9}' + f'{codNum:8.8}' + f'{tipEmi:1.1}'
         digVerif = str(GenClavAccMod11(clavAcc))
@@ -121,11 +125,6 @@ class XmlBuildFactElect():
         secuencialNodeTxt = rootNode.createTextNode(numSec)
         secuencialNode.appendChild(secuencialNodeTxt)
         infoTribNode.appendChild(secuencialNode)
-
-        dirMatrizNode = rootNode.createElement('dirMatriz')
-        dirMatrizNodeTxt = rootNode.createTextNode(dirMatr)
-        dirMatrizNode.appendChild(dirMatrizNodeTxt)
-        infoTribNode.appendChild(dirMatrizNode)
 
         dirMatrizNode = rootNode.createElement('dirMatriz')
         dirMatrizNodeTxt = rootNode.createTextNode(dirMatr)
@@ -199,7 +198,7 @@ class XmlBuildFactElect():
 
         # totalConImpuestos Node
         totalConImpNode = rootNode.createElement('totalConImpuestos')
-        factNode.appendChild(totalConImpNode)
+        infoFactNode.appendChild(totalConImpNode)
 
         # totalImpuesto Node
         totalImpNode = rootNode.createElement('totalImpuesto')
@@ -236,9 +235,27 @@ class XmlBuildFactElect():
         infoFactNode.appendChild(importeTotalNode)
 
         monedaNode = rootNode.createElement('moneda')
-        monedaNodeTxt = rootNode.createTextNode('DÓLAR')
+        monedaNodeTxt = rootNode.createTextNode('DOLAR')
         monedaNode.appendChild(monedaNodeTxt)
         infoFactNode.appendChild(monedaNode)
+
+        # Pagos Node
+        pagosNode = rootNode.createElement('pagos')
+        infoFactNode.appendChild(pagosNode)
+
+        # Pago Node
+        pagoNode = rootNode.createElement('pago')
+        pagosNode.appendChild(pagoNode)
+
+        formaPagoNode = rootNode.createElement('formaPago')
+        formaPagoNodeTxt = rootNode.createTextNode(str(tipoPago.description))
+        formaPagoNode.appendChild(formaPagoNodeTxt)
+        pagoNode.appendChild(formaPagoNode)
+                
+        totalformaPagoNode = rootNode.createElement('total')
+        totalformaPagoNodeTxt = rootNode.createTextNode(str(importeTotal))
+        totalformaPagoNode.appendChild(totalformaPagoNodeTxt)
+        pagoNode.appendChild(totalformaPagoNode)
 
         # detalles Node
         detallesNode = rootNode.createElement('detalles')
@@ -285,9 +302,18 @@ class XmlBuildFactElect():
             precTotSinImpNode.appendChild(precTotSinImpNodeTxt)
             detalleNode.appendChild(precTotSinImpNode)
 
+            #Detalles Adicionales Node
+            detallesAdicionalesNode = rootNode.createElement('detallesAdicionales')
+            detalleNode.appendChild(detallesAdicionalesNode)
+
+            detAdicionalNode = rootNode.createElement('detAdicional')
+            detAdicionalNode.setAttribute('nombre', deta.product_id.product_name)
+            detAdicionalNode.setAttribute('valor', deta.product_id.mngProductBrand_id.description)
+            detallesAdicionalesNode.appendChild(detAdicionalNode)
+
             # impuestos Node
             impuestosNode = rootNode.createElement('impuestos')
-            detallesNode.appendChild(impuestosNode)
+            detalleNode.appendChild(impuestosNode)
 
             # impuesto Node
             impuestoNode = rootNode.createElement('impuesto')
@@ -332,7 +358,7 @@ class XmlBuildFactElect():
         with open(save_path_file, "w") as f:
             f.write(xml_str)
 
-        return save_path_file
+        return [save_path_file,clavAccFinal]
 
     
 def GenClavAccMod11(clavAcc):

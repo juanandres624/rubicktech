@@ -6,7 +6,7 @@ from accounts.models import Account
 from management.models import MngStatus
 from django.utils import timezone
 from django.db.models import Max
-
+from management.models import MngPaymentType
 
 def invoice_number():
     invid = Invoice.objects.aggregate(max_inv=Max('Invoice_no'))['max_inv']
@@ -16,9 +16,6 @@ def invoice_number():
 
 class Invoice(models.Model):
 
-    payment_method_s = (('Efectivo', 'Efectivo'), ('Dinero Electrónico', 'Dinero Electrónico'),
-    ('Tarjeta de Crédito/Débito', 'Tarjeta de Crédito/Débito'), ('Otros', 'Otros'),)
-
     Invoice_no = models.IntegerField(default=invoice_number, unique=True)
     Invoice_no_final = models.CharField(max_length=200, blank=True)
     billing_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name= 'billing_customer',blank=True,null=True)
@@ -26,7 +23,7 @@ class Invoice(models.Model):
     is_final_customer = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
     referral_guide = models.CharField(max_length=200, blank=True) #Guia de Remision
-    payment_method = models.CharField(max_length=100, choices=payment_method_s)
+    payment_method = models.ForeignKey(MngPaymentType, on_delete=models.CASCADE)
     subtotal_tax = models.DecimalField(max_digits=10, decimal_places=2, default=0) #Subtotal 12%
     subtotal_0 = models.DecimalField(max_digits=10, decimal_places=2, default=0) # Subtotal 0%
     subtotal_no_sub_taxes = models.DecimalField(max_digits=10, decimal_places=2 , default=0) # Subtotal No Sujeto De IVA

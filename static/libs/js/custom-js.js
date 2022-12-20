@@ -58,6 +58,48 @@
 
         })
 
+        //category product page
+        $('.select-2-product-category').select2();
+
+        $("#btn-add-category").click(function(e){
+            e.preventDefault();
+            var url = "addCategory";
+            var cat_desc = $('#cat_desc_id').val();
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {"cat_desc": cat_desc},
+                success: function (response) {
+                    if(response){
+                        // Fetch the preselected item, and add to the control
+                        var categSelect = $('.select-2-product-category');
+                        $.ajax({
+                            type: 'GET',
+                            url: 'getCategoryById/' + response
+                        }).then(function (data) {
+                            // create the option and append to Select2
+                            var option = new Option(data['description'], data['id'], true, true);
+                            categSelect.append(option).trigger('change');
+
+                            // manually trigger the `select2:select` event
+                            categSelect.trigger({
+                                type: 'select2:select',
+                                params: {
+                                    data: data
+                                }
+                            });
+                        });
+                                       
+                    }
+                },
+                error: function (response){ 
+                    console.log(response)
+                }
+            });
+        });
+        
+
 
         //calls modal image product / set img src
         $(".modal_img").click(function(){
@@ -122,6 +164,29 @@
             }
           };
 
+          
+        //   $("#docNumbClie").on('change', function(e) {
+        //     e.preventDefault();
+        //     var numb_doc = $(this).val();
+        //     var doc_type= $("#docTypeClie option:selected").text();
+
+        //     if(doc_type == 'RUC'){
+        //         getCustomerDataSRI(numb_doc);
+        //     }else{
+        //         console.log('no es Ruc');
+        //     }
+                
+
+        //     $('#id_first_name').val('');
+        //     $('#id_last_name').val('');
+        //     $('#id_email').val('');
+        //     $('#id_phone_1').val('');
+        //     $('#id_phone_2').val('');
+        //     $('#id_address').val('');
+        //     $('#id_note').val('');
+
+        // })
+
     });
 
     function search_table_row_values(table_name,row_index) {
@@ -141,7 +206,6 @@
 
     function getFillCustomerData(id_customer){
         // GET AJAX request
-        console.log('holiii');
 
         $.ajax({
             type: 'GET',
@@ -162,6 +226,29 @@
             }
         })
     }
+
+    // function getCustomerDataSRI(numb_doc){
+    //     // GET AJAX request
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: "get/ajax/validate/customerSri/",
+    //         data: {"num_doc": numb_doc},
+    //         success: function (response) {
+    //             if(response){
+    //                 $('#cust_names').text(response['customer_full_name']);
+    //                 $('#cust_doc_num').text(response['customer_doc_num']);
+    //                 $('#cust_email').text(response['customer_email']);
+    //                 $('#cust_phone').text(response['customer_phone1']);
+    //                 $('#cust_address').text(response['customer_address']);
+    //                 $('#cust_city').text(response['customer_city']);                    
+    //             }
+    //         },
+    //         error: function (response){
+    //             console.log(response)
+    //         }
+    //     })
+    // }
 
 
     // function updateInvoiceDetailModal(id_prod,id_invoice,prod_quantity){

@@ -24,6 +24,19 @@ from management.models import MngProductCategory
 from .firmado import firmar_xml
 from zeep import Client
 from .xmlBuildFactElect import XmlBuildFactElect
+import requests
+
+link_validacion_off = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl"
+link_autorizacion_off = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
+
+link_validacion_online = "https://celcer.sri.gob.ec/comprobantes-electronicosws/RecepcionComprobantes?wsdl"
+link_autorizacion_online = "https://celcer.sri.gob.ec/comprobantes-electronicosws/AutorizacionComprobantes?wsdl"
+
+# cl_val_off = Client(link_validacion_off)
+# cl_aut_off = Client(link_autorizacion_off)
+
+# cl_val_on = Client(link_validacion_online)
+# cl_aut_on = Client(link_autorizacion_online)
 
 
 @login_required(login_url='login')
@@ -400,9 +413,12 @@ class DownloadXML(View):
     def get(self, request, invoice_id, *args, **kwargs):
         xmlInit = XmlBuildFactElect()
         xmlDoc = xmlInit.create(invoice_id)
-        print(xmlDoc)
-        #firm = firmar_xml(xml).encode()
-        #print(firm)
+        firm = firmar_xml(xmlDoc[0]).encode()
+        cl_val_on = Client(link_validacion_online)
+        r = cl_val_on.service.validarComprobante(firm)
+        print(r)
+        # auth = cl_aut_on.service.autorizacionComprobante(xmlDoc)
+        # print(auth)
         # response = HttpResponse(xml, content_type='application/xml')
         # #filename = "Invoice_%s.xml" %("12341231")
         # content = "attachment; filename='%s'" %(xml)

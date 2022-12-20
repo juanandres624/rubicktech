@@ -6,16 +6,15 @@
 		<razonSocial>Rubick Tech S.A</razonSocial>
 		<nombreComercial>Venta de Prog. Informaticos</nombreComercial>
 		<ruc>0906855911001</ruc>
-		<claveAcceso>2311202201090685591100110010010000000090000000917</claveAcceso>
+		<claveAcceso>1912202201090685591100110010010000000090000000917</claveAcceso>
 		<codDoc>01</codDoc>
 		<estab>001</estab>
 		<ptoEmi>001</ptoEmi>
 		<secuencial>000000009</secuencial>
 		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
-		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
 	</infoTributaria>
 	<infoFactura>
-		<fechaEmision>23/11/2022</fechaEmision>
+		<fechaEmision>19/12/2022</fechaEmision>
 		<dirEstablecimiento>Entrerios Calle Principal Local 43</dirEstablecimiento>
 		<obligadoContabilidad>NO</obligadoContabilidad>
 		<tipoIdentificacionComprador>04</tipoIdentificacionComprador>
@@ -24,37 +23,46 @@
 		<direccionComprador>address update</direccionComprador>
 		<totalSinImpuestos>296.50</totalSinImpuestos>
 		<totalDescuento>0.00</totalDescuento>
+		<totalConImpuestos>
+			<totalImpuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<baseImponible>296.50</baseImponible>
+				<valor>35.58</valor>
+			</totalImpuesto>
+		</totalConImpuestos>
 		<propina>0.00</propina>
 		<importeTotal>332.08</importeTotal>
-		<moneda>DÓLAR</moneda>
+		<moneda>DOLAR</moneda>
+		<pagos>
+			<pago>
+				<formaPago>01</formaPago>
+				<total>332.08</total>
+			</pago>
+		</pagos>
 	</infoFactura>
-	<totalConImpuestos>
-		<totalImpuesto>
-			<codigo>2</codigo>
-			<codigoPorcentaje>2</codigoPorcentaje>
-			<baseImponible>296.50</baseImponible>
-			<valor>35.58</valor>
-		</totalImpuesto>
-	</totalConImpuestos>
 	<detalles>
 		<detalle>
-			<codigoPrincipal>ÑLO42342342</codigoPrincipal>
+			<codigoPrincipal>ULO42342342</codigoPrincipal>
 			<codigoAuxiliar>423423fsa2423423</codigoAuxiliar>
 			<descripcion>Jordan Basketball Shoe</descripcion>
 			<cantidad>1</cantidad>
 			<precioUnitario>120.00</precioUnitario>
 			<descuento>0.00</descuento>
 			<precioTotalSinImpuesto>120.00</precioTotalSinImpuesto>
+			<detallesAdicionales>
+				<detAdicional nombre="Jordan Basketball Shoe" valor="Otros"/>
+			</detallesAdicionales>
+			<impuestos>
+				<impuesto>
+					<codigo>2</codigo>
+					<codigoPorcentaje>2</codigoPorcentaje>
+					<tarifa>12.00</tarifa>
+					<baseImponible>120.00</baseImponible>
+					<valor>14.40</valor>
+				</impuesto>
+			</impuestos>
 		</detalle>
-		<impuestos>
-			<impuesto>
-				<codigo>2</codigo>
-				<codigoPorcentaje>2</codigoPorcentaje>
-				<tarifa>12.00</tarifa>
-				<baseImponible>120.00</baseImponible>
-				<valor>14.40</valor>
-			</impuesto>
-		</impuestos>
 		<detalle>
 			<codigoPrincipal>KI45215</codigoPrincipal>
 			<codigoAuxiliar>23423423443</codigoAuxiliar>
@@ -63,15 +71,18 @@
 			<precioUnitario>88.25</precioUnitario>
 			<descuento>0.00</descuento>
 			<precioTotalSinImpuesto>176.50</precioTotalSinImpuesto>
+			<detallesAdicionales>
+				<detAdicional nombre="Mavi Jeans" valor="Tomy Hilfiger"/>
+			</detallesAdicionales>
+			<impuestos>
+				<impuesto>
+					<codigo>2</codigo>
+					<codigoPorcentaje>2</codigoPorcentaje>
+					<tarifa>12.00</tarifa>
+					<baseImponible>176.50</baseImponible>
+					<valor>21.18</valor>
+				</impuesto>
+			</impuestos>
 		</detalle>
-		<impuestos>
-			<impuesto>
-				<codigo>2</codigo>
-				<codigoPorcentaje>2</codigoPorcentaje>
-				<tarifa>12.00</tarifa>
-				<baseImponible>176.50</baseImponible>
-				<valor>21.18</valor>
-			</impuesto>
-		</impuestos>
 	</detalles>
 </factura>

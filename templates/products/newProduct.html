@@ -25,7 +25,6 @@
     <div class="row">
         <div class="col-4">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-
                 <div class="card">
                     <h5 class="card-header">Detalle Producto</h5>
                     <div class="card-body">
@@ -37,11 +36,24 @@
                             <label class="col-form-label">Código Unico </label>
                             {{ form.code }}
                         </div>
-                        <div class="form-group">
-                            <label>Categoria de Producto <b style="color: red;">*</b></label>
-                            {{ form.mngProductCategory_id }}
-                            <p>Agregar una Categoría al Producto</p>
-                        </div> 
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="form-group">
+                                    <label>Categoria de Producto <b style="color: red;">*</b></label>
+                                    {{ form.mngProductCategory_id }}
+                                    <!-- <p>Agregar una Categoría al Producto</p> -->
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <input type="button" class="btn-small btn-success" value="+" data-toggle="modal" data-target="#modalAddCategory"></input>
+                                </div>
+                            </div>
+ 
+
+                        </div>
+ 
                     </div>
                 </div>
 
@@ -101,12 +113,20 @@
                                 <label class="col-form-label">Descripción</label>
                                 {{ form.description }}
                             </div>
+                            <div class="form-group">
+                                <label>Stock</label>
+                                {{ form.stock }}
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="avanzado" role="tabpanel" aria-labelledby="avanzado-tab">
                             <div class="form-group">
                                 <label>Marca</label>
                                 {{ form.mngProductBrand_id }}
-                            </div>    
+                            </div>
+                            <div class="form-group">
+                                <label>Proveedor</label>
+                                {{ form.provider_id }}
+                            </div>   
                         </div>
                     </div>
                 </div>
@@ -126,5 +146,42 @@
     {{ form.email.errors }}
     {{ form.non_field_errors }}
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAddCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="{% url 'addCategory' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Categoria</h5>
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="card">
+                            <h5 class="card-header">Información</h5>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="col-form-label">Nombres <b style="color: red;">*</b></label>
+                                    <input class="form-control" name='cat_desc' id="cat_desc_id"></input>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>           
+            </div>
+            <div class="modal-footer">
+                <input class="btn btn-space btn-primary" value="Guardar" id="btn-add-category"></input>
+                <button href="#" class="btn btn-space btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+            </form> 
+        </div>
+    </div>
+</div>
 
 {% endblock %}

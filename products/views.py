@@ -8,14 +8,21 @@ from django.contrib import messages
 from django.forms import inlineformset_factory
 from .models import Product, Variation,Image
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from management.models import MngProductCategory
+from django.http import JsonResponse
+
 
 @login_required(login_url = 'login')
 def newProduct(request):
     if request.method == 'POST':
         form = ProductsForm(request.POST)
+        print(form.errors)
         if form.is_valid():
 
             newProd = form.save()
+            print(newProd)
 
             messages.success(request, 'Producto Creado....')
             return redirect('editProduct',  product_id=newProd.id)
@@ -204,3 +211,21 @@ def viewCatalogs(request):
 def get_all_products():
     
     return Product.objects.filter()
+
+@csrf_exempt
+def addCategory(request):
+    if request.method == "POST":
+        cat_desc = request.POST.get('cat_desc')
+        cat_id = MngProductCategory.objects.create(description=cat_desc)
+        return HttpResponse(cat_id.id)
+
+def getCategoryById(request,id):
+    if request.method == "GET":
+        id_categ = MngProductCategory.objects.get(pk=id)
+        if MngProductCategory.objects.filter(id=id).exists():
+            return JsonResponse({"id": id_categ.id,
+                                 "description": id_categ.description}, status=200)
+        else:
+            return JsonResponse({}, status=400)
+
+    return HttpResponse(JsonResponse)

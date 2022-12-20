@@ -69,6 +69,25 @@ class MngStatus(models.Model):
     def __str__(self):
         return self.description
 
+class MngPaymentType(models.Model):
+    payType = (
+        ('01', 'SIN UTILIZACION DEL SISTEMA FINANCIERO'), 
+        ('15', 'COMPENSACIÓN DE DEUDAS'), 
+        ('16', 'TARJETA DE DÉBITO'),
+        ('17', 'DINERO ELECTRÓNICO'),
+        ('18', 'TARJETA PREPAGO'),
+        ('19', 'TARJETA DE CRÉDITO'),
+        ('20', 'OTROS CON UTILIZACIÓN DEL SISTEMA FINANCIERO'),
+        ('21', 'ENDOSO DE TÍTULOS'),
+    )
+
+    description = models.CharField(max_length=100, choices=payType)
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.get_description_display()
+
 class MngFactElect(models.Model):
     tipEmision = (
         ("1", 'Emisión normal'), 

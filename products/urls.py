@@ -10,5 +10,7 @@ urlpatterns = [
     path('createVariation/<int:product_id>/',views.createVariation,name='createVariation'),
     path('createImage/<int:product_id>/',views.createImage,name='createImage'),
     path('viewCatalogs', views.viewCatalogs, name='viewCatalogs'),
+    path('addCategory', views.addCategory, name='addCategory'),
+    path('getCategoryById/<int:id>/', views.getCategoryById, name='getCategoryById'),
 
 ]
