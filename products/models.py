@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.db import models
 from providers.models import Provider
 from management.models import MngProductCategory,MngProductBrand

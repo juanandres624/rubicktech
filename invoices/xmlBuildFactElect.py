@@ -56,9 +56,9 @@ class XmlBuildFactElect():
         totalDesc = invoice.subtotal_discount
         totalImpCod = mng_fact_properties.codImp
         totalImpTarifIva = mng_fact_properties.tarifIva
-        totalImpBaseImp = totalSinImp - totalDesc
-        totalImpValor = totalImpBaseImp * 12 / 100
-        importeTotal = totalImpBaseImp + totalImpValor
+        totalImpBaseImp = round(totalSinImp - totalDesc,2)
+        totalImpValor = round(totalImpBaseImp * 12 / 100,2)
+        importeTotal = round(totalImpBaseImp + totalImpValor,2)
         tipoPago = invoice.payment_method
 
         clavAcc = f'{now.strftime("%d%m%Y"):8.8}' + f'{tipComp:2.2}' + f'{numRuc:13.13}' + f'{tipAmb:1.1}' + f'{serie:6.6}' + f'{numSec:9.9}' + f'{codNum:8.8}' + f'{tipEmi:1.1}'
@@ -272,10 +272,18 @@ class XmlBuildFactElect():
             codigoPrincipalNode.appendChild(codigoPrincipalNodeTxt)
             detalleNode.appendChild(codigoPrincipalNode)
 
-            codigoSecNode = rootNode.createElement('codigoAuxiliar')
-            codigoSecNodeTxt = rootNode.createTextNode(deta.product_id.code)
-            codigoSecNode.appendChild(codigoSecNodeTxt)
-            detalleNode.appendChild(codigoSecNode)
+            if(len(deta.product_id.code) > 0):
+
+                codigoSecNode = rootNode.createElement('codigoAuxiliar')
+                codigoSecNodeTxt = rootNode.createTextNode(deta.product_id.code)
+                codigoSecNode.appendChild(codigoSecNodeTxt)
+                detalleNode.appendChild(codigoSecNode)
+            else:
+
+                codigoSecNode = rootNode.createElement('codigoAuxiliar')
+                codigoSecNodeTxt = rootNode.createTextNode(deta.product_id.product_code)
+                codigoSecNode.appendChild(codigoSecNodeTxt)
+                detalleNode.appendChild(codigoSecNode)
 
             descripcionNode = rootNode.createElement('descripcion')
             descripcionNodeTxt = rootNode.createTextNode(deta.product_id.product_name)
@@ -347,18 +355,19 @@ class XmlBuildFactElect():
             impuestoNode.appendChild(impuestoBaseImpNode)
 
             impuestoValorNode = rootNode.createElement('valor')
-            impuestoValorNodeTxt = rootNode.createTextNode(str(deta.total_price * int(float(tipTarifRes)) / 100))
+            impuestoValorNodeTxt = rootNode.createTextNode(str(round(deta.total_price * int(float(tipTarifRes)) / 100,2)))
+            print(str(deta.total_price * int(float(tipTarifRes)) / 100))
             impuestoValorNode.appendChild(impuestoValorNodeTxt)
             impuestoNode.appendChild(impuestoValorNode)
 
         xml_str = rootNode.toprettyxml(indent="\t")
 
-        save_path_file = "invElect/" + str(invoice.user.id) + invoice.Invoice_no_final + ".xml"
+        save_path_file = "invElect/" + clavAccFinal + ".xml"
 
         with open(save_path_file, "w") as f:
             f.write(xml_str)
 
-        return [save_path_file,clavAccFinal]
+        return [clavAccFinal]
 
     
 def GenClavAccMod11(clavAcc):

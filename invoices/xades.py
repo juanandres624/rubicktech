@@ -5,15 +5,19 @@ import logging
 
 class Xades(object):
 
-    def sign(self, xml_document, file_pk12, password):
+    def sign(xml_document):
         """
         Metodo que aplica la firma digital al XML
         TODO: Revisar return
         """
+        file_pk12 = "invoices/firma/5760703_identity.p12"
+        password = "owq9128"
+
         xml_str = xml_document.encode('utf-8')
         JAR_PATH = 'firma/firmaXadesBes.jar'
         JAVA_CMD = 'java'
         firma_path = os.path.join(os.path.dirname(__file__), JAR_PATH)
+        print(firma_path)
         command = [
             JAVA_CMD,
             '-jar',
@@ -38,3 +42,20 @@ class Xades(object):
         )
         res = p.communicate()
         return res[0]
+
+    def apply_digital_signature(self, access_key, file_pk12, password):
+        """
+        Metodo que aplica la firma digital al XML
+        """
+        OPT_PATH = 'invElect/'
+        JAR_PATH = 'firma/firmaXadesBes.jar'
+        JAVA_CMD = 'java'
+        ds_document = False
+        name = '%s%s.xml' % (OPT_PATH, access_key)
+        print(name)
+        # firma electrónica del xml
+        firma_path = os.path.join(os.path.dirname(__file__), JAR_PATH)
+        print(firma_path)
+        # invocación del jar de la firma electrónica
+        subprocess.call([JAVA_CMD, '-jar', firma_path, name, name, file_pk12, password])
+        return ds_document
