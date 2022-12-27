@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+<factura id="comprobante" version="1.0.0">
+	<infoTributaria>
+		<ambiente>1</ambiente>
+		<tipoEmision>1</tipoEmision>
+		<razonSocial>Rubick Tech S.A</razonSocial>
+		<nombreComercial>Venta de Prog. Informaticos</nombreComercial>
+		<ruc>0906855911001</ruc>
+		<claveAcceso>2712202201090685591100110010010000000140000001419</claveAcceso>
+		<codDoc>01</codDoc>
+		<estab>001</estab>
+		<ptoEmi>001</ptoEmi>
+		<secuencial>000000014</secuencial>
+		<dirMatriz>Entrerios Calle Principal Local 43</dirMatriz>
+	</infoTributaria>
+	<infoFactura>
+		<fechaEmision>27/12/2022</fechaEmision>
+		<dirEstablecimiento>Entrerios Calle Principal Local 43</dirEstablecimiento>
+		<obligadoContabilidad>NO</obligadoContabilidad>
+		<tipoIdentificacionComprador>06</tipoIdentificacionComprador>
+		<razonSocialComprador>Emilia Aulestia</razonSocialComprador>
+		<identificacionComprador>0906588452</identificacionComprador>
+		<direccionComprador>la joya</direccionComprador>
+		<totalSinImpuestos>195.72</totalSinImpuestos>
+		<totalDescuento>2.50</totalDescuento>
+		<totalConImpuestos>
+			<totalImpuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>2</codigoPorcentaje>
+				<baseImponible>193.22</baseImponible>
+				<valor>23.19</valor>
+			</totalImpuesto>
+		</totalConImpuestos>
+		<propina>0.00</propina>
+		<importeTotal>216.41</importeTotal>
+		<moneda>DOLAR</moneda>
+		<pagos>
+			<pago>
+				<formaPago>01</formaPago>
+				<total>216.41</total>
+			</pago>
+		</pagos>
+	</infoFactura>
+	<detalles>
+		<detalle>
+			<codigoPrincipal>EC45214</codigoPrincipal>
+			<codigoAuxiliar>151515484749526</codigoAuxiliar>
+			<descripcion>Great-Tshirt</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>23.22</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>23.22</precioTotalSinImpuesto>
+			<detallesAdicionales>
+				<detAdicional nombre="Great-Tshirt" valor="Tomy Hilfiger"/>
+			</detallesAdicionales>
+			<impuestos>
+				<impuesto>
+					<codigo>2</codigo>
+					<codigoPorcentaje>2</codigoPorcentaje>
+					<tarifa>12.00</tarifa>
+					<baseImponible>23.22</baseImponible>
+					<valor>2.79</valor>
+				</impuesto>
+			</impuestos>
+		</detalle>
+		<detalle>
+			<codigoPrincipal>LOL12244</codigoPrincipal>
+			<codigoAuxiliar>56565265</codigoAuxiliar>
+			<descripcion>Puma Ferrari Shoe</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>100.00</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>100.00</precioTotalSinImpuesto>
+			<detallesAdicionales>
+				<detAdicional nombre="Puma Ferrari Shoe" valor="Otros"/>
+			</detallesAdicionales>
+			<impuestos>
+				<impuesto>
+					<codigo>2</codigo>
+					<codigoPorcentaje>2</codigoPorcentaje>
+					<tarifa>12.00</tarifa>
+					<baseImponible>100.00</baseImponible>
+					<valor>12.00</valor>
+				</impuesto>
+			</impuestos>
+		</detalle>
+		<detalle>
+			<codigoPrincipal>JLSK342445</codigoPrincipal>
+			<codigoAuxiliar>JLSK342445</codigoAuxiliar>
+			<descripcion>BIS Rojo Arete</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>25.00</precioUnitario>
+			<descuento>0.00</descuento>
+			<precioTotalSinImpuesto>25.00</precioTotalSinImpuesto>
+			<detallesAdicionales>
+				<detAdicional nombre="BIS Rojo Arete" valor="Otros"/>
+			</detallesAdicionales>
+			<impuestos>
+				<impuesto>
+					<codigo>2</codigo>
+					<codigoPorcentaje>2</codigoPorcentaje>
+					<tarifa>12.00</tarifa>
+					<baseImponible>25.00</baseImponible>
+					<valor>3.00</valor>
+				</impuesto>
+			</impuestos>
+		</detalle>
+		<detalle>
+			<codigoPrincipal>KIUE0005255</codigoPrincipal>
+			<codigoAuxiliar>KIUE0005255</codigoAuxiliar>
+			<descripcion>Barcelona Sc Camiseta</descripcion>
+			<cantidad>1</cantidad>
+			<precioUnitario>50.00</precioUnitario>
+			<descuento>2.50</descuento>
+			<precioTotalSinImpuesto>47.50</precioTotalSinImpuesto>
+			<detallesAdicionales>
+				<detAdicional nombre="Barcelona Sc Camiseta" valor="Otros"/>
+			</detallesAdicionales>
+			<impuestos>
+				<impuesto>
+					<codigo>2</codigo>
+					<codigoPorcentaje>2</codigoPorcentaje>
+					<tarifa>12.00</tarifa>
+					<baseImponible>47.50</baseImponible>
+					<valor>5.70</valor>
+				</impuesto>
+			</impuestos>
+		</detalle>
+	</detalles>
+</factura>
