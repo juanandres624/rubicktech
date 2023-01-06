@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h3 class="mb-2">Ver Usuarios </h3>
+                    <p class="pageheader-text"></p>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="viewUsers" class="breadcrumb-link">Usuarios</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Ver Usuarios</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="usersTable" class="table table-striped table-bordered mainDataTable" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th hidden>id</th>
+                                        <th>Nombre Usuario</th>
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th>Email</th>
+                                        <th>Telefono</th>
+                                        <th>Fecha Creación</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                        <tr>
+                                            <td id="user_id" hidden>{{ user.id }}</td>
+                                            <td>{{ user.username | capfirst }}</td>
+                                            <td>{{ user.first_name | capfirst }}</td>
+                                            <td>{{ user.last_name | capfirst }}</td>
+                                            <td>{{ user.email | capfirst }}</td>
+                                            <td>{{ user.phone_number }}</td>
+                                            <td>{{ user.date_added }}</td>
+                                            <td class="text-center"><a type="button" href="javascript:;" id="modal_delete_user"><span class="fa fa-trash"></span></a></td>               
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalDeleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                Esta Seguro que desea Eliminar Usuario?
+                <input type="text" name="user_id_modal" id="user_id_modal">
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" href="javascript:;" class="btn btn-primary user_delete">Confirmar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+{% endblock %}
+

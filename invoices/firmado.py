@@ -17,9 +17,12 @@ def firmar_xml(xml_filename):
     cert = crypto.dump_certificate(crypto.FILETYPE_PEM, p12.get_certificate())
 
     # archivod de prueba
-    filename = xml_filename
+    OPT_PATH = os.path.join(os.path.abspath(os.curdir),'invElect/')
+    filename = '%s%s.xml' % (OPT_PATH, xml_filename)
 
     root = ET.parse(filename).getroot()
+
+    print(root)
 
     # sha1 por defecto
     final_firmado = XMLSigner().sign(root, key=key, cert=cert)
@@ -38,9 +41,12 @@ def firmar_xml(xml_filename):
 """abre un xml,lo firma y guarda en otro xml"""
 
 
-def save_xml_firmado(xml_firmado_name, xml_origen):
+def save_xml_firmado(xml_origen):
     """name : xxxxx.xml"""
-    file1 = open(xml_origen, "w")
+    OPT_PATH = os.path.join(os.path.abspath(os.curdir),'invElect/')
+    filepath = '%s%s_firm.xml' % (OPT_PATH, xml_origen)
+
+    file1 = open(filepath, "w")
     # file1.write(str(xml_str))
     file1.write(firmar_xml(xml_origen))
     file1.close()  # to change file access modes

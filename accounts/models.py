@@ -5,11 +5,9 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 
 class myAccountManager(BaseUserManager):
     def create_user(self, first_name, last_name, username, email, password = None):
-        if not email:
-            raise ValueError('User must have an Email Address')
 
         if not username:
-            raise ValueError('User must have an Username')
+            raise ValueError('Nombre de Usuario Requerido')
 
         user = self.model(
             email = self.normalize_email(email),
@@ -17,8 +15,14 @@ class myAccountManager(BaseUserManager):
             first_name = first_name,
             last_name = last_name,
         )
+
         user.set_password(password)
+        user.is_admin = True
+        user.is_active = True
+        user.is_staff = True
+        user.is_superadmin = False
         user.save(using = self._db)
+
         return user
 
     def create_superuser(self, first_name, last_name, username, email, password):
@@ -40,7 +44,7 @@ class Account(AbstractBaseUser):
     first_name      = models.CharField(max_length = 50, null = False, blank = True)
     last_name       = models.CharField(max_length = 50, null = False, blank = True)
     username        = models.CharField(max_length = 50, null = False, blank = True, unique = True)
-    email           = models.EmailField(max_length = 100, null = False, blank = False, unique = True)
+    email           = models.EmailField(max_length = 100, null = True, blank = True)
     phone_number    = models.CharField(max_length = 50, null = False, blank = True)
     numRuc          = models.CharField(max_length = 13, null = True, blank = True)
     razSocial       = models.CharField(max_length = 150, null = True, blank = True)
@@ -49,6 +53,7 @@ class Account(AbstractBaseUser):
     dirEstablec     = models.CharField(max_length = 255, null = True, blank = True)
     obligContab     = models.BooleanField(default = False)
     contribEspec    = models.CharField(max_length = 13, null = True, blank = True)
+    admin_id        = models.CharField(max_length = 255, null = False, blank = True)
 
     #required
     date_joined     = models.DateTimeField(auto_now_add = True, null = False, blank = True)
@@ -58,8 +63,11 @@ class Account(AbstractBaseUser):
     is_active       = models.BooleanField(default = False)
     is_superadmin   = models.BooleanField(default = False)
 
-    USERNAME_FIELD  = 'email'
-    REQUIRED_FIELDS  = ['username','first_name','last_name']
+    date_added = models.DateField(auto_now_add=True)
+
+
+    USERNAME_FIELD  = 'username'
+    REQUIRED_FIELDS  = ['first_name','last_name']
 
     objects = myAccountManager()
 

@@ -76,10 +76,10 @@ jQuery(document).ready(function($) {
         });
 
     }
-    if ($("#example4").length) {
+    if ($(".mainDataTable").length) {
 
         $(document).ready(function() {
-            var table = $('#example4').DataTable({
+            var table = $('.mainDataTable').DataTable({
                 fixedHeader: true,
                 language: {
                     "decimal": "",

@@ -43,7 +43,6 @@
 
             getFillCustomerData(id_customer);
             
-
         })
 
         //Final Customer checkbox
@@ -57,6 +56,31 @@
             
 
         })
+
+        //Modal Usuer delete
+        $("#modal_delete_user").click(function(){
+            data_table = search_table_row_values("usersTable",this);
+            $('#user_id_modal').val(data_table[0]);
+            $("#modalDeleteUser").modal('show');
+            
+            /*var url = "delete/ajax/account/users/";
+            if (confirm('Esta Seguro que desea Eliminar Usuario?')) {
+                $.ajax({
+                type: 'GET',
+                url: url,
+                data: {"username": data_table[0]},
+                success: function (response) {
+                    if(response){
+                        setInterval('location.reload()', 1000);                    
+                    }
+                },
+                error: function (response){
+                    console.log(response)
+                }
+                })
+            }*/
+            
+        });
 
         //category product page
         $('.select-2-product-category').select2();
@@ -122,6 +146,7 @@
             $('#id_quantity_det_modal').val(data_table[1]);
             $('#input_cod_prod_det_modal').val(data_table[0]);
         });
+        
 
         $(".delete_det_inv").click(function(){
             invoice_id = $('#id_invoice_glob').text()
