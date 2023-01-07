@@ -1,7 +1,7 @@
 from django.db import models
 from providers.models import Provider
 from management.models import MngProductCategory,MngProductBrand
-
+from accounts.models import Account
 
 class Product(models.Model):
     product_code = models.CharField(max_length=200, blank=True)
@@ -23,6 +23,13 @@ class Product(models.Model):
     provider_id = models.ForeignKey(Provider, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    created_by = models.ForeignKey(Account, on_delete=models.CASCADE, null=True,related_name= 'created_by_m_prod')
+
+    
+
+
 
     def __str__(self):
         return self.product_name

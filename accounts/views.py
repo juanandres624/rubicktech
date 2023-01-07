@@ -48,12 +48,21 @@ def registerUser(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             email = form.cleaned_data['email']
+            is_admin = form.cleaned_data['is_admin']
 
-            user = Account.objects.create_user(first_name=first_name, last_name=last_name, username=username,
-                                               email=email, password=password)
+            if is_admin:
+                user = Account.objects.create_admin(first_name=first_name, last_name=last_name, username=username,email=email, password=password)
+            else:
+                user = Account.objects.create_user(first_name=first_name, last_name=last_name, username=username,email=email, password=password)
+
+            mainAccount = Account.objects.get(pk=request.user.admin_id.id)
             user.phone_number = phone_number
-            user.admin_id = str(request.user)
+            user.admin_id = mainAccount
             user.save()
+
+
+
+            messages.success(request, 'Usuario Creado....')
 
             return redirect('viewUsers')
     else:
@@ -66,7 +75,7 @@ def registerUser(request):
 @login_required(login_url = 'login')
 def viewUsers(request):
 
-    all_users = get_all_users(str(request.user))
+    all_users = get_all_users(request.user)
 
     context = {
         'users' : all_users
@@ -76,16 +85,16 @@ def viewUsers(request):
 
 
 @csrf_exempt
-def deleteUser(request,username):
+def deleteUser(request):
+    user_id = request.GET.get("user_id", None)
 
     try:
-        account = Account.objects.get(username=username)
+        account = Account.objects.get(pk=user_id)
     except Account.DoesNotExist:
         account = None
 
     if request.method == "GET":
-        username = request.GET.get("username", None)
-        user_data = Account.objects.get(username=username)
+        user_data = Account.objects.get(pk=user_id)
         user_data.delete()
 
         return JsonResponse({"message": "success"}, status=200)
@@ -94,4 +103,4 @@ def deleteUser(request,username):
 
 def get_all_users(adminId):
     
-    return Account.objects.filter(is_active=True,is_superadmin=False,admin_id=adminId)
+    return Account.objects.filter(is_active=True,is_superadmin=False,admin_id=adminId.admin_id)

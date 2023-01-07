@@ -35,6 +35,7 @@ class Invoice(models.Model):
     subtotal_gran_total = models.DecimalField(max_digits=10, decimal_places=2, default=0) # Valor TOTAL
 
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    created_by = models.ForeignKey(Account, on_delete=models.CASCADE, null=True,related_name= 'created_by_m_inv')
     mngStatus_id = models.ForeignKey(MngStatus, on_delete=models.CASCADE, default=1)
 
 

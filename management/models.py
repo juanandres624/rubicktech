@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import Account
 
 class MngDocumentType(models.Model):
     docType = (
@@ -36,6 +37,8 @@ class MngProductCategory(models.Model):
     description = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     date_added = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    created_by = models.ForeignKey(Account, on_delete=models.CASCADE, null=True,related_name= 'created_by_m_mngpc')
 
     def __str__(self):
         return self.description
@@ -44,6 +47,8 @@ class MngProductBrand(models.Model):
     description = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     date_added = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    created_by = models.ForeignKey(Account, on_delete=models.CASCADE, null=True,related_name= 'created_by_m_mngpb')
 
     def __str__(self):
         return self.description

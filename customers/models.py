@@ -1,5 +1,6 @@
 from django.db import models
 from management.models import MngDocumentType, MngPersonType, MngCity
+from accounts.models import Account 
 
 class Customer(models.Model):
     first_name = models.CharField(max_length=100, null=False, blank=True)
@@ -14,7 +15,9 @@ class Customer(models.Model):
     address = models.CharField(max_length=200, null=False, blank=True)
     mngCity_id = models.ForeignKey(MngCity, on_delete=models.CASCADE)
     note = models.CharField(max_length=200, null=False, blank=True)
-  
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    created_by = models.ForeignKey(Account, on_delete=models.CASCADE, null=True,related_name= 'created_by_m_cust')
+
     # required
     is_active = models.BooleanField(default=True)
     date_added = models.DateField(auto_now_add=True)

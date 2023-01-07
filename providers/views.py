@@ -4,17 +4,19 @@ from django.contrib.auth.decorators import login_required
 from providers.models import Provider
 from .forms import ProviderForm
 from products.models import Product
-
+from accounts.models import Account
 
 @login_required(login_url = 'login')
 def newProvider(request):
     if request.method == 'POST':
         form = ProviderForm(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.created_by = request.user
+            post.user = request.user.admin_id
+            post.save()
             messages.success(request, 'Proveedor Creado....')
-            return redirect('dashboard')
-
+            return redirect('editProvider', provider_id = post.id)
     else:
         form = ProviderForm(request.POST or None, request.FILES or None)
         context = {
@@ -27,7 +29,7 @@ def newProvider(request):
 @login_required(login_url = 'login')
 def viewProviders(request):
 
-    all_providers = get_all_providers()
+    all_providers = get_all_providers(request.user.id)
 
     context = {
         'providers' : all_providers
@@ -37,6 +39,11 @@ def viewProviders(request):
 
 @login_required(login_url = 'login')
 def editProvider(request,provider_id):
+
+    try:
+        userAdmin = Account.objects.get(pk=request.user.admin_id.id)
+    except Exception as e:
+        raise e
 
     try:
         provider = Provider.objects.get(pk=provider_id)
@@ -53,18 +60,27 @@ def editProvider(request,provider_id):
             messages.success(request, 'Proveedor No ha sido Editado....')
             return redirect('viewProvider')  
     else:
-        form = ProviderForm(instance=provider)
-        products = Product.objects.filter(provider_id=provider)
+        if userAdmin == provider.user:
+            form = ProviderForm(instance=provider)
+            products = Product.objects.filter(provider_id=provider)
 
-        context = {
-            'id': provider.id,
-            'form': form,
-            'provider':provider,
-            'prodProv':products,
-        }
-        return render(request, 'providers/editProvider.html', context)
+            context = {
+                'id': provider.id,
+                'form': form,
+                'provider':provider,
+                'prodProv':products,
+            }
+            return render(request, 'providers/editProvider.html', context)
+        else:
+            messages.error(request, 'No hay Registros del Proveedor')
+            return redirect('viewProviders')
 
 
-def get_all_providers():
+def get_all_providers(user_id):
+
+    try:
+        UserAdmin = Account.objects.get(pk=user_id)
+    except Account.DoesNotExist:
+        UserAdmin = None
     
-    return Provider.objects.filter(is_active=True)
+    return Provider.objects.filter(user=UserAdmin.admin_id,is_active=True)

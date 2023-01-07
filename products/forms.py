@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product,Variation,Image
+from .models import Product,Variation,Image,Provider,Account,MngProductCategory,MngProductBrand
 
 
 class MngSelectDescription(forms.Select):
@@ -9,12 +9,15 @@ class MngSelectDescription(forms.Select):
             option['attrs']['data-select'] = value.instance.description
         return option
 
-class MngSelectProvider(forms.Select):
-    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
-        option = super().create_option(name, value, label, selected, index, subindex, attrs)
-        if value:
-            option['attrs']['data-select'] = value.instance.__str__
-        return option
+# class MngSelectProvider(forms.Select):
+#     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+#         option = super().create_option(name, value, label, selected, index, subindex, attrs)
+#         if value:
+#             print(value.instance.provider_code)
+#             #print(self.user)
+            
+#             option['attrs']['data-select'] = value.instance.__str__
+#         return option
 
 
 class ProductsForm(forms.ModelForm):
@@ -24,10 +27,15 @@ class ProductsForm(forms.ModelForm):
         fields = ["product_code", "code", "product_name", "description", "price", "boughtPrice",
                   "is_discount","discountPorcentage","mngProductCategory_id","provider_id",
                   "mngProductBrand_id","stock","is_0_tax"]
-        widgets = {'mngProductCategory_id': MngSelectDescription, 'provider_id': MngSelectProvider,
-            'mngProductBrand_id': MngSelectDescription,"description": forms.Textarea()}
+        widgets = {"description": forms.Textarea()}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,user, *args, **kwargs):
+        userGlob = user
+        try:
+            UserAdmin = Account.objects.get(pk=userGlob.id)
+        except Account.DoesNotExist:
+            UserAdmin = None
+
         super(ProductsForm, self).__init__(*args, **kwargs)
         self.fields['product_code'].widget.attrs['type'] = 'text'
         self.fields['code'].widget.attrs['type'] = 'text'
@@ -43,7 +51,18 @@ class ProductsForm(forms.ModelForm):
         self.fields['is_0_tax'].widget.attrs['type'] = 'checkbox'
 
         self.fields['mngProductCategory_id'].widget.attrs['class'] = 'select-2-product-category'
-        self.fields['mngProductCategory_id'].widget.attrs['required'] = False
+        self.fields['mngProductCategory_id'].widget.attrs['required'] = False        
+        
+        self.fields['provider_id'].widget.attrs['class'] = 'select-2-product-provider'
+        self.fields['provider_id'].widget.attrs['required'] = False        
+        
+        self.fields['mngProductBrand_id'].widget.attrs['class'] = 'select-2-product-brand'
+        self.fields['mngProductBrand_id'].widget.attrs['required'] = False
+
+        self.fields['provider_id'].queryset = Provider.objects.filter(user=UserAdmin.admin_id,is_active=True)
+        self.fields['mngProductCategory_id'].queryset = MngProductCategory.objects.filter(user=UserAdmin.admin_id,is_active=True)
+        self.fields['mngProductBrand_id'].queryset = MngProductBrand.objects.filter(user=UserAdmin.admin_id,is_active=True)
+
 
         for field_name, field in self.fields.items():
             if field.widget.attrs.get('class') != 'custom-control-input is-valid' :
@@ -96,7 +115,7 @@ class CatalogForm(forms.ModelForm):
         model = Product
         fields = ["product_name","price","mngProductCategory_id","provider_id",
                   "mngProductBrand_id"]
-        widgets = {'mngProductCategory_id': MngSelectDescription, 'provider_id': MngSelectProvider,
+        widgets = {'mngProductCategory_id': MngSelectDescription, #'provider_id': MngSelectProvider,
             'mngProductBrand_id': MngSelectDescription}
 
     def __init__(self, *args, **kwargs):

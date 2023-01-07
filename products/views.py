@@ -7,25 +7,24 @@ from .models import Product, Variation,Image
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-from management.models import MngProductCategory
+from management.models import MngProductCategory,MngProductBrand
 from django.http import JsonResponse
-
+from accounts.models import Account
 
 @login_required(login_url = 'login')
 def newProduct(request):
     if request.method == 'POST':
-        form = ProductsForm(request.POST)
+        form = ProductsForm(request.user,request.POST, request.FILES or None)
         print(form.errors)
         if form.is_valid():
-
-            newProd = form.save()
-            print(newProd)
-
+            post = form.save(commit=False)
+            post.created_by = request.user
+            post.user = request.user.admin_id
+            post.save()
             messages.success(request, 'Producto Creado....')
-            return redirect('editProduct',  product_id=newProd.id)
-            #return redirect('dashboard')
+            return redirect('editProduct',  product_id=post.id)
     else:
-        form = ProductsForm(request.POST or None, request.FILES or None)
+        form = ProductsForm(request.user,request.POST or None, request.FILES or None)
         context = {
             'form': form,
         }
@@ -36,6 +35,11 @@ def newProduct(request):
 def editProduct(request,product_id):
 
     try:
+        userAdmin = Account.objects.get(pk=request.user.admin_id.id)
+    except Exception as e:
+        raise e
+
+    try:
         product = Product.objects.get(pk=product_id)
     except Product.DoesNotExist:
         product = None
@@ -44,7 +48,7 @@ def editProduct(request,product_id):
     image = product.image_set.all()
 
     if request.method == 'POST':
-        form = ProductsForm(request.POST,instance= product)
+        form = ProductsForm(request.user,request.POST,instance= product)
         if form.is_valid():
             form.save()
             messages.success(request, 'Producto Editado....')
@@ -53,14 +57,18 @@ def editProduct(request,product_id):
             messages.success(request, 'Producto No ha sido Editado....')
             return redirect('editProduct', product.id)  
     else:
-        form = ProductsForm(instance=product)
-        context = {
-            'id': product.id,
-            'form': form,
-            # 'variations':variation,
-            'images':image,
-        }
-        return render(request, 'products/editProduct.html', context)
+        if userAdmin == product.user:
+            form = ProductsForm(request.user,instance=product)
+            context = {
+                'id': product.id,
+                'form': form,
+                # 'variations':variation,
+                'images':image,
+            }
+            return render(request, 'products/editProduct.html', context)
+        else:
+            messages.error(request, 'No hay Registros del Producto')
+            return redirect('viewProducts')
 
 
 @login_required(login_url = 'login')
@@ -131,7 +139,7 @@ def createImage(request,product_id):
 @login_required(login_url = 'login')
 def viewProducts(request):
 
-    all_products = get_all_products()
+    all_products = get_all_products(request.user.id)
     img = []
 
     for products in all_products:
@@ -205,15 +213,23 @@ def viewCatalogs(request):
     return render(request, 'products/viewCatalogs.html',context)
 
 
-def get_all_products():
+def get_all_products(user_id):
+
+    try:
+        UserAdmin = Account.objects.get(pk=user_id)
+    except Account.DoesNotExist:
+        UserAdmin = None
     
-    return Product.objects.filter()
+    return Product.objects.filter(user=UserAdmin.admin_id,is_active=True)
 
 @csrf_exempt
 def addCategory(request):
     if request.method == "POST":
         cat_desc = request.POST.get('cat_desc')
         cat_id = MngProductCategory.objects.create(description=cat_desc)
+        cat_id.created_by = request.user
+        cat_id.user = request.user.admin_id
+        cat_id.save()
         return HttpResponse(cat_id.id)
 
 def getCategoryById(request,id):
@@ -222,6 +238,27 @@ def getCategoryById(request,id):
         if MngProductCategory.objects.filter(id=id).exists():
             return JsonResponse({"id": id_categ.id,
                                  "description": id_categ.description}, status=200)
+        else:
+            return JsonResponse({}, status=400)
+
+    return HttpResponse(JsonResponse)
+
+@csrf_exempt
+def addBrand(request):
+    if request.method == "POST":
+        brand_desc = request.POST.get('brand_desc')
+        brand_id = MngProductBrand.objects.create(description=brand_desc)
+        brand_id.created_by = request.user
+        brand_id.user = request.user.admin_id
+        brand_id.save()
+        return HttpResponse(brand_id.id)
+
+def getBrandById(request,id):
+    if request.method == "GET":
+        id_brand = MngProductBrand.objects.get(pk=id)
+        if MngProductBrand.objects.filter(id=id).exists():
+            return JsonResponse({"id": id_brand.id,
+                                 "description": id_brand.description}, status=200)
         else:
             return JsonResponse({}, status=400)
 

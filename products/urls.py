@@ -11,6 +11,8 @@ urlpatterns = [
     path('createImage/<int:product_id>/',views.createImage,name='createImage'),
     path('viewCatalogs', views.viewCatalogs, name='viewCatalogs'),
     path('addCategory', views.addCategory, name='addCategory'),
-    path('getCategoryById/<int:id>/', views.getCategoryById, name='getCategoryById'),
+    path('getCategoryById/<int:id>/', views.getCategoryById, name='getCategoryById'),    
+    path('addBrand', views.addBrand, name='addBrand'),
+    path('getBrandById/<int:id>/', views.getBrandById, name='getBrandById'),
 
 ]

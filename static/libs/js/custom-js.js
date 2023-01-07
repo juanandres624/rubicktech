@@ -1,7 +1,6 @@
-    // $("#submit").click(function () {
-    //     var text = $("#textarea").val();
-    //     $("#modal_body").html(text);
-    // });
+    setTimeout(function(){
+        $('#message').fadeOut('slow')
+    }, 3000)
 
     $(document).ready(function(){
         //addInvoiceDetail();
@@ -57,33 +56,37 @@
 
         })
 
-        //Modal Usuer delete
+        //User delete
         $("#modal_delete_user").click(function(){
             data_table = search_table_row_values("usersTable",this);
             $('#user_id_modal').val(data_table[0]);
             $("#modalDeleteUser").modal('show');
-            
-            /*var url = "delete/ajax/account/users/";
-            if (confirm('Esta Seguro que desea Eliminar Usuario?')) {
-                $.ajax({
-                type: 'GET',
-                url: url,
-                data: {"username": data_table[0]},
-                success: function (response) {
-                    if(response){
-                        setInterval('location.reload()', 1000);                    
-                    }
-                },
-                error: function (response){
-                    console.log(response)
+        });
+
+        $("#user_delete_btn").click(function(){
+            var user_id = $('#user_id_modal').val();
+            var url = "delete/ajax/account/users/";
+            $.ajax({
+            type: 'GET',
+            url: url,
+            data: {"user_id": user_id},
+            success: function (response) {
+                if(response){
+                    setInterval('location.reload()', 1000);                    
                 }
-                })
-            }*/
+            },
+            error: function (response){
+                console.log(response)
+            }
+            })
             
         });
+        
 
         //category product page
         $('.select-2-product-category').select2();
+        $('.select-2-product-provider').select2();
+        $('.select-2-product-brand').select2();
 
         $("#btn-add-category").click(function(e){
             e.preventDefault();
@@ -115,6 +118,44 @@
                             });
                         });
                         $('#modalAddCategory').modal('hide')               
+                    }
+                },
+                error: function (response){ 
+                    console.log(response)
+                }
+            });
+        });
+
+        $("#btn-add-brand").click(function(e){
+            e.preventDefault();
+            var url = "addBrand";
+            var brand_desc = $('#brand_desc_id').val();
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {"brand_desc": brand_desc},
+                success: function (response) {
+                    if(response){
+                        // Fetch the preselected item, and add to the control
+                        var brandSelect = $('.select-2-product-brand');
+                        $.ajax({
+                            type: 'GET',
+                            url: 'getBrandById/' + response
+                        }).then(function (data) {
+                            // create the option and append to Select2
+                            var option = new Option(data['description'], data['id'], true, true);
+                            brandSelect.append(option).trigger('change');
+
+                            // manually trigger the `select2:select` event
+                            brandSelect.trigger({
+                                type: 'select2:select',
+                                params: {
+                                    data: data
+                                }
+                            });
+                        });
+                        $('#modalAddBrand').modal('hide')               
                     }
                 },
                 error: function (response){ 

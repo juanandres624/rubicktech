@@ -6,6 +6,8 @@ from .models import Customer
 from invoices.models import Invoice
 from django.http import JsonResponse
 import requests
+from accounts.models import Account
+from django.db.models import Exists, OuterRef
 
 
 @login_required(login_url = 'login')
@@ -14,6 +16,8 @@ def newCustomer(request):
         form = CustomerForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
+            post.created_by = request.user
+            post.user = request.user.admin_id
             post.save()
             messages.success(request, 'Cliente Creado....')
             return redirect('editCustomer', customer_id = post.id)
@@ -32,7 +36,7 @@ def newCustomer(request):
 @login_required(login_url = 'login')
 def viewCustomers(request):
 
-    all_customers = get_all_customers()
+    all_customers = get_all_customers(request.user.id)
 
     context = {
         'customers' : all_customers
@@ -43,6 +47,11 @@ def viewCustomers(request):
     
 @login_required(login_url = 'login')
 def editCustomer(request,customer_id):
+
+    try:
+        userAdmin = Account.objects.get(pk=request.user.admin_id.id)
+    except Exception as e:
+        raise e
 
     try:
         customer = Customer.objects.get(pk=customer_id)
@@ -59,23 +68,30 @@ def editCustomer(request,customer_id):
             messages.error(request, form.errors)
             return redirect('editCustomer', customer.id)
     else:
-        form = CustomerForm(instance=customer)
-        invoices = Invoice.objects.filter(billing_customer_id=customer)
-        #InvdetailAct = Invoice.objects.filter(invoice_id=invoice_id)
-        context = {
-            'id': customer.id,
-            'form': form,
-            'customer': customer,
-            'invoices': invoices,
-        }
-        return render(request, 'customers/editCustomer.html', context)
+        if userAdmin == customer.user:
+            form = CustomerForm(instance=customer)
+            invoices = Invoice.objects.filter(billing_customer_id=customer)
+            #InvdetailAct = Invoice.objects.filter(invoice_id=invoice_id)
+            context = {
+                'id': customer.id,
+                'form': form,
+                'customer': customer,
+                'invoices': invoices,
+            }
+            return render(request, 'customers/editCustomer.html', context)
+        else:
+            messages.error(request, 'No hay Registros del Cliente')
+            return redirect('viewCustomers')
 
 
-def get_all_customers():
+def get_all_customers(user_id):
     
-    # categories = get_object_or_404(Category,slug = category_slug)
+    try:
+        UserAdmin = Account.objects.get(pk=user_id)
+    except Account.DoesNotExist:
+        UserAdmin = None
 
-    return Customer.objects.filter(is_active=True)
+    return Customer.objects.filter(user=UserAdmin.admin_id,is_active=True)
 
 
 # def checkCustomerDataSri(request):

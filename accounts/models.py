@@ -4,6 +4,37 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 # Create your models here.
 
 class myAccountManager(BaseUserManager):
+
+    def create_superuser(self, first_name, last_name, username, email, password = None):
+        user = self.create_user(
+            email = self.normalize_email(email),
+            username = username,
+            password = password,
+            first_name = first_name,
+            last_name = last_name,
+        )
+        user.is_admin = True
+        user.is_active = True
+        user.is_staff = True
+        user.is_superadmin = True
+        user.save(using = self._db)
+        return user    
+        
+    def create_admin(self, first_name, last_name, username, email, password = None):
+        user = self.create_user(
+            email = self.normalize_email(email),
+            username = username,
+            password = password,
+            first_name = first_name,
+            last_name = last_name,
+        )
+        user.is_admin = True
+        user.is_active = True
+        user.is_staff = True
+        user.is_superadmin = False
+        user.save(using = self._db)
+        return user
+
     def create_user(self, first_name, last_name, username, email, password = None):
 
         if not username:
@@ -17,27 +48,12 @@ class myAccountManager(BaseUserManager):
         )
 
         user.set_password(password)
-        user.is_admin = True
+        user.is_admin = False
         user.is_active = True
         user.is_staff = True
         user.is_superadmin = False
         user.save(using = self._db)
 
-        return user
-
-    def create_superuser(self, first_name, last_name, username, email, password):
-        user = self.create_user(
-            email = self.normalize_email(email),
-            username = username,
-            password = password,
-            first_name = first_name,
-            last_name = last_name,
-        )
-        user.is_admin = True
-        user.is_active = True
-        user.is_staff = True
-        user.is_superadmin = True
-        user.save(using = self._db)
         return user
 
 class Account(AbstractBaseUser):
@@ -53,7 +69,7 @@ class Account(AbstractBaseUser):
     dirEstablec     = models.CharField(max_length = 255, null = True, blank = True)
     obligContab     = models.BooleanField(default = False)
     contribEspec    = models.CharField(max_length = 13, null = True, blank = True)
-    admin_id        = models.CharField(max_length = 255, null = False, blank = True)
+    admin_id        = models.ForeignKey('self', on_delete=models.CASCADE,blank=True,null=True)
 
     #required
     date_joined     = models.DateTimeField(auto_now_add = True, null = False, blank = True)

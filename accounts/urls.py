@@ -10,6 +10,6 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('newUser/', views.registerUser, name='newUser'),
     path('viewUsers/', views.viewUsers, name='viewUsers'),
-    path('accounts/viewUsers/delete/ajax/account/users/', deleteUser, name = "deleteUser"),
+    path('viewUsers/delete/ajax/account/users/', deleteUser, name = "deleteUser"),
 
 ]

@@ -15,7 +15,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ['first_name', 'last_name', 'username', 'password', 'phone_number', 'email']
+        fields = ['first_name', 'last_name', 'username', 'password', 'phone_number', 'email','is_admin']
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -26,8 +26,16 @@ class RegistrationForm(forms.ModelForm):
         self.fields['phone_number'].widget.attrs['im-insert'] = 'true'
         self.fields['email'].widget.attrs['type'] = 'email'
 
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+        self.fields['is_admin'].widget.attrs['class'] = 'custom-control-input'
+        self.fields['is_admin'].widget.attrs['class'] += ' is-valid'
+        self.fields['is_admin'].widget.attrs['type'] = 'checkbox'
+        
+        for field_name, field in self.fields.items():
+            if field.widget.attrs.get('class') != 'custom-control-input is-valid' :
+                if field.widget.attrs.get('class'):
+                    field.widget.attrs['class'] += ' form-control'
+                else:
+                    field.widget.attrs['class'] = 'form-control'
 
     def clean(self):
         cleaned_data = super(RegistrationForm, self).clean()
