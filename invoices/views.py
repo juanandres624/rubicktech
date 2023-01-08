@@ -27,6 +27,7 @@ from zeep import Client
 from .xmlBuildFactElect import XmlBuildFactElect
 import requests
 from xml.dom.minidom import parse, parseString
+import sweetify
 
 #link_validacion_off = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl"
 #link_autorizacion_off = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
@@ -68,10 +69,12 @@ def newInvoice(request):
 
             post.save()
             # messages.success(request, 'Factura Creada....')
+            sweetify.success(request, 'Nueva Factura ha sido Creada')
             return redirect('newInvoiceDetail', invoice_id=post.id)
         else:
-            messages.error(request, 'Error:' + form.errors)
-            return redirect('dashboard')
+            # messages.error(request, 'Error:' + form.errors)
+            sweetify.error(request, form.errors)
+            return redirect('newInvoice')
 
     else:
         form = InvoiceForm(request.POST or None)
@@ -99,7 +102,8 @@ def newInvoiceDetail(request, invoice_id):
             try:
                 prod = Product.objects.get(product_code=form['product_code'])
             except Product.DoesNotExist:
-                messages.error(request, 'Producto No Existe')
+                # messages.error(request, 'Producto No Existe')
+                sweetify.error(request, 'Producto No Existe')
                 return redirect('newInvoiceDetail', invoice_id=invoice_id)
 
             if prod.stock > 0:
@@ -204,11 +208,13 @@ def newInvoiceDetail(request, invoice_id):
                             invoice.save()
                             return redirect('newInvoiceDetail', invoice_id=invoice_id)
                     else:
-                        messages.error(request, 'Producto tiene ' + str(prod.stock) + ' en Stock')
+                        # messages.error(request, 'Producto tiene ' + str(prod.stock) + ' en Stock')
+                        sweetify.info(request, 'Producto tiene ' + str(prod.stock) + ' en Stock')
                         return redirect('newInvoiceDetail', invoice_id=invoice_id)
                 # else:
             else:
-                messages.error(request, 'Producto No en Stock')
+                # messages.error(request, 'Producto No en Stock')
+                sweetify.error(request, 'Producto No en Stock')
                 return redirect('newInvoiceDetail', invoice_id=invoice_id)
 
         else:
@@ -270,13 +276,16 @@ def newInvoiceDetail(request, invoice_id):
 
                         return redirect('newInvoiceDetail', invoice_id=invoice_id)
                     else:
-                        messages.error(request, 'Producto tiene ' + str(invoice_data_prod.stock) + ' en Stock')
+                        # messages.error(request, 'Producto tiene ' + str(invoice_data_prod.stock) + ' en Stock')
+                        sweetify.info(request, 'Producto tiene ' + str(invoice_data_prod.stock) + ' en Stock')
                         return redirect('newInvoiceDetail', invoice_id=invoice_id)
                 else:
-                    messages.error(request, 'Detalle del Producto No Existe')
+                    # messages.error(request, 'Detalle del Producto No Existe')
+                    sweetify.error(request, 'Detalle del Producto No Existe')
                     return redirect('newInvoiceDetail', invoice_id=invoice_id)
             else:
-                messages.error(request, 'Error Invoice')
+                # messages.error(request, 'Error Invoice')
+                sweetify.error(request, 'Error en Factura')
                 return redirect('newInvoiceDetail', invoice_id=invoice_id)
     else:
 
@@ -357,7 +366,8 @@ def deleteInvoiceDetail(request, invoice_id):
             return JsonResponse({"message": "success"}, status=200)
             # return redirect('newInvoiceDetail',  invoice_id=invoice_id)
         else:
-            messages.error(request, 'Error No se encuentra detalle factura')
+            # messages.error(request, 'Error No se encuentra detalle factura')
+            sweetify.error(request, 'No se encuentra detalle de Factura')
             return redirect('newInvoiceDetail', invoice_id=invoice_id)
 
 

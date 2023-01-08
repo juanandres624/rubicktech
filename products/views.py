@@ -10,19 +10,24 @@ from django.http import HttpResponse
 from management.models import MngProductCategory,MngProductBrand
 from django.http import JsonResponse
 from accounts.models import Account
+import sweetify
 
 @login_required(login_url = 'login')
 def newProduct(request):
     if request.method == 'POST':
         form = ProductsForm(request.user,request.POST, request.FILES or None)
-        print(form.errors)
         if form.is_valid():
             post = form.save(commit=False)
             post.created_by = request.user
             post.user = request.user.admin_id
             post.save()
-            messages.success(request, 'Producto Creado....')
+            # messages.success(request, 'Producto Creado....')
+            sweetify.success(request, 'Producto ha sido Creado')
             return redirect('editProduct',  product_id=post.id)
+        else:
+            # messages.error(request, form.errors)
+            sweetify.error(request, form.errors)
+            return redirect('newProduct')
     else:
         form = ProductsForm(request.user,request.POST or None, request.FILES or None)
         context = {
@@ -51,10 +56,12 @@ def editProduct(request,product_id):
         form = ProductsForm(request.user,request.POST,instance= product)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Producto Editado....')
+            # messages.success(request, 'Producto Editado....')
+            sweetify.success(request, 'Producto ha sido Editado')
             return redirect('editProduct', product.id)
         else:
-            messages.success(request, 'Producto No ha sido Editado....')
+            # messages.success(request, 'Producto No ha sido Editado....')
+            sweetify.error(request, 'Producto no ha sido Editado')
             return redirect('editProduct', product.id)  
     else:
         if userAdmin == product.user:
@@ -67,7 +74,8 @@ def editProduct(request,product_id):
             }
             return render(request, 'products/editProduct.html', context)
         else:
-            messages.error(request, 'No hay Registros del Producto')
+            # messages.error(request, 'No hay Registros del Producto')
+            sweetify.error(request, 'No hay Registros del Producto')
             return redirect('viewProducts')
 
 
@@ -123,10 +131,12 @@ def createImage(request,product_id):
             product.save()
                 
             formset.save()
-            messages.success(request, 'Producto Editado....')
+            # messages.success(request, 'Producto Editado....')
+            sweetify.success(request, 'Producto ha sido Editado')
             return redirect('editProduct', product.id)
         else:
-            messages.success(request, 'Producto No ha sido Editado....')
+            # messages.success(request, 'Producto No ha sido Editado....')
+            sweetify.error(request, 'Producto no ha sido Editado')
             return redirect('editProduct', product.id)  
     else:
         #form = VariationForm(instance=product)
@@ -230,6 +240,7 @@ def addCategory(request):
         cat_id.created_by = request.user
         cat_id.user = request.user.admin_id
         cat_id.save()
+        sweetify.success(request, 'Nueva Categoria Creada')
         return HttpResponse(cat_id.id)
 
 def getCategoryById(request,id):
@@ -251,6 +262,7 @@ def addBrand(request):
         brand_id.created_by = request.user
         brand_id.user = request.user.admin_id
         brand_id.save()
+        sweetify.success(request, 'Nueva Marca Creada')
         return HttpResponse(brand_id.id)
 
 def getBrandById(request,id):

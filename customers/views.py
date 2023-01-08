@@ -8,7 +8,7 @@ from django.http import JsonResponse
 import requests
 from accounts.models import Account
 from django.db.models import Exists, OuterRef
-
+import sweetify
 
 @login_required(login_url = 'login')
 def newCustomer(request):
@@ -19,10 +19,12 @@ def newCustomer(request):
             post.created_by = request.user
             post.user = request.user.admin_id
             post.save()
-            messages.success(request, 'Cliente Creado....')
+            # messages.success(request, 'Cliente Creado....')
+            sweetify.success(request, 'Cliente ha sido Creado')
             return redirect('editCustomer', customer_id = post.id)
         else:
-            messages.error(request, form.errors)
+            # messages.error(request, form.errors)
+            sweetify.error(request, form.errors)
             return redirect('newCustomer')
     else:
         form = CustomerForm(request.POST or None, request.FILES or None)
@@ -62,10 +64,12 @@ def editCustomer(request,customer_id):
         form = CustomerForm(request.POST,instance= customer)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Cliente Editado....')
+            # messages.success(request, 'Cliente Editado....')
+            sweetify.success(request, 'Cliente ha sido Editado')
             return redirect('editCustomer', customer.id)
         else:
-            messages.error(request, form.errors)
+            # messages.error(request, form.errors)
+            sweetify.error(request, form.errors)
             return redirect('editCustomer', customer.id)
     else:
         if userAdmin == customer.user:
@@ -80,7 +84,8 @@ def editCustomer(request,customer_id):
             }
             return render(request, 'customers/editCustomer.html', context)
         else:
-            messages.error(request, 'No hay Registros del Cliente')
+            # messages.error(request, 'No hay Registros del Cliente')
+            sweetify.error(request, 'No hay Registros del Cliente')
             return redirect('viewCustomers')
 
 

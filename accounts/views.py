@@ -6,7 +6,7 @@ from accounts.forms import RegistrationForm
 from accounts.models import Account
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+import sweetify
 
 
 def login(request):
@@ -19,10 +19,12 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            messages.success(request, 'Bienvenido ' + user.first_name + " " + user.last_name)
+            # messages.success(request, 'Bienvenido ' + user.first_name + " " + user.last_name)
+            sweetify.info(request, 'Bienvenido ' + user.first_name + " " + user.last_name)
             return redirect('dashboard')
         else:
-            messages.error(request, 'Credenciales de usuario invalidas')
+            # messages.error(request, 'Credenciales de usuario invalidas')
+            sweetify.error(request, 'Credenciales de usuario invalidas')
             return redirect('login')
 
     return render(request, 'login.html')
@@ -34,7 +36,8 @@ def dashboard(request):
 @login_required(login_url = 'login')
 def logout(request):
     auth.logout(request)
-    messages.success(request,'Ha salido de su cuenta de usuario!')
+    # messages.success(request,'Ha salido de su cuenta de usuario!')
+    sweetify.info(request, 'Ha salido de su cuenta de usuario!')
     return redirect('login')
 
 @login_required(login_url = 'login')
@@ -60,9 +63,8 @@ def registerUser(request):
             user.admin_id = mainAccount
             user.save()
 
-
-
-            messages.success(request, 'Usuario Creado....')
+            # messages.success(request, 'Usuario Creado....')
+            sweetify.success(request, 'Usuario ha sido Creado')
 
             return redirect('viewUsers')
     else:

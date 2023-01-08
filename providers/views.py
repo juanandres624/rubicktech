@@ -5,6 +5,7 @@ from providers.models import Provider
 from .forms import ProviderForm
 from products.models import Product
 from accounts.models import Account
+import sweetify
 
 @login_required(login_url = 'login')
 def newProvider(request):
@@ -15,8 +16,14 @@ def newProvider(request):
             post.created_by = request.user
             post.user = request.user.admin_id
             post.save()
-            messages.success(request, 'Proveedor Creado....')
+            # messages.success(request, 'Proveedor Creado....')
+            sweetify.success(request, 'Proveedor ha sido Creado')
             return redirect('editProvider', provider_id = post.id)
+        else:
+            # messages.error(request, form.errors)
+            sweetify.error(request, form.errors)
+            return redirect('newProvider')
+
     else:
         form = ProviderForm(request.POST or None, request.FILES or None)
         context = {
@@ -54,10 +61,12 @@ def editProvider(request,provider_id):
         form = ProviderForm(request.POST,instance= provider)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Proveedor Editado....')
+            # messages.success(request, 'Proveedor Editado....')
+            sweetify.success(request, 'Proveedor ha sido Editado')
             return redirect('editProvider', provider.id)
         else:
-            messages.success(request, 'Proveedor No ha sido Editado....')
+            # messages.success(request, 'Proveedor No ha sido Editado....')
+            sweetify.error(request, 'Proveedor no ha sido Editado')
             return redirect('viewProvider')  
     else:
         if userAdmin == provider.user:
@@ -72,7 +81,8 @@ def editProvider(request,provider_id):
             }
             return render(request, 'providers/editProvider.html', context)
         else:
-            messages.error(request, 'No hay Registros del Proveedor')
+            # messages.error(request, 'No hay Registros del Proveedor')
+            sweetify.error(request, 'No hay Registros del Proveedor')
             return redirect('viewProviders')
 
 

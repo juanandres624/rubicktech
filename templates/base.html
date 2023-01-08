@@ -59,6 +59,7 @@
     <script src="{% static 'vendor/datatables/js/dataTables.buttons.min.js' %}"></script>
     <script src="{% static 'vendor/datatables/js/buttons.bootstrap4.min.js' %}"></script>
     <script src="{% static 'vendor/datatables/js/data-table.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- input masks js-->
     <script src="{% static 'vendor/inputmask/js/jquery.inputmask.bundle.js' %}"></script>
@@ -102,6 +103,8 @@
             })
     });
     </script>
-
+    
+{% load sweetify %}
+{% sweetify %}
 </body>
 </html>
